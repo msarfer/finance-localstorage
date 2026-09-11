@@ -135,6 +135,7 @@ export function MovementsView() {
                       {formatDate(m.date)} · {originName}
                       {destName ? ` → ${destName}` : ''}
                       {cat && m.type !== 'transfer' ? ` · ${cat.name}` : ''}
+                      {m.cashBreakdown ? ' · 💵 efectivo' : ''}
                     </p>
                   </div>
                   <div className="flex shrink-0 items-center gap-2">

@@ -25,6 +25,7 @@ export interface Movement {
   accountId?: string
   fromAccountId?: string
   toAccountId?: string
+  cashBreakdown?: CashCounts
   date: string
   createdAt: number
 }

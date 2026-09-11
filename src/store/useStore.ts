@@ -6,7 +6,7 @@ import { DEFAULT_CATEGORIES } from '@/data/defaultCategories'
 import { computeCashTotal, emptyCashCounts, uid } from '@/lib/money'
 
 const STORAGE_KEY = 'finanzas:state'
-export const SCHEMA_VERSION = 2
+export const SCHEMA_VERSION = 3
 
 export const EXPORT_HEADER = {
   app: 'mis-finanzas',
@@ -30,6 +30,46 @@ export interface FinanceStore extends AppState {
   replaceAll: (state: Pick<AppState, 'accounts' | 'movements' | 'categories' | 'settings'>) => void
   updateSettings: (patch: Partial<AppSettings>) => void
   clearAll: () => void
+}
+
+function applyMovementDelta(
+  accounts: Account[],
+  movement: Movement,
+  invert: boolean,
+): Account[] {
+  const byId = new Map(accounts.map((a) => [a.id, { ...a, cash: a.cash ? { ...a.cash } : undefined }]))
+  const sign = invert ? -1 : 1
+  const counts = movement.cashBreakdown ?? {}
+  const amount = movement.amount
+
+  const apply = (accountId: string | undefined, gain: boolean) => {
+    const acc = byId.get(accountId ?? '')
+    if (!acc) return
+    const factor = gain ? sign : -sign
+    if (acc.kind === 'cash') {
+      const next: Account['cash'] = { ...(acc.cash ?? emptyCashCounts()) }
+      for (const [denom, count] of Object.entries(counts)) {
+        const d = Number(denom)
+        const delta = factor * (count ?? 0)
+        const after = (next[d] ?? 0) + delta
+        if (after <= 0) delete next[d]
+        else next[d] = after
+      }
+      acc.cash = next
+      acc.balance = computeCashTotal(next)
+    } else {
+      acc.balance = acc.balance + factor * amount
+    }
+    acc.updatedAt = Date.now()
+  }
+
+  if (movement.type === 'income') apply(movement.accountId, true)
+  else if (movement.type === 'expense') apply(movement.accountId, false)
+  else {
+    apply(movement.fromAccountId, false)
+    apply(movement.toAccountId, true)
+  }
+  return [...byId.values()]
 }
 
 export const useStore = create<FinanceStore>()(
@@ -80,17 +120,35 @@ export const useStore = create<FinanceStore>()(
         })),
 
       addMovement: (input) =>
-        set((s) => ({
-          movements: [...s.movements, { ...input, id: uid('mov'), createdAt: Date.now() }],
-        })),
+        set((s) => {
+          const movement: Movement = { ...input, id: uid('mov'), createdAt: Date.now() }
+          return {
+            movements: [...s.movements, movement],
+            accounts: applyMovementDelta(s.accounts, movement, false),
+          }
+        }),
 
       updateMovement: (id, patch) =>
-        set((s) => ({
-          movements: s.movements.map((m) => (m.id === id ? { ...m, ...patch } : m)),
-        })),
+        set((s) => {
+          const existing = s.movements.find((m) => m.id === id)
+          if (!existing) return {}
+          const updated: Movement = { ...existing, ...patch }
+          let accounts = applyMovementDelta(s.accounts, existing, true)
+          accounts = applyMovementDelta(accounts, updated, false)
+          return {
+            movements: s.movements.map((m) => (m.id === id ? updated : m)),
+            accounts,
+          }
+        }),
 
       deleteMovement: (id) =>
-        set((s) => ({ movements: s.movements.filter((m) => m.id !== id) })),
+        set((s) => {
+          const existing = s.movements.find((m) => m.id === id)
+          return {
+            movements: s.movements.filter((m) => m.id !== id),
+            accounts: existing ? applyMovementDelta(s.accounts, existing, true) : s.accounts,
+          }
+        }),
 
       addCategory: (input) =>
         set((s) => ({ categories: [...s.categories, { ...input, id: uid('cat') }] })),
