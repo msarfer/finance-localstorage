@@ -87,7 +87,7 @@ export function Dashboard() {
                     className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm"
                     style={{ backgroundColor: `${cat?.color ?? '#6366f1'}22`, color: cat?.color ?? '#6366f1' }}
                   >
-                    {cat?.emoji ?? (m.type === 'transfer' ? '🔁' : '💸')}
+                    {cat?.emoji ?? (m.type === 'cashflow' ? '💱' : m.type === 'transfer' ? '🔁' : '💸')}
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">

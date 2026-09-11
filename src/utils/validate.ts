@@ -73,7 +73,7 @@ function validateMovement(value: unknown, errors: string[], idx: number): Moveme
     errors.push(`Movimiento ${idx + 1}: no es un objeto válido`)
     return null
   }
-  const type = value.type === 'income' || value.type === 'expense' || value.type === 'transfer' ? value.type : null
+  const type = value.type === 'income' || value.type === 'expense' || value.type === 'transfer' || value.type === 'cashflow' ? value.type : null
   if (!type) {
     errors.push(`Movimiento ${idx + 1}: tipo inválido`)
     return null
@@ -83,9 +83,9 @@ function validateMovement(value: unknown, errors: string[], idx: number): Moveme
     errors.push(`Movimiento ${idx + 1}: importe inválido`)
     return null
   }
-  if (type === 'transfer') {
+  if (type === 'transfer' || type === 'cashflow') {
     if (typeof value.fromAccountId !== 'string' || typeof value.toAccountId !== 'string') {
-      errors.push(`Movimiento ${idx + 1}: transferencia sin cuentas origen/destino`)
+      errors.push(`Movimiento ${idx + 1}: operación sin cuentas origen/destino`)
       return null
     }
   } else if (typeof value.accountId !== 'string') {
@@ -167,6 +167,23 @@ export function parseImport(raw: string): ImportResult {
   const categories = (Array.isArray(data.categories) ? data.categories : [])
     .map((v, i) => validateCategory(v, errors, i))
     .filter((c): c is Category => c !== null)
+
+  const accountById = new Map(accounts.map((a) => [a.id, a]))
+  for (const m of movements) {
+    if (m.type !== 'transfer' && m.type !== 'cashflow') continue
+    const from = accountById.get(m.fromAccountId ?? '')
+    const to = accountById.get(m.toAccountId ?? '')
+    if (m.type === 'transfer') {
+      if (!from || !to || from.kind !== 'online' || to.kind !== 'online') {
+        errors.push(`Movimiento "${m.concept ?? m.id}": una transferencia solo puede ser entre cuentas online`)
+      }
+    } else if (!from || !to || from.kind === to.kind) {
+      errors.push(`Movimiento "${m.concept ?? m.id}": debe implicar una cuenta online y una de efectivo`)
+    }
+    if (from && to && from.id === to.id) {
+      errors.push(`Movimiento "${m.concept ?? m.id}": origen y destino son la misma cuenta`)
+    }
+  }
 
   if (accounts.length === 0) {
     return { ok: false, errors: ['No hay ninguna cuenta válida en el archivo'] }

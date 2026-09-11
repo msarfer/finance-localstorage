@@ -14,7 +14,7 @@ export interface Account {
   updatedAt: number
 }
 
-export type MovementType = 'income' | 'expense' | 'transfer'
+export type MovementType = 'income' | 'expense' | 'transfer' | 'cashflow'
 
 export interface Movement {
   id: string

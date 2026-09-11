@@ -61,6 +61,7 @@ export function Button({
   type = 'button',
   disabled,
   className = '',
+  title,
 }: {
   children: ReactNode
   onClick?: () => void
@@ -68,6 +69,7 @@ export function Button({
   type?: 'button' | 'submit'
   disabled?: boolean
   className?: string
+  title?: string
 }) {
   const base =
     'inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50'
@@ -82,7 +84,7 @@ export function Button({
       'text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800',
   }
   return (
-    <button type={type} onClick={onClick} disabled={disabled} className={`${base} ${styles[variant]} ${className}`}>
+    <button type={type} onClick={onClick} disabled={disabled} title={title} className={`${base} ${styles[variant]} ${className}`}>
       {children}
     </button>
   )

@@ -5,6 +5,7 @@ export const MOVEMENT_TYPE_LABEL: Record<MovementType, string> = {
   income: 'Ingreso',
   expense: 'Gasto',
   transfer: 'Transferencia',
+  cashflow: 'Banco ↔ Efectivo',
 }
 
 export function formatDate(iso: string): string {
