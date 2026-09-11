@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { useStore } from '../store/useStore'
+import { useStore } from '@/store/useStore'
 
 function systemDark(): boolean {
   return window.matchMedia('(prefers-color-scheme: dark)').matches

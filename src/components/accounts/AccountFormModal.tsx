@@ -1,10 +1,10 @@
 import { useState } from 'react'
 
-import type { Account, AccountKind, CashCounts } from '../../types'
-import { ACCOUNT_COLORS } from '../../data/constants'
-import { useStore } from '../../store/useStore'
-import { emptyCashCounts, formatEUR, parseCentsInput } from '../../lib/money'
-import { Button, Field, Modal, inputCls } from '../ui'
+import type { Account, AccountKind, CashCounts } from '@/types'
+import { ACCOUNT_COLORS } from '@/data/constants'
+import { useStore } from '@/store/useStore'
+import { emptyCashCounts, formatEUR, parseCentsInput } from '@/lib/money'
+import { Button, Field, Modal, inputCls } from '@/components/ui'
 import { CashBreakdownEditor } from './CashBreakdownEditor'
 
 export function AccountFormModal({

@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react'
 
-import type { Movement, MovementType } from '../../types'
-import { useStore } from '../../store/useStore'
-import { currentMonthISO, monthOf } from '../../lib/reports'
-import { signedEUR, formatDate, monthLabel } from '../../lib/display'
-import { formatEUR } from '../../lib/money'
-import { Button, ConfirmDialog, EmptyState, inputCls } from '../ui'
+import type { Movement, MovementType } from '@/types'
+import { useStore } from '@/store/useStore'
+import { currentMonthISO, monthOf } from '@/lib/reports'
+import { signedEUR, formatDate, monthLabel } from '@/lib/display'
+import { formatEUR } from '@/lib/money'
+import { Button, ConfirmDialog, EmptyState, inputCls } from '@/components/ui'
 import { MovementFormModal } from './MovementFormModal'
 
 export function MovementsView() {

@@ -1,7 +1,7 @@
-import type { Account, AppState, Category, Movement } from '../types'
-import { DENOMINATIONS } from '../data/constants'
-import { computeCashTotal } from '../lib/money'
-import { EXPORT_HEADER, SCHEMA_VERSION } from '../store/useStore'
+import type { Account, AppState, Category, Movement } from '@/types'
+import { DENOMINATIONS } from '@/data/constants'
+import { computeCashTotal } from '@/lib/money'
+import { EXPORT_HEADER, SCHEMA_VERSION } from '@/store/useStore'
 
 export interface ExportFile {
   app: string

@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react'
 
-import type { View } from '../types'
-import { useStore } from '../store/useStore'
-import { computeCashTotal } from '../lib/money'
-import { formatEUR } from '../lib/money'
-import { useTheme } from '../hooks/useTheme'
+import type { View } from '@/types'
+import { useStore } from '@/store/useStore'
+import { computeCashTotal } from '@/lib/money'
+import { formatEUR } from '@/lib/money'
+import { useTheme } from '@/hooks/useTheme'
 
 const NAV: { view: View; label: string; icon: string }[] = [
   { view: 'dashboard', label: 'Resumen', icon: '📊' },

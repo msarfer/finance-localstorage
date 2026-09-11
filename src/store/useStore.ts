@@ -1,9 +1,9 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import type { Account, AppSettings, AppState, Category, Movement } from '../types'
-import { DEFAULT_CATEGORIES } from '../data/defaultCategories'
-import { computeCashTotal, emptyCashCounts, uid } from '../lib/money'
+import type { Account, AppSettings, AppState, Category, Movement } from '@/types'
+import { DEFAULT_CATEGORIES } from '@/data/defaultCategories'
+import { computeCashTotal, emptyCashCounts, uid } from '@/lib/money'
 
 const STORAGE_KEY = 'finanzas:state'
 export const SCHEMA_VERSION = 2

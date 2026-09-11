@@ -1,9 +1,9 @@
 import { useShallow } from 'zustand/react/shallow'
-import { useStore } from '../../store/useStore'
-import { summarize, currentMonthISO } from '../../lib/reports'
-import { formatEUR } from '../../lib/money'
-import { formatDate, MOVEMENT_TYPE_LABEL, monthLabel, signedEUR } from '../../lib/display'
-import { StatCard, EmptyState } from '../ui'
+import { useStore } from '@/store/useStore'
+import { summarize, currentMonthISO } from '@/lib/reports'
+import { formatEUR } from '@/lib/money'
+import { formatDate, MOVEMENT_TYPE_LABEL, monthLabel, signedEUR } from '@/lib/display'
+import { StatCard, EmptyState } from '@/components/ui'
 
 export function Dashboard() {
   const state = useStore(

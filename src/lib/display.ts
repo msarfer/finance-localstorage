@@ -1,5 +1,5 @@
-import type { MovementType } from '../types'
-import { formatEUR } from '../lib/money'
+import type { MovementType } from '@/types'
+import { formatEUR } from '@/lib/money'
 
 export const MOVEMENT_TYPE_LABEL: Record<MovementType, string> = {
   income: 'Ingreso',

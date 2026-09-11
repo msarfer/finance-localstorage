@@ -1,5 +1,5 @@
-import { BILLS, COINS } from '../data/constants'
-import type { CashCounts } from '../types'
+import { BILLS, COINS } from '@/data/constants'
+import type { CashCounts } from '@/types'
 
 const eurFormatter = new Intl.NumberFormat('es-ES', {
   style: 'currency',

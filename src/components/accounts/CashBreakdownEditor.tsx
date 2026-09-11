@@ -1,7 +1,7 @@
-import type { CashCounts } from '../../types'
-import { BILLS, COINS, BILL_LABELS, COIN_LABELS } from '../../data/constants'
-import { computeCashTotal } from '../../lib/money'
-import { formatEUR } from '../../lib/money'
+import type { CashCounts } from '@/types'
+import { BILLS, COINS, BILL_LABELS, COIN_LABELS } from '@/data/constants'
+import { computeCashTotal } from '@/lib/money'
+import { formatEUR } from '@/lib/money'
 
 function CountRow({
   label,

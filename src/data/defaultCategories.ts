@@ -1,4 +1,4 @@
-import type { Category } from '../types'
+import type { Category } from '@/types'
 
 export const DEFAULT_CATEGORIES: Category[] = [
   { id: 'cat-nomina', name: 'Nómina / Sueldo', emoji: '💼', color: '#10b981', type: 'income' },

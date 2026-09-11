@@ -1,5 +1,5 @@
-import type { Account, AppState, Movement } from '../types'
-import { computeCashTotal } from './money'
+import type { Account, AppState, Movement } from '@/types'
+import { computeCashTotal } from '@/lib/money'
 
 export function currentMonthISO(): string {
   const now = new Date()

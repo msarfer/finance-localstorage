@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
-import type { Movement, MovementType } from '../../types'
-import { useStore } from '../../store/useStore'
-import { parseCentsInput, todayISO } from '../../lib/money'
-import { Button, Field, Modal, inputCls } from '../ui'
+import type { Movement, MovementType } from '@/types'
+import { useStore } from '@/store/useStore'
+import { parseCentsInput, todayISO } from '@/lib/money'
+import { Button, Field, Modal, inputCls } from '@/components/ui'
 
 export function MovementFormModal({
   initial,

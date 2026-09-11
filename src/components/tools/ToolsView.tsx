@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react'
 
-import type { ImportResult } from '../../utils/validate'
-import { buildExport, parseImport } from '../../utils/validate'
-import { useStore } from '../../store/useStore'
-import { formatEUR } from '../../lib/money'
-import { Button, ConfirmDialog, Modal } from '../ui'
+import type { ImportResult } from '@/utils/validate'
+import { buildExport, parseImport } from '@/utils/validate'
+import { useStore } from '@/store/useStore'
+import { formatEUR } from '@/lib/money'
+import { Button, ConfirmDialog, Modal } from '@/components/ui'
 
 function todayFilename(): string {
   return `mis-finanzas-${new Date().toISOString().slice(0, 10)}.json`

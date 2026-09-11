@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
-import type { Account } from '../../types'
-import { BILL_LABELS, COIN_LABELS } from '../../data/constants'
-import { useStore } from '../../store/useStore'
-import { computeCashTotal } from '../../lib/money'
-import { formatEUR } from '../../lib/money'
-import { Button, ConfirmDialog, EmptyState } from '../ui'
+import type { Account } from '@/types'
+import { BILL_LABELS, COIN_LABELS } from '@/data/constants'
+import { useStore } from '@/store/useStore'
+import { computeCashTotal } from '@/lib/money'
+import { formatEUR } from '@/lib/money'
+import { Button, ConfirmDialog, EmptyState } from '@/components/ui'
 import { AccountFormModal } from './AccountFormModal'
 
 function BinList({ account }: { account: Account }) {

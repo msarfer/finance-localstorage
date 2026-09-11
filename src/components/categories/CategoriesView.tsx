@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
-import type { Category, CategoryType } from '../../types'
-import { CATEGORY_COLORS } from '../../data/constants'
-import { useStore } from '../../store/useStore'
-import { Button, Field, Modal, inputCls, ConfirmDialog } from '../ui'
+import type { Category, CategoryType } from '@/types'
+import { CATEGORY_COLORS } from '@/data/constants'
+import { useStore } from '@/store/useStore'
+import { Button, Field, Modal, inputCls, ConfirmDialog } from '@/components/ui'
 
 function CategoryFormModal({
   initial,
