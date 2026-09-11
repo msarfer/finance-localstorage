@@ -25,7 +25,7 @@ export function MovementsView() {
 	const [presetDirection, setPresetDirection] = useState<
 		'toCash' | 'toBank' | undefined
 	>(undefined);
-	const [cashMenuOpen, setCashMenuOpen] = useState(false);
+	const [moveMenuOpen, setMoveMenuOpen] = useState(false);
 	const [deleting, setDeleting] = useState<Movement | null>(null);
 
 	const onlineAccounts = accounts.filter((a) => a.kind === 'online');
@@ -128,59 +128,82 @@ export function MovementsView() {
 			<div className="flex flex-wrap items-center justify-between gap-2">
 				<h1 className="text-xl font-bold">Movimientos</h1>
 				<div className="flex gap-2">
-					<Button variant="secondary" onClick={() => newMovement('expense')}>
-						+ Gasto
-					</Button>
-					<Button variant="secondary" onClick={() => newMovement('income')}>
-						+ Ingreso
-					</Button>
-					<Button onClick={() => newMovement('transfer')}>
-						+ Transferencia
-					</Button>
 					<div className="relative">
-						<Button
-							variant="secondary"
-							onClick={() => setCashMenuOpen((o) => !o)}
-							disabled={cashMenuDisabled}
-							title={
-								cashMenuDisabled
-									? 'Necesitas al menos una cuenta online y una de efectivo'
-									: 'Sacar o ingresar dinero en efectivo'
-							}
-						>
-							Movimientos en efectivo
+						<Button onClick={() => setMoveMenuOpen((o) => !o)}>
+							+ Nuevo movimiento
 						</Button>
-{cashMenuOpen && (
-              <div className="fixed inset-0 z-20" onClick={() => setCashMenuOpen(false)} />
-            )}
-            {cashMenuOpen && (
-              <div className="absolute right-0 z-30 mt-2 w-64 overflow-hidden rounded-lg border border-slate-200 bg-white text-left shadow-lg dark:border-slate-700 dark:bg-slate-900">
+						{moveMenuOpen && (
+							<div
+								className="fixed inset-0 z-20"
+								onClick={() => setMoveMenuOpen(false)}
+							/>
+						)}
+						{moveMenuOpen && (
+							<div className="absolute right-0 z-30 mt-2 w-72 overflow-hidden rounded-lg border border-slate-200 bg-white text-left shadow-lg dark:border-slate-700 dark:bg-slate-900">
+								<div className="px-4 pt-3 pb-1 text-xs font-semibold uppercase tracking-wide text-slate-400">
+									Ordinarios
+								</div>
 								<button
 									type="button"
+									onClick={() => {
+										newMovement('expense');
+										setMoveMenuOpen(false);
+									}}
+									className="flex w-full items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
+								>
+									Gasto
+								</button>
+								<button
+									type="button"
+									onClick={() => {
+										newMovement('income');
+										setMoveMenuOpen(false);
+									}}
+									className="flex w-full items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
+								>
+									Ingreso
+								</button>
+								<button
+									type="button"
+									onClick={() => {
+										newMovement('transfer');
+										setMoveMenuOpen(false);
+									}}
+									className="flex w-full items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
+								>
+									Transferencia online
+								</button>
+								<div className="my-1 border-t border-slate-100 dark:border-slate-800" />
+								<div className="px-4 pt-1 pb-1 text-xs font-semibold uppercase tracking-wide text-slate-400">
+									Banco ↔ Efectivo
+								</div>
+								<button
+									type="button"
+									disabled={cashMenuDisabled}
 									onClick={() => {
 										newCashflow('toCash');
-										setCashMenuOpen(false);
+										setMoveMenuOpen(false);
 									}}
-									className="flex w-full items-center gap-2 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
+									className="flex w-full items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:text-slate-200 dark:hover:bg-slate-800"
 								>
 									Sacar dinero
-									<span className="text-xs font-normal text-slate-400">
-										(banco → efectivo)
-									</span>
 								</button>
 								<button
 									type="button"
+									disabled={cashMenuDisabled}
 									onClick={() => {
 										newCashflow('toBank');
-										setCashMenuOpen(false);
+										setMoveMenuOpen(false);
 									}}
-									className="flex w-full items-center gap-2 border-t border-slate-100 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-800 dark:text-slate-200 dark:hover:bg-slate-800"
+									className="flex w-full items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:text-slate-200 dark:hover:bg-slate-800"
 								>
 									Ingresar dinero
-									<span className="text-xs font-normal text-slate-400">
-										(efectivo → banco)
-									</span>
 								</button>
+								{cashMenuDisabled && (
+									<p className="border-t border-slate-100 px-4 py-2 text-xs text-slate-400 dark:border-slate-800 dark:text-slate-500">
+										Necesitas al menos una cuenta online y una de efectivo
+									</p>
+								)}
 							</div>
 						)}
 					</div>
