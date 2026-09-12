@@ -32,6 +32,7 @@ export function MovementsView() {
 	const cashAccounts = accounts.filter((a) => a.kind === 'cash');
 	const cashMenuDisabled =
 		onlineAccounts.length === 0 || cashAccounts.length === 0;
+	const onlineTransferDisabled = onlineAccounts.length < 2;
 
 	const accountName = useMemo(
 		() => new Map(accounts.map((a) => [a.id, a.name])),
@@ -165,14 +166,20 @@ export function MovementsView() {
 								</button>
 								<button
 									type="button"
+									disabled={onlineTransferDisabled}
 									onClick={() => {
 										newMovement('transfer');
 										setMoveMenuOpen(false);
 									}}
-									className="flex w-full items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
+									className="flex w-full items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:text-slate-200 dark:hover:bg-slate-800"
 								>
 									Transferencia online
 								</button>
+								{onlineTransferDisabled && (
+									<p className="border-b border-slate-100 px-4 py-2 text-xs text-slate-400 dark:border-slate-800 dark:text-slate-500">
+										Necesitas al menos dos cuentas online para hacer transferencias
+									</p>
+								)}
 								<div className="my-1 border-t border-slate-100 dark:border-slate-800" />
 								<div className="px-4 pt-1 pb-1 text-xs font-semibold uppercase tracking-wide text-slate-400">
 									Banco ↔ Efectivo

@@ -237,23 +237,33 @@ export function MovementFormModal({
 		onClose();
 	};
 
-	const typeBtn = (t: MovementType, label: string) => (
-		<button
-			type="button"
-			onClick={() => switchType(t)}
-			className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
-				type === t
-					? t === 'income'
-						? 'border-emerald-600 bg-emerald-600 text-white'
-						: t === 'expense'
-							? 'border-red-600 bg-red-600 text-white'
-							: 'border-indigo-600 bg-indigo-600 text-white'
-					: 'border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800'
-			}`}
-		>
-			{label}
-		</button>
-	);
+	const typeBtn = (
+		t: MovementType,
+		label: string,
+		opts: { disabled?: boolean } = {},
+	) => {
+		const { disabled = false } = opts;
+		return (
+			<button
+				type="button"
+				disabled={disabled}
+				onClick={() => switchType(t)}
+				className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
+					disabled && !(type === t)
+						? 'cursor-not-allowed border-slate-200 text-slate-400 dark:border-slate-800 dark:text-slate-500'
+						: type === t
+							? t === 'income'
+								? 'border-emerald-600 bg-emerald-600 text-white'
+								: t === 'expense'
+									? 'border-red-600 bg-red-600 text-white'
+									: 'border-indigo-600 bg-indigo-600 text-white'
+							: 'border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800'
+				}`}
+			>
+				{label}
+			</button>
+		);
+	};
 
 	const dirBtn = (d: CashflowDirection, label: string) => (
 		<button
@@ -293,13 +303,33 @@ export function MovementFormModal({
 				</>
 			}
 		>
-			<div className="space-y-4">
+			<div className="space-y-4 p-2">
 				<div className="grid grid-cols-4 gap-2">
 					{typeBtn('expense', '💸 Gasto')}
 					{typeBtn('income', '📥 Ingreso')}
-					{typeBtn('transfer', '🔁 Online')}
-					{typeBtn('cashflow', '💱 Efectivo')}
+					{typeBtn('transfer', '🔁 Online', {
+						disabled: onlineAccounts.length < 2,
+					})}
+					{typeBtn('cashflow', '💱 Efectivo', {
+						disabled: onlineAccounts.length === 0,
+					})}
 				</div>
+				{onlineAccounts.length < 2 && (
+					<p className="text-xs text-slate-400 dark:text-slate-500">
+						{onlineAccounts.length === 0
+							? 'Necesitas al menos una cuenta online para Banco ↔ Efectivo y dos para transferencias'
+							: 'Necesitas al menos dos cuentas online para hacer transferencias'}
+					</p>
+				)}
+
+				<Field label="Concepto">
+					<input
+						className={inputCls}
+						value={concept}
+						onChange={(e) => setConcept(e.target.value)}
+						placeholder="Ej. Compra semanal"
+					/>
+				</Field>
 
 				{type === 'transfer' && (
 					<div className="grid grid-cols-2 gap-3">
@@ -450,15 +480,6 @@ export function MovementFormModal({
 						</div>
 					</Field>
 				)}
-
-				<Field label="Concepto">
-					<input
-						className={inputCls}
-						value={concept}
-						onChange={(e) => setConcept(e.target.value)}
-						placeholder="Ej. Compra semanal"
-					/>
-				</Field>
 
 				{error && (
 					<p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-950/40 dark:text-red-400">
