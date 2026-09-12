@@ -60,7 +60,10 @@ export function uid(prefix: string): string {
 export function parseCentsInput(input: string): number | null {
   const normalized = input.trim().replace(/\u00a0|\u202f/g, ' ').replace(/[€\s]/g, '')
   if (!normalized) return null
-  const cleaned = normalized.replace(',', '.')
+  const hasComma = normalized.includes(',')
+  const cleaned = hasComma
+    ? normalized.replace(/\./g, '').replace(',', '.')
+    : normalized
   const value = Number(cleaned)
   if (!Number.isFinite(value) || value < 0) return null
   return Math.round(value * 100)
