@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 
 import { todayISO } from '@/lib/money'
@@ -117,11 +117,13 @@ export function IconButton({
   title,
   className = '',
   icon = 'pencil',
+  autoFocus = false,
 }: {
   onClick: () => void
   title: string
   className?: string
   icon?: IconName
+  autoFocus?: boolean
 }) {
   return (
     <button
@@ -129,6 +131,7 @@ export function IconButton({
       onClick={onClick}
       title={title}
       aria-label={title}
+      autoFocus={autoFocus}
       className={`rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-200 ${className}`}
     >
       <Icon name={icon} className="h-4 w-4" />
@@ -191,6 +194,22 @@ export function Modal({
   children: ReactNode
   footer?: ReactNode
 }) {
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation()
+        onClose()
+      }
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      document.removeEventListener('keydown', onKeyDown)
+    }
+  }, [onClose])
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/40 p-0 backdrop-blur-sm sm:items-center sm:p-4"
@@ -204,7 +223,7 @@ export function Modal({
           <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
             {title}
           </h2>
-          <IconButton onClick={onClose} title="Cerrar" icon="close" />
+          <IconButton onClick={onClose} title="Cerrar" icon="close" autoFocus />
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1">
           {children}
