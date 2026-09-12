@@ -12,7 +12,7 @@ export function BinList({ account }: { account: Account }) {
       {entries.map(([denom, count]) => {
         const label = (BILL_LABELS[Number(denom)] ?? COIN_LABELS[Number(denom)] ?? `${denom} €`)
         return (
-          <span key={denom} className="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+          <span key={denom} className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium tabular-nums text-slate-600 dark:bg-slate-800 dark:text-slate-300">
             {count} × {label}
           </span>
         )

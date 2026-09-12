@@ -5,7 +5,7 @@ import type { Account } from '@/types'
 import { useStore } from '@/store/useStore'
 import { computeCashTotal } from '@/lib/money'
 import { formatEUR } from '@/lib/money'
-import { Button, ConfirmDialog, EmptyState } from '@/components/ui'
+import { Button, Card, ConfirmDialog, EmptyState, IconButton, PageHeader, SectionLabel } from '@/components/ui'
 import { BinList } from './BinList'
 import { AccountFormModal } from './AccountFormModal'
 
@@ -20,10 +20,10 @@ export function AccountsView() {
   const cash = accounts.filter((a) => a.kind === 'cash')
 
   const renderCard = (a: Account) => (
-    <div key={a.id} className="flex flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+    <Card key={a.id} className="p-5">
       <div className="flex items-start justify-between gap-2">
         <Link href={`/accounts/${a.id}`} className="group flex min-w-0 items-start gap-2.5">
-          <span className="mt-0.5 h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: a.color }} />
+          <span className="mt-1 h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: a.color }} />
           <span className="min-w-0">
             <span className="block truncate font-semibold leading-tight transition group-hover:text-brand">
               {a.name}
@@ -33,73 +33,81 @@ export function AccountsView() {
             </span>
           </span>
         </Link>
-        <div className="flex shrink-0 gap-1">
-          <button
-            type="button"
+        <div className="flex shrink-0 gap-0.5">
+          <IconButton
             onClick={() => {
               setEditing(a)
               setFormOpen(true)
             }}
-            className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800"
             title="Editar"
-          >
-            <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M5.433 13.917l1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
-              <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z" />
-            </svg>
-          </button>
-          <button
-            type="button"
+          />
+          <IconButton
             onClick={() => setDeleting(a)}
-            className="rounded-md p-1.5 text-slate-400 hover:bg-expense-soft hover:text-expense dark:hover:bg-expense-soft-dark/40"
             title="Eliminar"
-          >
-            <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4Z" clipRule="evenodd" />
-            </svg>
-          </button>
+            icon="trash"
+            className="hover:bg-expense-soft hover:text-expense dark:hover:bg-expense-soft-dark/40"
+          />
         </div>
       </div>
-      <Link href={`/accounts/${a.id}`} className="mt-3 text-2xl font-bold transition hover:opacity-80" style={{ color: a.color }}>
+      <Link
+        href={`/accounts/${a.id}`}
+        className="mt-4 block text-2xl font-semibold tracking-tight tabular-nums transition hover:opacity-75"
+        style={{ color: a.color }}
+      >
         {formatEUR(a.kind === 'cash' ? computeCashTotal(a.cash ?? {}) : a.balance)}
       </Link>
       {a.kind === 'cash' && (
-        <div className="mt-3 border-t border-slate-100 pt-3 dark:border-slate-800">
-          <p className="mb-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">Desglose</p>
+        <div className="mt-4 border-t border-slate-100 pt-4 dark:border-slate-800">
+          <SectionLabel className="mb-2">Desglose</SectionLabel>
           <BinList account={a} />
         </div>
       )}
-    </div>
+    </Card>
   )
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">Cuentas</h1>
-        <Button onClick={() => { setEditing(null); setFormOpen(true) }}>+ Nueva cuenta</Button>
-      </div>
+      <PageHeader
+        title="Cuentas"
+        subtitle={
+          accounts.length === 0
+            ? undefined
+            : `${accounts.length} cuenta${accounts.length === 1 ? '' : 's'} en total`
+        }
+        action={
+          <Button
+            icon="plus"
+            onClick={() => {
+              setEditing(null)
+              setFormOpen(true)
+            }}
+          >
+            Nueva cuenta
+          </Button>
+        }
+      />
 
       {accounts.length === 0 ? (
         <EmptyState
-          icon="🏦"
+          icon="bank"
           title="No tienes cuentas todavía"
           subtitle="Crea tu primera cuenta online o de efectivo"
         />
       ) : (
-        <>
+        <div className="space-y-6">
           {online.length > 0 && (
             <section>
-              <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Cuentas online</h2>
+              <SectionLabel className="mb-3">Cuentas online</SectionLabel>
               <div className="grid gap-3 sm:grid-cols-2">{online.map(renderCard)}</div>
             </section>
           )}
           {cash.length > 0 && (
             <section>
-              <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Efectivo físico</h2>
-              <div className="grid gap-3 sm:grid-cols-2">{cash.map(renderCard)}</div>
+              <SectionLabel className="mb-3">Efectivo físico</SectionLabel>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{cash.map(renderCard)}</div>
             </section>
           )}
-        </>
+        </div>
       )}
 
       {formOpen && (

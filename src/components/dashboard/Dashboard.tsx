@@ -1,9 +1,19 @@
 import { useShallow } from 'zustand/react/shallow'
+import { Link } from 'wouter'
+
 import { useStore } from '@/store/useStore'
 import { summarize, currentMonthISO } from '@/lib/reports'
 import { formatEUR } from '@/lib/money'
-import { formatDate, MOVEMENT_TYPE_LABEL, monthLabel, signedEUR } from '@/lib/display'
-import { StatCard, EmptyState } from '@/components/ui'
+import { monthLabel } from '@/lib/display'
+import {
+  Card,
+  Chip,
+  EmptyState,
+  PageHeader,
+  SectionLabel,
+  StatCard,
+} from '@/components/ui'
+import { MovementListItem } from '@/components/movements/MovementListItem'
 
 export function Dashboard() {
   const state = useStore(
@@ -14,6 +24,7 @@ export function Dashboard() {
     })),
   )
   const categoryById = new Map(state.categories.map((c) => [c.id, c]))
+  const accountName = new Map(state.accounts.map((a) => [a.id, a.name]))
 
   const month = currentMonthISO()
   const summary = summarize(state, month)
@@ -22,94 +33,160 @@ export function Dashboard() {
   const expenseColor = 'var(--color-expense)'
   const neutralColor = 'var(--color-brand-bright)'
 
+  const income = summary.monthIncome
+  const expense = summary.monthExpense
+  const flow = income + expense
+  const incomePct = flow > 0 ? (income / flow) * 100 : 50
+
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-bold">Resumen de {monthLabel(month)}</h1>
+    <div className="space-y-8">
+      <PageHeader
+        title="Resumen"
+        subtitle={monthLabel(month)}
+      />
+
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <StatCard label="Patrimonio" value={formatEUR(summary.totalAssets)} icon="dashboard" />
+        <StatCard
+          label="Cuentas online"
+          value={formatEUR(summary.totalOnline)}
+          sub={`${state.accounts.filter((a) => a.kind === 'online').length} cuentas`}
+          icon="bank"
+        />
+        <StatCard
+          label="Efectivo en mano"
+          value={formatEUR(summary.totalCash)}
+          sub={`${state.accounts.filter((a) => a.kind === 'cash').length} cuentas`}
+          icon="wallet"
+        />
+        <StatCard
+          label="Balance del mes"
+          value={formatEUR(summary.monthBalance)}
+          accent={summary.monthBalance >= 0 ? incomeColor : expenseColor}
+          icon={summary.monthBalance >= 0 ? 'trend-up' : 'trend-down'}
+        />
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatCard label="Patrimonio total" value={formatEUR(summary.totalAssets)} />
-        <StatCard label="Cuentas online" value={formatEUR(summary.totalOnline)} sub={`${state.accounts.filter((a) => a.kind === 'online').length} cuentas`} />
-        <StatCard label="Efectivo en mano" value={formatEUR(summary.totalCash)} sub={`${state.accounts.filter((a) => a.kind === 'cash').length} cuentas`} />
-        <StatCard label="Balance del mes" value={formatEUR(summary.monthBalance)} accent={summary.monthBalance >= 0 ? incomeColor : expenseColor} />
-      </div>
+      <Card className="p-5">
+        <div className="flex items-center justify-between">
+          <SectionLabel>Movimiento del mes</SectionLabel>
+          <Chip tone="neutral">{monthLabel(month)}</Chip>
+        </div>
+        <div className="mt-4 grid grid-cols-2 gap-6">
+          <div>
+            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+              Ingresos
+            </p>
+            <p
+              className="mt-1 text-2xl font-semibold tracking-tight tabular-nums text-income dark:text-income-bright"
+            >
+              + {formatEUR(income)}
+            </p>
+          </div>
+          <div>
+            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+              Gastos
+            </p>
+            <p
+              className="mt-1 text-2xl font-semibold tracking-tight tabular-nums text-expense dark:text-expense-bright"
+            >
+              - {formatEUR(expense)}
+            </p>
+          </div>
+        </div>
+        <div className="mt-5 flex h-1.5 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+          <div
+            className="h-full rounded-l-full"
+            style={{ width: `${incomePct}%`, backgroundColor: 'var(--color-income)' }}
+          />
+          <div
+            className="h-full rounded-r-full"
+            style={{ width: `${100 - incomePct}%`, backgroundColor: 'var(--color-expense)' }}
+          />
+        </div>
+        <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
+          Proporción de ingresos y gastos del mes
+        </p>
+      </Card>
 
-      <div className="grid grid-cols-2 gap-3">
-        <StatCard label="Ingresos del mes" value={`+ ${formatEUR(summary.monthIncome)}`} accent={incomeColor} />
-        <StatCard label="Gastos del mes" value={`- ${formatEUR(summary.monthExpense)}`} accent={expenseColor} />
-      </div>
-
-      <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <h2 className="mb-3 font-semibold">Gastos por categoría ({monthLabel(month)})</h2>
+      <Card className="p-5">
+        <div className="flex items-center justify-between">
+          <SectionLabel>Gastos por categoría</SectionLabel>
+          <Chip tone="expense">Este mes</Chip>
+        </div>
         {summary.byCategory.length === 0 ? (
-          <EmptyState icon="📭" title="Sin gastos este mes" subtitle="Registra un gasto para verlo desglosado aquí" />
+          <div className="mt-4">
+            <EmptyState
+              icon="tag"
+              title="Sin gastos este mes"
+              subtitle="Registra un gasto para verlo desglosado aquí"
+            />
+          </div>
         ) : (
-          <div className="space-y-3">
+          <div className="mt-4 space-y-4">
             {summary.byCategory.map(({ categoryId, amount, count }) => {
               const cat = categoryById.get(categoryId)
               const pct = summary.monthExpense > 0 ? (amount / summary.monthExpense) * 100 : 0
               return (
                 <div key={categoryId}>
-                  <div className="mb-1 flex items-center justify-between text-sm">
-                    <span className="flex items-center gap-1.5 text-slate-700 dark:text-slate-200">
+                  <div className="mb-1.5 flex items-center justify-between gap-3 text-sm">
+                    <span className="flex min-w-0 items-center gap-2 font-medium text-slate-700 dark:text-slate-200">
                       {cat?.emoji && <span aria-hidden>{cat.emoji}</span>}
-                      {cat?.name ?? 'Sin categoría'}
+                      <span className="truncate">{cat?.name ?? 'Sin categoría'}</span>
                     </span>
-                    <span className="text-slate-500 dark:text-slate-400">
-                      {formatEUR(amount)} · {count} mov. · {pct.toFixed(0)}%
+                    <span className="shrink-0 tabular-nums text-slate-500 dark:text-slate-400">
+                      {formatEUR(amount)} · {pct.toFixed(0)}%
                     </span>
                   </div>
-                  <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
                     <div
                       className="h-full rounded-full"
                       style={{ width: `${pct}%`, backgroundColor: cat?.color ?? neutralColor }}
                     />
                   </div>
+                  {count > 1 && (
+                    <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+                      {count} movimientos
+                    </p>
+                  )}
                 </div>
               )
             })}
           </div>
         )}
-      </section>
+      </Card>
 
-      <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <h2 className="mb-3 font-semibold">Últimos movimientos</h2>
+      <Card>
+        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 dark:border-slate-800">
+          <SectionLabel>Últimos movimientos</SectionLabel>
+          <Link
+            href="/movements"
+            className="inline-flex items-center gap-1 text-sm font-medium text-brand transition hover:text-brand-bright"
+          >
+            Ver todos
+          </Link>
+        </div>
         {summary.recent.length === 0 ? (
-          <EmptyState icon="🧾" title="Sin movimientos" subtitle="Los movimientos que registres aparecerán aquí" />
+          <div className="p-5">
+            <EmptyState
+              icon="inbox"
+              title="Sin movimientos"
+              subtitle="Los movimientos que registres aparecerán aquí"
+            />
+          </div>
         ) : (
           <ul className="divide-y divide-slate-100 dark:divide-slate-800">
-            {summary.recent.map((m) => {
-              const cat = m.categoryId ? categoryById.get(m.categoryId) : undefined
-              const accent = m.type === 'expense' ? expenseColor : m.type === 'income' ? incomeColor : neutralColor
-              return (
-                <li key={m.id} className="flex items-center gap-3 py-2.5">
-                  <span
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm"
-                    style={{
-                      backgroundColor: `color-mix(in srgb, ${cat?.color ?? neutralColor} 13%, transparent)`,
-                      color: cat?.color ?? neutralColor,
-                    }}
-                  >
-                    {cat?.emoji ?? (m.type === 'cashflow' ? '💱' : m.type === 'transfer' ? '🔁' : '💸')}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">
-                      {m.concept || MOVEMENT_TYPE_LABEL[m.type]}
-                    </p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      {formatDate(m.date)} · {cat?.name ?? MOVEMENT_TYPE_LABEL[m.type]}
-                    </p>
-                  </div>
-                  <p className="shrink-0 text-sm font-semibold" style={{ color: accent }}>
-                    {signedEUR(m.amount, m.type)}
-                  </p>
-                </li>
-              )
-            })}
+            {summary.recent.map((m) => (
+              <MovementListItem
+                key={m.id}
+                movement={m}
+                accountName={(id) => (id ? accountName.get(id) : undefined)}
+                categoryById={categoryById}
+              />
+            ))}
           </ul>
         )}
-      </section>
+      </Card>
     </div>
   )
 }

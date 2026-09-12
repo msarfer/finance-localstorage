@@ -9,6 +9,7 @@ import {
 	parseCentsInput,
 } from '@/lib/money';
 import { Button, inputCls } from '@/components/ui';
+import { Icon } from '@/components/icons';
 
 const MAX_COUNT = 999;
 
@@ -201,6 +202,7 @@ export function CashBreakdownEditor({
 					/>
 					<Button
 						variant="secondary"
+						icon="check"
 						onClick={applyFill}
 						disabled={!fillValue.trim()}
 						className="shrink-0"
@@ -218,14 +220,10 @@ export function CashBreakdownEditor({
 			<details className="group rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
 				<summary className="flex cursor-pointer select-none list-none items-center justify-between gap-2 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 [&::-webkit-details-marker]:hidden">
 					<span className="flex items-center gap-2">
-						<svg
+						<Icon
+							name="chevron-right"
 							className="h-4 w-4 text-slate-400 transition-transform group-open:rotate-90 dark:text-slate-500"
-							viewBox="0 0 20 20"
-							fill="currentColor"
-							aria-hidden="true"
-						>
-							<path d="M6.28 5.22a.75.75 0 0 1 0 1.06L2.06 10.5l4.22 4.22a.75.75 0 1 1-1.06 1.06L.72 10.53a.75.75 0 0 1 0-1.06l4.5-4.5a.75.75 0 0 1 1.06 0Z" />
-						</svg>
+						/>
 						Billetes
 					</span>
 					{billsCount > 0 && (
@@ -250,14 +248,10 @@ export function CashBreakdownEditor({
 			<details className="group rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
 				<summary className="flex cursor-pointer select-none list-none items-center justify-between gap-2 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 [&::-webkit-details-marker]:hidden">
 					<span className="flex items-center gap-2">
-						<svg
+						<Icon
+							name="chevron-right"
 							className="h-4 w-4 text-slate-400 transition-transform group-open:rotate-90 dark:text-slate-500"
-							viewBox="0 0 20 20"
-							fill="currentColor"
-							aria-hidden="true"
-						>
-							<path d="M6.28 5.22a.75.75 0 0 1 0 1.06L2.06 10.5l4.22 4.22a.75.75 0 1 1-1.06 1.06L.72 10.53a.75.75 0 0 1 0-1.06l4.5-4.5a.75.75 0 0 1 1.06 0Z" />
-						</svg>
+						/>
 						Monedas
 					</span>
 					{coinsCount > 0 && (

@@ -6,6 +6,7 @@ import { useStore } from '@/store/useStore';
 import { emptyCashCounts, formatEUR, parseCentsInput } from '@/lib/money';
 import { Button, Field, Modal, inputCls, ColorPalette } from '@/components/ui';
 import { CashBreakdownEditor } from './CashBreakdownEditor';
+import { Icon } from '@/components/icons';
 
 export function AccountFormModal({
 	initial,
@@ -89,24 +90,26 @@ export function AccountFormModal({
 						<button
 							type="button"
 							onClick={() => setKind('online')}
-							className={`rounded-lg border px-3 py-2.5 text-sm font-medium transition ${
+							className={`flex flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-sm font-medium transition ${
 								kind === 'online'
 									? 'border-brand bg-brand text-white'
 									: 'border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800'
 							}`}
 						>
-							🏦 Online (banco)
+							<Icon name="bank" className="h-5 w-5" />
+							Online (banco)
 						</button>
 						<button
 							type="button"
 							onClick={() => setKind('cash')}
-							className={`rounded-lg border px-3 py-2.5 text-sm font-medium transition ${
+							className={`flex flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-sm font-medium transition ${
 								kind === 'cash'
 									? 'border-brand bg-brand text-white'
 									: 'border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800'
 							}`}
 						>
-							💵 Efectivo físico
+							<Icon name="wallet" className="h-5 w-5" />
+							Efectivo físico
 						</button>
 					</div>
 				</div>

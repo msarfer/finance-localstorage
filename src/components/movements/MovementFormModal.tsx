@@ -11,6 +11,7 @@ import {
 } from '@/lib/money';
 import { Button, Field, Modal, inputCls, DatePicker } from '@/components/ui';
 import { CashBreakdownEditor } from '@/components/accounts/CashBreakdownEditor';
+import { Icon, type IconName } from '@/components/icons';
 
 type CashflowDirection = 'toCash' | 'toBank';
 
@@ -240,18 +241,20 @@ export function MovementFormModal({
 	const typeBtn = (
 		t: MovementType,
 		label: string,
+		icon: IconName,
 		opts: { disabled?: boolean } = {},
 	) => {
 		const { disabled = false } = opts;
+		const active = type === t;
 		return (
 			<button
 				type="button"
 				disabled={disabled}
 				onClick={() => switchType(t)}
-				className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
-					disabled && !(type === t)
+				className={`flex flex-col items-center gap-1.5 rounded-xl border px-2 py-3 text-sm transition ${
+					disabled && !active
 						? 'cursor-not-allowed border-slate-200 text-slate-400 dark:border-slate-800 dark:text-slate-500'
-						: type === t
+						: active
 							? t === 'income'
 								? 'border-income bg-income text-white'
 								: t === 'expense'
@@ -260,21 +263,28 @@ export function MovementFormModal({
 							: 'border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800'
 				}`}
 			>
+				<Icon name={icon} className="h-5 w-5" />
 				{label}
 			</button>
 		);
 	};
 
-	const dirBtn = (d: CashflowDirection, label: string) => (
+	const dirBtn = (
+		d: CashflowDirection,
+		label: string,
+		icon: IconName,
+		iconExtra: string = '',
+	) => (
 		<button
 			type="button"
 			onClick={() => setDirection(d)}
-			className={`flex-1 rounded-lg border px-3 py-2 text-sm font-medium transition ${
+			className={`flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-medium transition ${
 				direction === d
 					? 'border-brand bg-brand text-white'
 					: 'border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800'
 			}`}
 		>
+			<Icon name={icon} className={`h-4 w-4 ${iconExtra}`} />
 			{label}
 		</button>
 	);
@@ -305,12 +315,12 @@ export function MovementFormModal({
 		>
 			<div className="space-y-4 p-2">
 				<div className="grid grid-cols-4 gap-2">
-					{typeBtn('expense', '💸 Gasto')}
-					{typeBtn('income', '📥 Ingreso')}
-					{typeBtn('transfer', '🔁 Online', {
+					{typeBtn('expense', 'Gasto', 'trend-down')}
+					{typeBtn('income', 'Ingreso', 'trend-up')}
+					{typeBtn('transfer', 'Online', 'swap', {
 						disabled: onlineAccounts.length < 2,
 					})}
-					{typeBtn('cashflow', '💱 Efectivo', {
+					{typeBtn('cashflow', 'Efectivo', 'wallet', {
 						disabled: onlineAccounts.length === 0,
 					})}
 				</div>
@@ -365,8 +375,8 @@ export function MovementFormModal({
 				{type === 'cashflow' && (
 					<>
 						<div className="flex gap-2">
-							{dirBtn('toCash', 'Sacar dinero')}
-							{dirBtn('toBank', 'Ingresar dinero')}
+							{dirBtn('toCash', 'Sacar dinero', 'arrow-left')}
+							{dirBtn('toBank', 'Ingresar dinero', 'arrow-left', 'rotate-180')}
 						</div>
 						<div className="grid grid-cols-2 gap-3">
 							<Field label="Cuenta bancaria (online)">

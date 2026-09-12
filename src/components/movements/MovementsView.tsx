@@ -5,9 +5,49 @@ import { useStore } from '@/store/useStore';
 import { currentMonthISO, monthOf } from '@/lib/reports';
 import { monthLabel } from '@/lib/display';
 import { formatEUR } from '@/lib/money';
-import { Button, ConfirmDialog, EmptyState, inputCls } from '@/components/ui';
+import { Button, Card, Chip, ConfirmDialog, EmptyState, inputCls, PageHeader } from '@/components/ui';
 import { MovementFormModal } from './MovementFormModal';
 import { MovementListItem } from './MovementListItem';
+import { Icon } from '@/components/icons';
+import type { IconName } from '@/components/icons';
+
+function MenuItem({
+	icon,
+	label,
+	onClick,
+	onClose,
+	disabled = false,
+	hint,
+}: {
+	icon: IconName;
+	label: string;
+	onClick: () => void;
+	onClose: () => void;
+	disabled?: boolean;
+	hint?: string;
+}) {
+	return (
+		<>
+			<button
+				type="button"
+				disabled={disabled}
+				onClick={() => {
+					onClick();
+					onClose();
+				}}
+				className="flex w-full items-center gap-3 px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:text-slate-200 dark:hover:bg-slate-800"
+			>
+				<Icon name={icon} className="h-4 w-4 text-slate-400 dark:text-slate-500" />
+				{label}
+			</button>
+			{disabled && hint && (
+				<p className="px-4 pb-2 text-xs text-slate-400 dark:text-slate-500">
+					{hint}
+				</p>
+			)}
+		</>
+	);
+}
 
 export function MovementsView() {
 	const accounts = useStore((s) => s.accounts);
@@ -118,13 +158,14 @@ export function MovementsView() {
 	};
 
 	return (
-		<div className="space-y-4">
-			<div className="flex flex-wrap items-center justify-between gap-2">
-				<h1 className="text-xl font-bold">Movimientos</h1>
-				<div className="flex gap-2">
+		<div className="space-y-6">
+			<PageHeader
+				title="Movimientos"
+				subtitle={`${filtered.length} movimiento${filtered.length === 1 ? '' : 's'}`}
+				action={
 					<div className="relative">
-						<Button onClick={() => setMoveMenuOpen((o) => !o)}>
-							+ Nuevo movimiento
+						<Button icon="plus" onClick={() => setMoveMenuOpen((o) => !o)}>
+							Nuevo movimiento
 						</Button>
 						{moveMenuOpen && (
 							<div
@@ -133,145 +174,115 @@ export function MovementsView() {
 							/>
 						)}
 						{moveMenuOpen && (
-							<div className="absolute right-0 z-30 mt-2 w-72 overflow-hidden rounded-lg border border-slate-200 bg-white text-left shadow-lg dark:border-slate-700 dark:bg-slate-900">
-								<div className="px-4 pt-3 pb-1 text-xs font-semibold uppercase tracking-wide text-slate-400">
+							<div className="absolute right-0 z-30 mt-2 w-72 overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-xl dark:border-slate-700 dark:bg-slate-900">
+								<div className="px-4 pt-4 pb-1 text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
 									Ordinarios
 								</div>
-								<button
-									type="button"
-									onClick={() => {
-										newMovement('expense');
-										setMoveMenuOpen(false);
-									}}
-									className="flex w-full items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
-								>
-									Gasto
-								</button>
-								<button
-									type="button"
-									onClick={() => {
-										newMovement('income');
-										setMoveMenuOpen(false);
-									}}
-									className="flex w-full items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-800"
-								>
-									Ingreso
-								</button>
-								<button
-									type="button"
+								<MenuItem
+									icon="trend-down"
+									label="Gasto"
+									onClick={() => newMovement('expense')}
+									onClose={() => setMoveMenuOpen(false)}
+								/>
+								<MenuItem
+									icon="trend-up"
+									label="Ingreso"
+									onClick={() => newMovement('income')}
+									onClose={() => setMoveMenuOpen(false)}
+								/>
+								<MenuItem
+									icon="swap"
+									label="Transferencia online"
+									onClick={() => newMovement('transfer')}
+									onClose={() => setMoveMenuOpen(false)}
 									disabled={onlineTransferDisabled}
-									onClick={() => {
-										newMovement('transfer');
-										setMoveMenuOpen(false);
-									}}
-									className="flex w-full items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:text-slate-200 dark:hover:bg-slate-800"
-								>
-									Transferencia online
-								</button>
-								{onlineTransferDisabled && (
-									<p className="border-b border-slate-100 px-4 py-2 text-xs text-slate-400 dark:border-slate-800 dark:text-slate-500">
-										Necesitas al menos dos cuentas online para hacer transferencias
-									</p>
-								)}
+									hint="Necesitas al menos dos cuentas online"
+								/>
 								<div className="my-1 border-t border-slate-100 dark:border-slate-800" />
-								<div className="px-4 pt-1 pb-1 text-xs font-semibold uppercase tracking-wide text-slate-400">
+								<div className="px-4 pt-1 pb-1 text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
 									Banco ↔ Efectivo
 								</div>
-								<button
-									type="button"
+								<MenuItem
+									icon="wallet"
+									label="Sacar dinero"
+									onClick={() => newCashflow('toCash')}
+									onClose={() => setMoveMenuOpen(false)}
 									disabled={cashMenuDisabled}
-									onClick={() => {
-										newCashflow('toCash');
-										setMoveMenuOpen(false);
-									}}
-									className="flex w-full items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:text-slate-200 dark:hover:bg-slate-800"
-								>
-									Sacar dinero
-								</button>
-								<button
-									type="button"
+									hint="Necesitas una cuenta online y una de efectivo"
+								/>
+								<MenuItem
+									icon="wallet"
+									label="Ingresar dinero"
+									onClick={() => newCashflow('toBank')}
+									onClose={() => setMoveMenuOpen(false)}
 									disabled={cashMenuDisabled}
-									onClick={() => {
-										newCashflow('toBank');
-										setMoveMenuOpen(false);
-									}}
-									className="flex w-full items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 dark:text-slate-200 dark:hover:bg-slate-800"
-								>
-									Ingresar dinero
-								</button>
-								{cashMenuDisabled && (
-									<p className="border-t border-slate-100 px-4 py-2 text-xs text-slate-400 dark:border-slate-800 dark:text-slate-500">
-										Necesitas al menos una cuenta online y una de efectivo
-									</p>
-								)}
+									hint="Necesitas una cuenta online y una de efectivo"
+								/>
 							</div>
 						)}
 					</div>
+				}
+			/>
+
+			<Card className="p-4">
+				<div className="grid gap-3 sm:grid-cols-4">
+					<select
+						className={inputCls}
+						value={filterMonth}
+						onChange={(e) => setFilterMonth(e.target.value)}
+					>
+						{months.map((m) => (
+							<option key={m} value={m}>
+								{monthLabel(m)}
+							</option>
+						))}
+					</select>
+					<select
+						className={inputCls}
+						value={filterAccount}
+						onChange={(e) => setFilterAccount(e.target.value)}
+					>
+						<option value="">Todas las cuentas</option>
+						{accounts.map((a) => (
+							<option key={a.id} value={a.id}>
+								{a.name}
+							</option>
+						))}
+					</select>
+					<select
+						className={inputCls}
+						value={filterType}
+						onChange={(e) =>
+							setFilterType(e.target.value as 'all' | MovementType)
+						}
+					>
+						<option value="all">Todos los tipos</option>
+						<option value="income">Ingresos</option>
+						<option value="expense">Gastos</option>
+						<option value="transfer">Transferencias online</option>
+						<option value="cashflow">Banco ↔ Efectivo</option>
+					</select>
+					<input
+						className={inputCls}
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+						placeholder="Buscar concepto, categoría..."
+					/>
 				</div>
-			</div>
-
-			<div className="grid gap-2 sm:grid-cols-4">
-				<select
-					className={inputCls}
-					value={filterMonth}
-					onChange={(e) => setFilterMonth(e.target.value)}
-				>
-					{months.map((m) => (
-						<option key={m} value={m}>
-							{monthLabel(m)}
-						</option>
-					))}
-				</select>
-				<select
-					className={inputCls}
-					value={filterAccount}
-					onChange={(e) => setFilterAccount(e.target.value)}
-				>
-					<option value="">Todas las cuentas</option>
-					{accounts.map((a) => (
-						<option key={a.id} value={a.id}>
-							{a.name}
-						</option>
-					))}
-				</select>
-				<select
-					className={inputCls}
-					value={filterType}
-					onChange={(e) =>
-						setFilterType(e.target.value as 'all' | MovementType)
-					}
-				>
-					<option value="all">Todos los tipos</option>
-					<option value="income">Ingresos</option>
-					<option value="expense">Gastos</option>
-					<option value="transfer">Transferencias online</option>
-					<option value="cashflow">Banco ↔ Efectivo</option>
-				</select>
-				<input
-					className={inputCls}
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-					placeholder="Buscar concepto, categoría..."
-				/>
-			</div>
-
-			<div className="flex items-center gap-3 text-sm">
-				<span className="text-income dark:text-income-bright">
-					Ingresos: + {formatEUR(monthlyTotals.income)}
-				</span>
-				<span className="text-expense dark:text-expense-bright">
-					Gastos: - {formatEUR(monthlyTotals.expense)}
-				</span>
-			</div>
+				<div className="mt-3 flex items-center gap-2">
+					<Chip tone="income">Ingresos: + {formatEUR(monthlyTotals.income)}</Chip>
+					<Chip tone="expense">Gastos: - {formatEUR(monthlyTotals.expense)}</Chip>
+				</div>
+			</Card>
 
 			{filtered.length === 0 ? (
 				<EmptyState
-					icon="🧾"
+					icon="inbox"
 					title="Sin movimientos"
 					subtitle="Ajusta los filtros o registra un nuevo movimiento"
 				/>
 			) : (
-				<div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+				<Card>
 					<ul className="divide-y divide-slate-100 dark:divide-slate-800">
 						{filtered.map((m) => (
 							<MovementListItem
@@ -291,7 +302,7 @@ export function MovementsView() {
 							/>
 						))}
 					</ul>
-				</div>
+				</Card>
 			)}
 
 			{formOpen && (
