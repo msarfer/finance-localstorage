@@ -45,11 +45,11 @@ export function Layout({ children }: { children: ReactNode }) {
 
 	const brand = (
 		<Link href="/" className="flex items-center gap-3">
-			<span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-white shadow-sm">
+			<span className="flex h-9 w-9 items-center justify-center rounded-(--radius-field) bg-brand text-white shadow-sm">
 				<Icon name="wallet" className="h-5 w-5" />
 			</span>
 			<span>
-				<span className="block text-[15px] font-bold leading-tight tracking-tight text-slate-900 dark:text-white">
+				<span className="block text-base font-bold leading-tight tracking-tight text-slate-900 dark:text-white">
 					Mis Finanzas
 				</span>
 				<span className="block text-xs text-slate-500 dark:text-slate-400">
@@ -127,7 +127,7 @@ export function Layout({ children }: { children: ReactNode }) {
 						<Link
 							key={item.path}
 							href={item.path}
-							className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-[10px] font-medium transition ${
+							className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition ${
 								active
 									? 'text-brand dark:text-brand-bright'
 									: 'text-slate-400 dark:text-slate-500'

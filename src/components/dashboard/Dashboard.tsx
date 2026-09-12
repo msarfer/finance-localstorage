@@ -39,7 +39,7 @@ export function Dashboard() {
 	const incomePct = flow > 0 ? (income / flow) * 100 : 50;
 
 	return (
-		<div className="space-y-8">
+		<div className="space-y-6">
 			<PageHeader title="Resumen" subtitle={monthLabel(month)} />
 
 			<div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
