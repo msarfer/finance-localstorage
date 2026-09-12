@@ -51,5 +51,3 @@ export interface AppState {
   categories: Category[]
   settings: AppSettings
 }
-
-export type View = 'dashboard' | 'accounts' | 'movements' | 'categories' | 'tools'

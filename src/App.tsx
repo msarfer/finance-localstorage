@@ -1,24 +1,30 @@
-import { useState } from 'react'
+import { Router, Route, Switch } from 'wouter'
+import { useHashLocation } from 'wouter/use-hash-location'
 
-import type { View } from '@/types'
 import { Layout } from '@/components/Layout'
 import { Dashboard } from '@/components/dashboard/Dashboard'
 import { AccountsView } from '@/components/accounts/AccountsView'
+import { AccountDetailView } from '@/components/accounts/AccountDetailView'
 import { MovementsView } from '@/components/movements/MovementsView'
 import { CategoriesView } from '@/components/categories/CategoriesView'
 import { ToolsView } from '@/components/tools/ToolsView'
+import { NotFound } from '@/components/NotFound'
 
 function App() {
-  const [view, setView] = useState<View>('dashboard')
-
   return (
-    <Layout view={view} onChangeView={setView}>
-      {view === 'dashboard' && <Dashboard />}
-      {view === 'accounts' && <AccountsView />}
-      {view === 'movements' && <MovementsView />}
-      {view === 'categories' && <CategoriesView />}
-      {view === 'tools' && <ToolsView />}
-    </Layout>
+    <Router hook={useHashLocation}>
+      <Layout>
+        <Switch>
+          <Route path="/" component={Dashboard} />
+          <Route path="/accounts" component={AccountsView} />
+          <Route path="/accounts/:id" component={AccountDetailView} />
+          <Route path="/movements" component={MovementsView} />
+          <Route path="/categories" component={CategoriesView} />
+          <Route path="/tools" component={ToolsView} />
+          <Route path="*" component={NotFound} />
+        </Switch>
+      </Layout>
+    </Router>
   )
 }
 

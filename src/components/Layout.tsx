@@ -1,30 +1,29 @@
 import type { ReactNode } from 'react';
+import { Link, useLocation } from 'wouter';
 
-import type { View } from '@/types';
 import { useStore } from '@/store/useStore';
 import { computeCashTotal } from '@/lib/money';
 import { formatEUR } from '@/lib/money';
 import { useTheme } from '@/hooks/useTheme';
 
-const NAV: { view: View; label: string; icon: string }[] = [
-	{ view: 'dashboard', label: 'Resumen', icon: '📊' },
-	{ view: 'accounts', label: 'Cuentas', icon: '🏦' },
-	{ view: 'movements', label: 'Movimientos', icon: '🔄' },
-	{ view: 'categories', label: 'Categorías', icon: '🏷️' },
-	{ view: 'tools', label: 'Importar / Exportar', icon: '💾' },
+const NAV: { path: string; label: string; icon: string }[] = [
+	{ path: '/', label: 'Resumen', icon: '📊' },
+	{ path: '/accounts', label: 'Cuentas', icon: '🏦' },
+	{ path: '/movements', label: 'Movimientos', icon: '🔄' },
+	{ path: '/categories', label: 'Categorías', icon: '🏷️' },
+	{ path: '/tools', label: 'Importar / Exportar', icon: '💾' },
 ];
 
-export function Layout({
-	view,
-	onChangeView,
-	children,
-}: {
-	view: View;
-	onChangeView: (v: View) => void;
-	children: ReactNode;
-}) {
+function isActive(path: string, current: string): boolean {
+	return path === '/'
+		? current === '/'
+		: current === path || current.startsWith(path + '/');
+}
+
+export function Layout({ children }: { children: ReactNode }) {
 	const accounts = useStore((s) => s.accounts);
 	const { theme, setTheme } = useTheme();
+	const [location] = useLocation();
 
 	const total = accounts.reduce(
 		(sum, a) =>
@@ -64,19 +63,18 @@ export function Layout({
 				</div>
 				<nav className="mx-auto flex max-w-5xl gap-1 overflow-x-auto px-4 pb-2">
 					{NAV.map((item) => (
-						<button
-							key={item.view}
-							type="button"
-							onClick={() => onChangeView(item.view)}
+						<Link
+							key={item.path}
+							href={item.path}
 							className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition ${
-								view === item.view
+								isActive(item.path, location)
 									? 'bg-indigo-600 text-white shadow-sm'
 									: 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'
 							}`}
 						>
 							<span aria-hidden>{item.icon}</span>
 							{item.label}
-						</button>
+						</Link>
 					))}
 				</nav>
 			</header>
