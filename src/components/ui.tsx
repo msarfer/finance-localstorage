@@ -539,7 +539,7 @@ export function DatePicker({
           type="button"
           onClick={() => setOpen((o) => !o)}
           aria-label="Abrir calendario"
-          className="absolute inset-y-0 right-0 flex cursor-pointer items-center px-2.5 text-slate-400 outline-none transition focus-visible:text-brand hover:text-slate-600 dark:hover:text-slate-200"
+          className="absolute inset-y-0 right-0 flex cursor-pointer items-center px-2.5 text-slate-400 transition hover:text-slate-600 dark:hover:text-slate-200"
         >
           <Icon name="calendar" />
         </button>
