@@ -9,7 +9,7 @@ import {
 	parseCentsInput,
 	todayISO,
 } from '@/lib/money';
-import { Button, Field, Modal, inputCls } from '@/components/ui';
+import { Button, Field, Modal, inputCls, DatePicker } from '@/components/ui';
 import { CashBreakdownEditor } from '@/components/accounts/CashBreakdownEditor';
 
 type CashflowDirection = 'toCash' | 'toBank';
@@ -430,12 +430,7 @@ export function MovementFormModal({
 						)}
 					</Field>
 					<Field label="Fecha">
-						<input
-							className={inputCls}
-							type="date"
-							value={date}
-							onChange={(e) => setDate(e.target.value)}
-						/>
+						<DatePicker value={date} onChange={setDate} />
 					</Field>
 				</div>
 
