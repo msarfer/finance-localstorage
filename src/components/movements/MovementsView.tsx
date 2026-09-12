@@ -5,7 +5,7 @@ import { useStore } from '@/store/useStore';
 import { currentMonthISO, monthOf } from '@/lib/reports';
 import { monthLabel } from '@/lib/display';
 import { formatEUR } from '@/lib/money';
-import { Button, Card, Chip, ConfirmDialog, EmptyState, inputCls, PageHeader, SectionLabel } from '@/components/ui';
+import { Button, Card, Chip, ConfirmDialog, EmptyState, inputCls, PageHeader, SearchBox, SectionLabel, Segmented } from '@/components/ui';
 import { MovementFormModal } from './MovementFormModal';
 import { MovementListItem } from './MovementListItem';
 import { Icon } from '@/components/icons';
@@ -225,7 +225,7 @@ export function MovementsView() {
 			/>
 
 			<Card className="p-4">
-				<div className="grid gap-3 sm:grid-cols-4">
+				<div className="grid gap-3 sm:grid-cols-2">
 					<select
 						className={inputCls}
 						value={filterMonth}
@@ -249,25 +249,26 @@ export function MovementsView() {
 							</option>
 						))}
 					</select>
-					<select
-						className={inputCls}
+				</div>
+				<div className="mt-3 flex flex-wrap items-center gap-3">
+					<Segmented<'all' | MovementType>
 						value={filterType}
-						onChange={(e) =>
-							setFilterType(e.target.value as 'all' | MovementType)
-						}
-					>
-						<option value="all">Todos los tipos</option>
-						<option value="income">Ingresos</option>
-						<option value="expense">Gastos</option>
-						<option value="transfer">Transferencias online</option>
-						<option value="cashflow">Banco ↔ Efectivo</option>
-					</select>
-					<input
-						className={inputCls}
-						value={search}
-						onChange={(e) => setSearch(e.target.value)}
-						placeholder="Buscar concepto, categoría..."
+						onChange={setFilterType}
+						options={[
+							{ value: 'all', label: 'Todos' },
+							{ value: 'income', label: 'Ingresos' },
+							{ value: 'expense', label: 'Gastos' },
+							{ value: 'transfer', label: 'Transferencias' },
+							{ value: 'cashflow', label: 'Banco ↔ Efectivo' },
+						]}
 					/>
+					<div className="min-w-0 flex-1 sm:max-w-xs">
+						<SearchBox
+							value={search}
+							onChange={setSearch}
+							placeholder="Buscar concepto, categoría…"
+						/>
+					</div>
 				</div>
 				<div className="mt-3 flex items-center gap-2">
 					<Chip tone="income">Ingresos: + {formatEUR(monthlyTotals.income)}</Chip>

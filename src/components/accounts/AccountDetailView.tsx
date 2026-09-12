@@ -13,7 +13,9 @@ import {
   ConfirmDialog,
   EmptyState,
   inputCls,
+  SearchBox,
   SectionLabel,
+  Segmented,
 } from '@/components/ui'
 import { AccountFormModal } from './AccountFormModal'
 import { BinList } from './BinList'
@@ -139,7 +141,9 @@ export function AccountDetailView() {
               style={{ backgroundColor: account.color }}
             />
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">{account.name}</h1>
+              <h1 className="font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                {account.name}
+              </h1>
               <p className="text-sm text-slate-500 dark:text-slate-400">
                 {account.kind === 'cash'
                   ? 'Efectivo físico'
@@ -162,7 +166,7 @@ export function AccountDetailView() {
           </div>
         </div>
         <p
-          className="mt-6 text-4xl font-semibold tracking-tight tabular-nums"
+          className="mt-6 font-display text-4xl font-semibold tracking-tight tabular-nums"
           style={{ color: account.color }}
         >
           {formatEUR(accountTotal(account))}
@@ -190,7 +194,7 @@ export function AccountDetailView() {
         </div>
 
         <Card className="p-4">
-          <div className="grid gap-2 sm:grid-cols-3">
+          <div className="grid gap-2 sm:grid-cols-2">
             <select
               className={inputCls}
               value={filterMonth}
@@ -202,24 +206,23 @@ export function AccountDetailView() {
                 </option>
               ))}
             </select>
-            <select
-              className={inputCls}
-              value={filterType}
-              onChange={(e) =>
-                setFilterType(e.target.value as 'all' | MovementType)
-              }
-            >
-              <option value="all">Todos los tipos</option>
-              <option value="income">Ingresos</option>
-              <option value="expense">Gastos</option>
-              <option value="transfer">Transferencias online</option>
-              <option value="cashflow">Banco ↔ Efectivo</option>
-            </select>
-            <input
-              className={inputCls}
+            <SearchBox
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar concepto, categoría..."
+              onChange={setSearch}
+              placeholder="Buscar concepto, categoría…"
+            />
+          </div>
+          <div className="mt-3 flex flex-wrap items-center gap-3">
+            <Segmented<'all' | MovementType>
+              value={filterType}
+              onChange={setFilterType}
+              options={[
+                { value: 'all', label: 'Todos' },
+                { value: 'income', label: 'Ingresos' },
+                { value: 'expense', label: 'Gastos' },
+                { value: 'transfer', label: 'Transferencias' },
+                { value: 'cashflow', label: 'Banco ↔ Efectivo' },
+              ]}
             />
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-2">
