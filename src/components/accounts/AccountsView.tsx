@@ -1,32 +1,13 @@
 import { useState } from 'react'
+import { Link } from 'wouter'
 
 import type { Account } from '@/types'
-import { BILL_LABELS, COIN_LABELS } from '@/data/constants'
 import { useStore } from '@/store/useStore'
 import { computeCashTotal } from '@/lib/money'
 import { formatEUR } from '@/lib/money'
 import { Button, ConfirmDialog, EmptyState } from '@/components/ui'
+import { BinList } from './BinList'
 import { AccountFormModal } from './AccountFormModal'
-
-function BinList({ account }: { account: Account }) {
-  const cash = account.cash ?? {}
-  const entries = Object.entries(cash)
-    .filter(([, count]) => typeof count === 'number' && count > 0)
-    .sort((a, b) => Number(b[0]) - Number(a[0]))
-  if (entries.length === 0) return <p className="text-sm text-slate-500 dark:text-slate-400">Sin billetes ni monedas.</p>
-  return (
-    <div className="flex flex-wrap gap-1.5">
-      {entries.map(([denom, count]) => {
-        const label = (BILL_LABELS[Number(denom)] ?? COIN_LABELS[Number(denom)] ?? `${denom} €`)
-        return (
-          <span key={denom} className="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-            {count} × {label}
-          </span>
-        )
-      })}
-    </div>
-  )
-}
 
 export function AccountsView() {
   const accounts = useStore((s) => s.accounts)
@@ -41,16 +22,18 @@ export function AccountsView() {
   const renderCard = (a: Account) => (
     <div key={a.id} className="flex flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
       <div className="flex items-start justify-between gap-2">
-        <div className="flex items-start gap-2.5">
+        <Link href={`/accounts/${a.id}`} className="group flex min-w-0 items-start gap-2.5">
           <span className="mt-0.5 h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: a.color }} />
-          <div>
-            <p className="font-semibold leading-tight">{a.name}</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+          <span className="min-w-0">
+            <span className="block truncate font-semibold leading-tight transition group-hover:text-indigo-600">
+              {a.name}
+            </span>
+            <span className="block text-xs text-slate-500 dark:text-slate-400">
               {a.kind === 'cash' ? 'Efectivo físico' : (a.entity || 'Cuenta online')}
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-1">
+            </span>
+          </span>
+        </Link>
+        <div className="flex shrink-0 gap-1">
           <button
             type="button"
             onClick={() => {
@@ -77,9 +60,9 @@ export function AccountsView() {
           </button>
         </div>
       </div>
-      <p className="mt-3 text-2xl font-bold" style={{ color: a.color }}>
+      <Link href={`/accounts/${a.id}`} className="mt-3 text-2xl font-bold transition hover:opacity-80" style={{ color: a.color }}>
         {formatEUR(a.kind === 'cash' ? computeCashTotal(a.cash ?? {}) : a.balance)}
-      </p>
+      </Link>
       {a.kind === 'cash' && (
         <div className="mt-3 border-t border-slate-100 pt-3 dark:border-slate-800">
           <p className="mb-1.5 text-xs font-medium text-slate-500 dark:text-slate-400">Desglose</p>

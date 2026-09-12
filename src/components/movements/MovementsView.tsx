@@ -3,10 +3,11 @@ import { useMemo, useState } from 'react';
 import type { Movement, MovementType } from '@/types';
 import { useStore } from '@/store/useStore';
 import { currentMonthISO, monthOf } from '@/lib/reports';
-import { signedEUR, formatDate, monthLabel } from '@/lib/display';
+import { monthLabel } from '@/lib/display';
 import { formatEUR } from '@/lib/money';
 import { Button, ConfirmDialog, EmptyState, inputCls } from '@/components/ui';
 import { MovementFormModal } from './MovementFormModal';
+import { MovementListItem } from './MovementListItem';
 
 export function MovementsView() {
 	const accounts = useStore((s) => s.accounts);
@@ -101,14 +102,6 @@ export function MovementsView() {
 			.reduce((s, m) => s + m.amount, 0);
 		return { income, expense };
 	}, [filtered]);
-
-	const chip = (m: Movement) => {
-		if (m.type === 'expense')
-			return 'bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-300';
-		if (m.type === 'income')
-			return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300';
-		return 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300';
-	};
 
 	const newMovement = (t: MovementType) => {
 		setEditing(null);
@@ -280,94 +273,23 @@ export function MovementsView() {
 			) : (
 				<div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
 					<ul className="divide-y divide-slate-100 dark:divide-slate-800">
-						{filtered.map((m) => {
-							const cat = m.categoryId
-								? categoryById.get(m.categoryId)
-								: undefined;
-							const isPair = m.type === 'transfer' || m.type === 'cashflow';
-							const originName = isPair
-								? accountName.get(m.fromAccountId ?? '')
-								: accountName.get(m.accountId ?? '');
-							const destName = isPair
-								? accountName.get(m.toAccountId ?? '')
-								: undefined;
-							return (
-								<li key={m.id} className="flex items-center gap-3 px-4 py-3">
-									<span
-										className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-base ${chip(m)}`}
-									>
-										{m.type === 'cashflow'
-											? '💱'
-											: (cat?.emoji ??
-												(m.type === 'transfer'
-													? '🔁'
-													: m.type === 'income'
-														? '📥'
-														: '💸'))}
-									</span>
-									<div className="min-w-0 flex-1">
-										<p className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">
-											{m.concept ||
-												(m.type === 'transfer'
-													? 'Transferencia online'
-													: m.type === 'cashflow'
-														? 'Sacar / Ingresar dinero'
-														: (cat?.name ?? 'Movimiento'))}
-										</p>
-										<p className="truncate text-xs text-slate-500 dark:text-slate-400">
-											{formatDate(m.date)} · {originName}
-											{destName ? ` → ${destName}` : ''}
-											{cat && m.type !== 'transfer' ? ` · ${cat.name}` : ''}
-											{m.cashBreakdown ? ' · 💵 efectivo' : ''}
-										</p>
-									</div>
-									<div className="flex shrink-0 items-center gap-2">
-										<span
-											className={`text-sm font-semibold ${m.type === 'expense' ? 'text-red-600 dark:text-red-400' : m.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-600 dark:text-slate-300'}`}
-										>
-											{signedEUR(m.amount, m.type)}
-										</span>
-										<button
-											type="button"
-											onClick={() => {
-												setEditing(m);
-												setPresetType(undefined);
-												setPresetDirection(undefined);
-												setFormOpen(true);
-											}}
-											className="rounded-md p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-800"
-											title="Editar"
-										>
-											<svg
-												className="h-4 w-4"
-												viewBox="0 0 20 20"
-												fill="currentColor"
-											>
-												<path d="M5.433 13.917l1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
-											</svg>
-										</button>
-										<button
-											type="button"
-											onClick={() => setDeleting(m)}
-											className="rounded-md p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/40"
-											title="Eliminar"
-										>
-											<svg
-												className="h-4 w-4"
-												viewBox="0 0 20 20"
-												fill="currentColor"
-											>
-												<path
-													fillRule="evenodd"
-													d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4Z"
-													clipRule="evenodd"
-												/>
-											</svg>
-										</button>
-									</div>
-								</li>
-							);
-						})}
+						{filtered.map((m) => (
+							<MovementListItem
+								key={m.id}
+								movement={m}
+								accountName={(id) =>
+									id ? accountName.get(id) : undefined
+								}
+								categoryById={categoryById}
+								onEdit={() => {
+									setEditing(m);
+									setPresetType(undefined);
+									setPresetDirection(undefined);
+									setFormOpen(true);
+								}}
+								onDelete={() => setDeleting(m)}
+							/>
+						))}
 					</ul>
 				</div>
 			)}
