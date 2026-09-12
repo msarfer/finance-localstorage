@@ -3,10 +3,11 @@ import { persist } from 'zustand/middleware'
 
 import type { Account, AppSettings, AppState, Category, Movement } from '@/types'
 import { DEFAULT_CATEGORIES } from '@/data/defaultCategories'
+import { DENOMINATIONS } from '@/data/constants'
 import { computeCashTotal, emptyCashCounts, uid } from '@/lib/money'
 
 const STORAGE_KEY = 'finanzas:state'
-export const SCHEMA_VERSION = 3
+export const SCHEMA_VERSION = 4
 
 export const EXPORT_HEADER = {
   app: 'mis-finanzas',
@@ -183,13 +184,63 @@ export const useStore = create<FinanceStore>()(
         categories: s.categories,
         settings: s.settings,
       }),
-      migrate: () => ({
-        version: SCHEMA_VERSION,
-        accounts: [],
-        movements: [],
-        categories: DEFAULT_CATEGORIES,
-        settings: { theme: 'system' } as AppState['settings'],
-      }),
+      migrate: (persistedState) => {
+        const s = persistedState as
+          | {
+              accounts?: Account[]
+              movements?: Movement[]
+              categories?: Category[]
+              settings?: AppSettings
+            }
+          | undefined
+        const empty = {
+          version: SCHEMA_VERSION,
+          accounts: [] as Account[],
+          movements: [] as Movement[],
+          categories: DEFAULT_CATEGORIES,
+          settings: { theme: 'system' } as AppSettings,
+        }
+        if (!s || !Array.isArray(s.accounts) || !Array.isArray(s.movements)) {
+          return empty
+        }
+
+        const cleanCounts = (counts?: unknown): Record<number, number> | undefined => {
+          if (!counts || typeof counts !== 'object') return undefined
+          const next: Record<number, number> = {}
+          for (const [key, raw] of Object.entries(counts as Record<string, unknown>)) {
+            const denom = Number(key)
+            const count = Number(raw)
+            if (
+              Number.isInteger(denom) &&
+              DENOMINATIONS.includes(denom) &&
+              Number.isInteger(count) &&
+              count > 0 &&
+              count <= 100000
+            ) {
+              next[denom] = count
+            }
+          }
+          return Object.keys(next).length > 0 ? next : undefined
+        }
+
+        return {
+          version: SCHEMA_VERSION,
+          accounts: s.accounts.map((a) => {
+            if (a.kind !== 'cash') return a
+            const cash = cleanCounts(a.cash) ?? emptyCashCounts()
+            return { ...a, cash, balance: computeCashTotal(cash) }
+          }),
+          movements: s.movements.map((m) => ({
+            ...m,
+            cashBreakdown: cleanCounts(m.cashBreakdown),
+          })),
+          categories:
+            Array.isArray(s.categories) && s.categories.length > 0
+              ? s.categories
+              : DEFAULT_CATEGORIES,
+          settings: s.settings ?? { theme: 'system' },
+        }
+      },
     },
   ),
 )
