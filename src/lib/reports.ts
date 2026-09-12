@@ -21,6 +21,40 @@ export interface DashboardSummary {
   recent: Movement[]
 }
 
+export interface TrendPoint {
+  month: string
+  label: string
+  income: number
+  expense: number
+}
+
+export function monthlyTrend(
+  state: Pick<AppState, 'movements'>,
+  months: number = 6,
+): TrendPoint[] {
+  const now = new Date()
+  const fmt = new Intl.DateTimeFormat('es-ES', { month: 'short' })
+  const points: TrendPoint[] = []
+  for (let i = months - 1; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1)
+    const month = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+    let income = 0
+    let expense = 0
+    for (const m of state.movements) {
+      if (monthOf(m.date) !== month) continue
+      if (m.type === 'income') income += m.amount
+      else if (m.type === 'expense') expense += m.amount
+    }
+    points.push({
+      month,
+      label: fmt.format(d).replace('.', '').trim(),
+      income,
+      expense,
+    })
+  }
+  return points
+}
+
 export function summarize(state: Pick<AppState, 'accounts' | 'movements' | 'categories'>, month: string = currentMonthISO()): DashboardSummary {
   let totalOnline = 0
   let totalCash = 0

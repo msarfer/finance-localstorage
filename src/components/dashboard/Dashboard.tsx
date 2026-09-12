@@ -2,9 +2,10 @@ import { useShallow } from 'zustand/react/shallow';
 import { Link } from 'wouter';
 
 import { useStore } from '@/store/useStore';
-import { summarize, currentMonthISO } from '@/lib/reports';
+import { summarize, currentMonthISO, monthlyTrend } from '@/lib/reports';
 import { formatEUR } from '@/lib/money';
 import { monthLabel } from '@/lib/display';
+import { useCountUp } from '@/hooks/useCountUp';
 import {
 	Card,
 	Chip,
@@ -14,6 +15,7 @@ import {
 	StatCard,
 } from '@/components/ui';
 import { MovementListItem } from '@/components/movements/MovementListItem';
+import { TrendChart } from '@/components/dashboard/TrendChart';
 
 export function Dashboard() {
 	const state = useStore(
@@ -28,6 +30,9 @@ export function Dashboard() {
 
 	const month = currentMonthISO();
 	const summary = summarize(state, month);
+	const trend = monthlyTrend(state, 6);
+
+	const animatedAssets = useCountUp(summary.totalAssets, 700);
 
 	const incomeColor = 'var(--color-income)';
 	const expenseColor = 'var(--color-expense)';
@@ -38,35 +43,79 @@ export function Dashboard() {
 	const flow = income + expense;
 	const incomePct = flow > 0 ? (income / flow) * 100 : 50;
 
+	const onlineCount = state.accounts.filter((a) => a.kind === 'online').length;
+	const cashCount = state.accounts.filter((a) => a.kind === 'cash').length;
+
+	const monthBalancePositive = summary.monthBalance >= 0;
+
 	return (
 		<div className="space-y-6">
-			<PageHeader title="Resumen" subtitle={monthLabel(month)} />
+			<PageHeader
+				title="Resumen"
+				subtitle={monthLabel(month)}
+			/>
 
-			<div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-				<StatCard
-					label="Tu Patrimonio"
-					value={formatEUR(summary.totalAssets)}
-					icon="dashboard"
-				/>
+			<Card className="relative overflow-hidden p-6 sm:p-8">
+				<div className="flex flex-wrap items-start justify-between gap-6">
+					<div>
+						<SectionLabel>Tu patrimonio</SectionLabel>
+						<p className="mt-2 font-display text-4xl font-semibold tracking-tight tabular-nums text-slate-900 sm:text-5xl dark:text-white">
+							{formatEUR(Math.round(animatedAssets))}
+						</p>
+						<p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+							{onlineCount} {onlineCount === 1 ? 'cuenta online' : 'cuentas online'}
+							{' · '}
+							{cashCount} {cashCount === 1 ? 'cuenta de efectivo' : 'cuentas de efectivo'}
+						</p>
+					</div>
+					<div className="text-right">
+						<SectionLabel>Neto del mes</SectionLabel>
+						<p
+							className={`mt-2 font-display text-3xl font-semibold tracking-tight tabular-nums ${
+								monthBalancePositive
+									? 'text-income dark:text-income-bright'
+									: 'text-expense dark:text-expense-bright'
+							}`}
+						>
+							{monthBalancePositive ? '+' : '−'}
+							{formatEUR(Math.abs(summary.monthBalance))}
+						</p>
+					</div>
+				</div>
+			</Card>
+
+			<div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
 				<StatCard
 					label="Cuentas online"
 					value={formatEUR(summary.totalOnline)}
-					sub={`${state.accounts.filter((a) => a.kind === 'online').length} cuentas`}
+					sub={`${onlineCount} cuentas`}
 					icon="bank"
 				/>
 				<StatCard
 					label="Efectivo en mano"
 					value={formatEUR(summary.totalCash)}
-					sub={`${state.accounts.filter((a) => a.kind === 'cash').length} cuentas`}
+					sub={`${cashCount} cuentas`}
 					icon="wallet"
 				/>
 				<StatCard
 					label="Balance del mes"
 					value={formatEUR(summary.monthBalance)}
-					accent={summary.monthBalance >= 0 ? incomeColor : expenseColor}
-					icon={summary.monthBalance >= 0 ? 'trend-up' : 'trend-down'}
+					accent={
+						monthBalancePositive ? incomeColor : expenseColor
+					}
+					icon={
+						monthBalancePositive ? 'trend-up' : 'trend-down'
+					}
 				/>
 			</div>
+
+			<Card className="p-5">
+				<div className="flex items-center justify-between">
+					<SectionLabel>Tendencia 6 meses</SectionLabel>
+					<Chip tone="neutral">Ingreso vs gasto</Chip>
+				</div>
+				<TrendChart points={trend} />
+			</Card>
 
 			<Card className="p-5">
 				<div className="flex items-center justify-between">
@@ -78,7 +127,7 @@ export function Dashboard() {
 						<p className="text-sm font-medium text-slate-500 dark:text-slate-400">
 							Ingresos
 						</p>
-						<p className="mt-1 text-2xl font-semibold tracking-tight tabular-nums text-income dark:text-income-bright">
+						<p className="mt-1 font-display text-2xl font-semibold tracking-tight tabular-nums text-income sm:text-3xl dark:text-income-bright">
 							+ {formatEUR(income)}
 						</p>
 					</div>
@@ -86,25 +135,19 @@ export function Dashboard() {
 						<p className="text-sm font-medium text-slate-500 dark:text-slate-400">
 							Gastos
 						</p>
-						<p className="mt-1 text-2xl font-semibold tracking-tight tabular-nums text-expense dark:text-expense-bright">
+						<p className="mt-1 font-display text-2xl font-semibold tracking-tight tabular-nums text-expense sm:text-3xl dark:text-expense-bright">
 							- {formatEUR(expense)}
 						</p>
 					</div>
 				</div>
 				<div className="mt-5 flex h-1.5 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
 					<div
-						className="h-full rounded-l-full"
-						style={{
-							width: `${incomePct}%`,
-							backgroundColor: 'var(--color-income)',
-						}}
+						className="h-full rounded-l-full transition-all"
+						style={{ width: `${incomePct}%`, backgroundColor: incomeColor }}
 					/>
 					<div
-						className="h-full rounded-r-full"
-						style={{
-							width: `${100 - incomePct}%`,
-							backgroundColor: 'var(--color-expense)',
-						}}
+						className="h-full rounded-r-full transition-all"
+						style={{ width: `${100 - incomePct}%`, backgroundColor: expenseColor }}
 					/>
 				</div>
 				<p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
@@ -191,7 +234,9 @@ export function Dashboard() {
 							<MovementListItem
 								key={m.id}
 								movement={m}
-								accountName={(id) => (id ? accountName.get(id) : undefined)}
+								accountName={(id) =>
+									id ? accountName.get(id) : undefined
+								}
 								categoryById={categoryById}
 							/>
 						))}
