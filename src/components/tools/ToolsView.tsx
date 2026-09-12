@@ -104,7 +104,10 @@ export function ToolsView() {
 			/>
 
 			{done && (
-				<div className="flex items-center gap-2 rounded-(--radius-inner) border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300">
+				<div
+					role="status"
+					className="flex items-center gap-2 rounded-(--radius-inner) border border-income-soft bg-income-soft px-4 py-3 text-sm font-medium text-income-strong dark:border-income-soft-dark dark:bg-income-soft-dark/40 dark:text-income-bright"
+				>
 					<Icon name="check" className="h-4 w-4" />
 					{done}
 				</div>

@@ -492,7 +492,10 @@ export function MovementFormModal({
 				)}
 
 				{error && (
-					<p className="rounded-(--radius-inner) bg-expense-soft px-3 py-2 text-sm text-expense dark:bg-expense-soft-dark/40 dark:text-expense-bright">
+					<p
+						role="alert"
+						className="rounded-(--radius-inner) bg-expense-soft px-3 py-2 text-sm text-expense dark:bg-expense-soft-dark/40 dark:text-expense-bright"
+					>
 						{error}
 					</p>
 				)}

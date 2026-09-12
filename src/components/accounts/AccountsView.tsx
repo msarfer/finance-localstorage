@@ -51,7 +51,7 @@ export function AccountsView() {
       </div>
       <Link
         href={`/accounts/${a.id}`}
-        className="mt-4 block text-2xl font-semibold tracking-tight tabular-nums transition hover:opacity-75"
+        className="mt-4 block font-display text-2xl font-semibold tracking-tight tabular-nums transition hover:opacity-75"
         style={{ color: a.color }}
       >
         {formatEUR(a.kind === 'cash' ? computeCashTotal(a.cash ?? {}) : a.balance)}
@@ -92,6 +92,17 @@ export function AccountsView() {
           icon="bank"
           title="No tienes cuentas todavía"
           subtitle="Crea tu primera cuenta online o de efectivo"
+          action={
+            <Button
+              icon="plus"
+              onClick={() => {
+                setEditing(null)
+                setFormOpen(true)
+              }}
+            >
+              Nueva cuenta
+            </Button>
+          }
         />
       ) : (
         <div className="space-y-6">

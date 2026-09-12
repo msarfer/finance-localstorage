@@ -101,7 +101,12 @@ function CategoryFormModal({
 					/>
 				</Field>
 				{error && (
-					<p className="text-sm text-expense dark:text-expense-bright">{error}</p>
+					<p
+						role="alert"
+						className="text-sm text-expense dark:text-expense-bright"
+					>
+						{error}
+					</p>
 				)}
 			</div>
 		</Modal>
@@ -147,6 +152,17 @@ export function CategoriesView() {
 					icon="tag"
 					title="No hay categorías todavía"
 					subtitle="Crea tu primera categoría para organizar tus movimientos"
+					action={
+						<Button
+							icon="plus"
+							onClick={() => {
+								setEditing(null);
+								setFormOpen(true);
+							}}
+						>
+							Nueva categoría
+						</Button>
+					}
 				/>
 			) : (
 				<div className="grid gap-3 sm:grid-cols-2">
@@ -155,7 +171,7 @@ export function CategoriesView() {
 						return (
 							<Card key={c.id} className="flex items-center gap-3 px-4 py-3">
 								<span
-									className="flex h-9 w-9 shrink-0 items-center justify-center rounded-(--radius-field) text-base"
+									className="flex h-9 w-9 shrink-0 items-center justify-center rounded-(--radius-inner) text-base"
 									style={{
 										backgroundColor: `color-mix(in srgb, ${c.color} 15%, transparent)`,
 									}}

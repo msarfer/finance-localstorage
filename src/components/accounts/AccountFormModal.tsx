@@ -158,7 +158,12 @@ export function AccountFormModal({
 				</Field>
 
 				{error && (
-					<p className="text-sm text-expense dark:text-expense-bright">{error}</p>
+					<p
+						role="alert"
+						className="text-sm text-expense dark:text-expense-bright"
+					>
+						{error}
+					</p>
 				)}
 			</div>
 		</Modal>
