@@ -31,8 +31,32 @@ html {
 body {
   margin: 0;
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-:root {
-  --font-sans: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+button:not(:disabled),
+[role="button"]:not(:disabled) {
+  cursor: pointer;
+}
+
+input,
+select,
+textarea {
+  accent-color: var(--color-brand);
+}
+
+::selection {
+  background: var(--color-brand-soft);
+  color: var(--color-brand-strong);
+}
+
+.dark ::selection {
+  background: var(--color-brand-soft-dark);
+  color: var(--color-brand-bright);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(148 163 184 / 0.5) transparent;
 }
