@@ -24,8 +24,14 @@ export function monthLabel(iso: string): string {
   return new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(date)
 }
 
+const signedEURFormatter = new Intl.NumberFormat('es-ES', {
+  style: 'currency',
+  currency: 'EUR',
+  signDisplay: 'always',
+})
+
 export function signedEUR(cents: number, type: MovementType): string {
-  if (type === 'expense') return `- ${formatEUR(cents)}`
-  if (type === 'income') return `+ ${formatEUR(cents)}`
+  if (type === 'expense') return signedEURFormatter.format(-cents / 100)
+  if (type === 'income') return signedEURFormatter.format(cents / 100)
   return formatEUR(cents)
 }
