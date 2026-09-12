@@ -13,6 +13,7 @@ import {
   ConfirmDialog,
   EmptyState,
   inputCls,
+  SectionLabel,
 } from '@/components/ui'
 import { AccountFormModal } from './AccountFormModal'
 import { BinList } from './BinList'
@@ -168,9 +169,7 @@ export function AccountDetailView() {
         </p>
         {account.kind === 'cash' && (
           <div className="mt-6 border-t border-slate-100 pt-4 dark:border-slate-800">
-            <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-              Desglose
-            </p>
+            <SectionLabel className="mb-2">Desglose</SectionLabel>
             <BinList account={account} />
           </div>
         )}

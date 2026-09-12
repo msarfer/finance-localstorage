@@ -309,9 +309,7 @@ export function StatCard({
   return (
     <Card className="p-4">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-          {label}
-        </p>
+        <SectionLabel>{label}</SectionLabel>
         {icon && (
           <span className="text-slate-300 dark:text-slate-600">
             <Icon name={icon} className="h-4 w-4" />

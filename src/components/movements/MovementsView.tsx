@@ -5,7 +5,7 @@ import { useStore } from '@/store/useStore';
 import { currentMonthISO, monthOf } from '@/lib/reports';
 import { monthLabel } from '@/lib/display';
 import { formatEUR } from '@/lib/money';
-import { Button, Card, Chip, ConfirmDialog, EmptyState, inputCls, PageHeader } from '@/components/ui';
+import { Button, Card, Chip, ConfirmDialog, EmptyState, inputCls, PageHeader, SectionLabel } from '@/components/ui';
 import { MovementFormModal } from './MovementFormModal';
 import { MovementListItem } from './MovementListItem';
 import { Icon } from '@/components/icons';
@@ -174,9 +174,9 @@ export function MovementsView() {
 							/>
 						)}
 						{moveMenuOpen && (
-							<div className="absolute right-0 z-30 mt-2 w-72 overflow-hidden rounded-2xl border border-slate-200 bg-white text-left shadow-xl dark:border-slate-700 dark:bg-slate-900">
-								<div className="px-4 pt-4 pb-1 text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-									Ordinarios
+							<div className="absolute right-0 z-30 mt-2 w-72 overflow-hidden rounded-(--radius-panel) border border-slate-200 bg-white text-left shadow-xl dark:border-slate-700 dark:bg-slate-900">
+								<div className="px-4 pt-4 pb-1">
+									<SectionLabel>Ordinarios</SectionLabel>
 								</div>
 								<MenuItem
 									icon="trend-down"
@@ -199,8 +199,8 @@ export function MovementsView() {
 									hint="Necesitas al menos dos cuentas online"
 								/>
 								<div className="my-1 border-t border-slate-100 dark:border-slate-800" />
-								<div className="px-4 pt-1 pb-1 text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-									Banco ↔ Efectivo
+								<div className="px-4 pt-1 pb-1">
+									<SectionLabel>Banco ↔ Efectivo</SectionLabel>
 								</div>
 								<MenuItem
 									icon="wallet"

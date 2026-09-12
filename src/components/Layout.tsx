@@ -7,6 +7,7 @@ import { formatEUR } from '@/lib/money';
 import { useTheme } from '@/hooks/useTheme';
 import { Icon } from '@/components/icons';
 import type { IconName } from '@/components/icons';
+import { SectionLabel } from '@/components/ui';
 
 const NAV: { path: string; label: string; icon: IconName }[] = [
 	{ path: '/', label: 'Resumen', icon: 'dashboard' },
@@ -93,10 +94,8 @@ export function Layout({ children }: { children: ReactNode }) {
 				<div className="px-1">{brand}</div>
 				<nav className="mt-8 flex flex-1 flex-col gap-1">{navItems}</nav>
 				<div className="space-y-3 border-t border-slate-100 pt-4 dark:border-slate-800">
-					<div className="rounded-xl bg-slate-50 px-4 py-3 dark:bg-slate-800/60">
-						<p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-							Tu Patrimonio
-						</p>
+					<div className="rounded-(--radius-field) bg-slate-50 px-4 py-3 dark:bg-slate-800/60">
+						<SectionLabel>Tu Patrimonio</SectionLabel>
 						<p className="mt-0.5 text-lg font-semibold tracking-tight tabular-nums text-slate-900 dark:text-white">
 							{formatEUR(total)}
 						</p>
