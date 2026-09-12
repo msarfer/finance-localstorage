@@ -73,7 +73,7 @@ export function ToolsView() {
 		if (!r.state) return null;
 		const assets = r.state.accounts.reduce((sum, a) => sum + a.balance, 0);
 		return (
-			<div className="rounded-xl bg-slate-50 p-4 text-sm dark:bg-slate-800/60">
+			<div className="rounded-(--radius-inner) bg-slate-50 p-4 text-sm dark:bg-slate-800/60">
 				<p className="font-medium text-slate-700 dark:text-slate-200">
 					Resumen de la importación
 				</p>
@@ -104,7 +104,7 @@ export function ToolsView() {
 			/>
 
 			{done && (
-				<div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300">
+				<div className="flex items-center gap-2 rounded-(--radius-inner) border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300">
 					<Icon name="check" className="h-4 w-4" />
 					{done}
 				</div>
@@ -199,7 +199,7 @@ export function ToolsView() {
 				>
 					<div className="space-y-3">
 						{result.errors.length > 0 && (
-							<div className="max-h-40 space-y-1 overflow-auto rounded-xl bg-expense-soft p-3 text-xs text-expense-strong dark:bg-expense-soft-dark/40 dark:text-expense-bright">
+							<div className="max-h-40 space-y-1 overflow-auto rounded-(--radius-inner) bg-expense-soft p-3 text-xs text-expense-strong dark:bg-expense-soft-dark/40 dark:text-expense-bright">
 								{result.errors.map((e, i) => (
 									<p key={i} className="flex items-start gap-1.5">
 										<Icon

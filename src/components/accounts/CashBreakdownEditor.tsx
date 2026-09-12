@@ -48,10 +48,10 @@ function DenominationRow({
 	const display = focused ? draft : String(count);
 
 	const btnCls =
-		'flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-slate-300 text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-bright/40 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700';
+		'flex h-9 w-9 shrink-0 items-center justify-center rounded-(--radius-inner) border border-slate-300 text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-bright/40 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700';
 
 	return (
-		<li className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2 dark:border-slate-700 dark:bg-slate-800">
+		<li className="flex items-center justify-between gap-3 rounded-(--radius-inner) border border-slate-200 bg-white px-3 py-2 dark:border-slate-700 dark:bg-slate-800">
 			<div className="flex min-w-0 flex-col">
 				<span className="text-sm font-medium text-slate-700 dark:text-slate-200">
 					{label}
@@ -107,7 +107,7 @@ function DenominationRow({
 							bump(-1);
 						}
 					}}
-					className="h-9 w-12 shrink-0 rounded-md border border-slate-300 bg-white text-center text-sm font-semibold tabular-nums text-slate-800 outline-none transition focus:border-brand-bright focus:ring-2 focus:ring-brand-bright/30 dark:border-slate-600 dark:bg-slate-900 dark:text-white"
+					className="h-9 w-12 shrink-0 rounded-(--radius-inner) border border-slate-300 bg-white text-center text-sm font-semibold tabular-nums text-slate-800 outline-none transition focus:border-brand-bright focus:ring-2 focus:ring-brand-bright/30 dark:border-slate-600 dark:bg-slate-900 dark:text-white"
 				/>
 				<button
 					type="button"
@@ -174,7 +174,7 @@ export function CashBreakdownEditor({
 
 	return (
 		<div className="space-y-4">
-			<div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800/40">
+			<div className="rounded-(--radius-field) border border-dashed border-slate-300 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800/40">
 				<label
 					htmlFor={fillId}
 					className="mb-1 block text-xs font-medium text-slate-500 dark:text-slate-400"
@@ -217,7 +217,7 @@ export function CashBreakdownEditor({
 				)}
 			</div>
 
-			<details className="group rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
+			<details className="group rounded-(--radius-inner) border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
 				<summary className="flex cursor-pointer select-none list-none items-center justify-between gap-2 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 [&::-webkit-details-marker]:hidden">
 					<span className="flex items-center gap-2">
 						<Icon
@@ -245,7 +245,7 @@ export function CashBreakdownEditor({
 				</ul>
 			</details>
 
-			<details className="group rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
+			<details className="group rounded-(--radius-inner) border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
 				<summary className="flex cursor-pointer select-none list-none items-center justify-between gap-2 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 [&::-webkit-details-marker]:hidden">
 					<span className="flex items-center gap-2">
 						<Icon
@@ -273,7 +273,7 @@ export function CashBreakdownEditor({
 				</ul>
 			</details>
 
-			<div className="flex items-center justify-between gap-3 rounded-lg bg-brand-soft px-3 py-2.5 dark:bg-brand-soft-dark/40">
+			<div className="flex items-center justify-between gap-3 rounded-(--radius-inner) bg-brand-soft px-3 py-2.5 dark:bg-brand-soft-dark/40">
 				<div className="flex items-center gap-3">
 					<span className="text-sm font-medium text-brand-strong dark:text-brand-bright">
 						Total

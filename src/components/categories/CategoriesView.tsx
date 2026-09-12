@@ -155,7 +155,7 @@ export function CategoriesView() {
 						return (
 							<Card key={c.id} className="flex items-center gap-3 px-4 py-3">
 								<span
-									className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-base"
+									className="flex h-9 w-9 shrink-0 items-center justify-center rounded-(--radius-field) text-base"
 									style={{
 										backgroundColor: `color-mix(in srgb, ${c.color} 15%, transparent)`,
 									}}

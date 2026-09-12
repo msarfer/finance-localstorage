@@ -64,7 +64,7 @@ export function Layout({ children }: { children: ReactNode }) {
 			<Link
 				key={item.path}
 				href={item.path}
-				className={`flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition ${
+				className={`flex items-center gap-3 rounded-(--radius-field) px-3 py-2 text-sm font-medium transition ${
 					active
 						? 'bg-brand-soft text-brand dark:bg-brand-soft-dark dark:text-brand-bright'
 						: 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'
@@ -81,7 +81,7 @@ export function Layout({ children }: { children: ReactNode }) {
 			type="button"
 			onClick={cycleTheme}
 			title={`Tema: ${theme === 'dark' ? 'oscuro' : theme === 'light' ? 'claro' : 'sistema'}`}
-			className="rounded-xl p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+			className="rounded-(--radius-field) p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-200"
 		>
 			<Icon name={themeIcon} className="h-5 w-5" />
 		</button>

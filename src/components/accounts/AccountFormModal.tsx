@@ -90,7 +90,7 @@ export function AccountFormModal({
 						<button
 							type="button"
 							onClick={() => setKind('online')}
-							className={`flex flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-sm font-medium transition ${
+							className={`flex flex-col items-center gap-1.5 rounded-(--radius-field) border px-3 py-3 text-sm font-medium transition ${
 								kind === 'online'
 									? 'border-brand bg-brand text-white'
 									: 'border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800'
@@ -102,7 +102,7 @@ export function AccountFormModal({
 						<button
 							type="button"
 							onClick={() => setKind('cash')}
-							className={`flex flex-col items-center gap-1.5 rounded-xl border px-3 py-3 text-sm font-medium transition ${
+							className={`flex flex-col items-center gap-1.5 rounded-(--radius-field) border px-3 py-3 text-sm font-medium transition ${
 								kind === 'cash'
 									? 'border-brand bg-brand text-white'
 									: 'border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800'

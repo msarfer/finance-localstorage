@@ -5,6 +5,11 @@
 @theme {
   --font-sans: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
+  /* Radii semánticos */
+  --radius-panel: var(--radius-2xl); /* Card, modal, popovers */
+  --radius-field: var(--radius-xl); /* botones, inputs, selects */
+  --radius-inner: var(--radius-lg); /* micro-controles: steppers, nav calendario */
+
   --color-brand: #4f46e5;
   --color-brand-bright: #6366f1;
   --color-brand-strong: #4338ca;

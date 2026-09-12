@@ -251,7 +251,7 @@ export function MovementFormModal({
 				type="button"
 				disabled={disabled}
 				onClick={() => switchType(t)}
-				className={`flex flex-col items-center gap-1.5 rounded-xl border px-2 py-3 text-sm transition ${
+				className={`flex flex-col items-center gap-1.5 rounded-(--radius-field) border px-2 py-3 text-sm transition ${
 					disabled && !active
 						? 'cursor-not-allowed border-slate-200 text-slate-400 dark:border-slate-800 dark:text-slate-500'
 						: active
@@ -278,7 +278,7 @@ export function MovementFormModal({
 		<button
 			type="button"
 			onClick={() => setDirection(d)}
-			className={`flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm font-medium transition ${
+			className={`flex flex-1 items-center justify-center gap-2 rounded-(--radius-field) border px-3 py-2 text-sm font-medium transition ${
 				direction === d
 					? 'border-brand bg-brand text-white'
 					: 'border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800'
@@ -456,7 +456,7 @@ export function MovementFormModal({
 						}
 					>
 						{cashAffected ? (
-							<div className="flex h-9.5 items-center rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm font-semibold text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+							<div className="flex h-9 items-center rounded-(--radius-field) border border-slate-200 bg-slate-50 px-3 text-sm font-semibold text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
 								{formatEUR(cashTotal)}
 							</div>
 						) : (
@@ -480,7 +480,7 @@ export function MovementFormModal({
 							value={cashBreakdown}
 							onChange={setCashBreakdown}
 						/>
-						<div className="mt-2 flex items-center justify-between rounded-lg bg-slate-50 px-3 py-2 text-xs dark:bg-slate-800">
+						<div className="mt-2 flex items-center justify-between rounded-(--radius-inner) bg-slate-50 px-3 py-2 text-xs dark:bg-slate-800">
 							<span className="text-slate-600 dark:text-slate-300">
 								El importe se calcula según los billetes y monedas
 							</span>
@@ -492,7 +492,7 @@ export function MovementFormModal({
 				)}
 
 				{error && (
-					<p className="rounded-lg bg-expense-soft px-3 py-2 text-sm text-expense dark:bg-expense-soft-dark/40 dark:text-expense-bright">
+					<p className="rounded-(--radius-inner) bg-expense-soft px-3 py-2 text-sm text-expense dark:bg-expense-soft-dark/40 dark:text-expense-bright">
 						{error}
 					</p>
 				)}

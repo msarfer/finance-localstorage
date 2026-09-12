@@ -16,7 +16,7 @@ export function Card({
 }) {
   return (
     <div
-      className={`rounded-2xl border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900 ${className}`}
+      className={`rounded-(--radius-panel) border border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900 ${className}`}
     >
       {children}
     </div>
@@ -89,7 +89,7 @@ export function Button({
   icon?: IconName
 }) {
   const base =
-    'inline-flex items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50'
+    'inline-flex items-center justify-center gap-1.5 rounded-(--radius-field) px-3.5 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50'
   const styles: Record<string, string> = {
     primary: 'bg-brand text-white shadow-sm hover:bg-brand-bright',
     secondary:
@@ -132,7 +132,7 @@ export function IconButton({
       title={title}
       aria-label={title}
       autoFocus={autoFocus}
-      className={`rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-200 ${className}`}
+      className={`rounded-(--radius-field) p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-200 ${className}`}
     >
       <Icon name={icon} className="h-4 w-4" />
     </button>
@@ -153,7 +153,7 @@ export function Field({ label, children }: { label: string; children: ReactNode 
 }
 
 export const inputCls =
-  'w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-brand-bright focus:ring-2 focus:ring-brand-bright/20 dark:border-slate-700 dark:bg-slate-900 dark:text-white'
+  'w-full rounded-(--radius-field) border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-brand-bright focus:ring-2 focus:ring-brand-bright/20 dark:border-slate-700 dark:bg-slate-900 dark:text-white'
 
 export function Chip({
   children,
@@ -216,7 +216,7 @@ export function Modal({
       onClick={onClose}
     >
       <div
-        className="flex max-h-[90dvh] w-full max-w-2xl flex-col rounded-t-3xl bg-white p-5 shadow-2xl sm:rounded-3xl dark:bg-slate-900"
+        className="flex max-h-[90dvh] w-full max-w-2xl flex-col rounded-t-(--radius-panel) bg-white p-5 shadow-2xl sm:rounded-(--radius-panel) dark:bg-slate-900"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
@@ -279,8 +279,8 @@ export function EmptyState({
   subtitle?: string
 }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 px-6 py-14 text-center dark:border-slate-700">
-      <span className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500">
+    <div className="flex flex-col items-center justify-center rounded-(--radius-panel) border border-dashed border-slate-300 px-6 py-14 text-center dark:border-slate-700">
+      <span className="mb-3 flex h-12 w-12 items-center justify-center rounded-(--radius-panel) bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500">
         <Icon name={icon} className="h-6 w-6" />
       </span>
       <p className="font-medium text-slate-700 dark:text-slate-200">{title}</p>
@@ -547,13 +547,13 @@ export function DatePicker({
         </button>
       </div>
       {open && (
-        <div className="absolute right-0 z-30 mt-2 w-64 rounded-2xl border border-slate-200 bg-white p-3 shadow-xl dark:border-slate-700 dark:bg-slate-900">
+        <div className="absolute right-0 z-30 mt-2 w-64 rounded-(--radius-panel) border border-slate-200 bg-white p-3 shadow-xl dark:border-slate-700 dark:bg-slate-900">
           <div className="mb-2 flex items-center justify-between">
             <button
               type="button"
               onClick={prevMonth}
               aria-label="Mes anterior"
-              className="rounded-md p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+              className="rounded-(--radius-inner) p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
             >
               <Icon name="chevron-left" className="h-4 w-4" />
             </button>
@@ -564,7 +564,7 @@ export function DatePicker({
               type="button"
               onClick={nextMonth}
               aria-label="Mes siguiente"
-              className="rounded-md p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+              className="rounded-(--radius-inner) p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
             >
               <Icon name="chevron-right" className="h-4 w-4" />
             </button>
@@ -582,7 +582,7 @@ export function DatePicker({
                   type="button"
                   onClick={() => select(day)}
                   aria-label={formatShort(toISO(day))}
-                  className={`flex h-8 items-center justify-center rounded-lg text-sm transition ${
+                  className={`flex h-8 items-center justify-center rounded-(--radius-inner) text-sm transition ${
                     toISO(day) === value
                       ? 'bg-brand font-semibold text-white'
                       : toISO(day) === today
@@ -606,7 +606,7 @@ export function DatePicker({
               if (d) setView({ year: d.getFullYear(), month: d.getMonth() })
               setOpen(false)
             }}
-            className="mt-2 w-full rounded-lg px-2 py-1.5 text-sm font-medium text-brand transition hover:bg-brand-soft dark:text-brand-bright dark:hover:bg-slate-800"
+            className="mt-2 w-full rounded-(--radius-inner) px-2 py-1.5 text-sm font-medium text-brand transition hover:bg-brand-soft dark:text-brand-bright dark:hover:bg-slate-800"
           >
             Hoy
           </button>
