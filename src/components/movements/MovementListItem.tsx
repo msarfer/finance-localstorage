@@ -57,12 +57,12 @@ export function MovementListItem({
   return (
     <li className="flex items-center gap-3 px-4 py-3">
       <span
-        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${tone}`}
+        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-(--radius-inner) ${tone}`}
       >
         <Icon name={icon} className="h-4 w-4" />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">
+        <p className="truncate text-sm font-medium text-slate-900 dark:text-slate-100">
           {m.concept ||
             (m.type === 'transfer'
               ? 'Transferencia online'
@@ -92,7 +92,7 @@ export function MovementListItem({
         </p>
       </div>
       <span
-        className={`shrink-0 text-sm font-semibold tabular-nums ${
+        className={`shrink-0 font-display text-sm font-semibold tabular-nums ${
           m.type === 'expense'
             ? 'text-expense dark:text-expense-bright'
             : m.type === 'income'
