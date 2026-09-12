@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 
 import { todayISO } from '@/lib/money'
@@ -37,7 +37,7 @@ export function PageHeader({
   return (
     <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <h1 className="font-display text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
           {title}
         </h1>
         {subtitle && (
@@ -60,7 +60,7 @@ export function SectionLabel({
 }) {
   return (
     <p
-      className={`text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500 ${className}`}
+      className={`font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500 ${className}`}
     >
       {children}
     </p>
@@ -181,6 +181,78 @@ export function Chip({
   )
 }
 
+/* --------------------------------- Segmented -------------------------------- */
+
+export function Segmented<T extends string>({
+  value,
+  onChange,
+  options,
+}: {
+  value: T
+  onChange: (value: T) => void
+  options: { value: T; label: string }[]
+}) {
+  return (
+    <div
+      role="group"
+      className="inline-flex items-center gap-0.5 rounded-(--radius-field) border border-slate-200 bg-white p-0.5 dark:border-slate-700 dark:bg-slate-900"
+    >
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          onClick={() => onChange(o.value)}
+          aria-pressed={value === o.value}
+          className={`rounded-(--radius-inner) px-3 py-1.5 text-sm font-medium transition ${
+            value === o.value
+              ? 'bg-slate-900 text-white shadow-sm dark:bg-slate-100 dark:text-slate-900'
+              : 'text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
+          }`}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+export function SearchBox({
+  value,
+  onChange,
+  placeholder = 'Buscar…',
+}: {
+  value: string
+  onChange: (value: string) => void
+  placeholder?: string
+}) {
+  return (
+    <div className="relative">
+      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500">
+        <Icon name="search" className="h-4 w-4" />
+      </span>
+      <input
+        type="search"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        aria-label={placeholder}
+        className={`${inputCls} pl-9 pr-9`}
+      />
+      {value && (
+        <button
+          type="button"
+          onClick={() => onChange('')}
+          title="Limpiar búsqueda"
+          aria-label="Limpiar búsqueda"
+          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-(--radius-inner) p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+        >
+          <Icon name="close" className="h-4 w-4" />
+        </button>
+      )}
+    </div>
+  )
+}
+
 /* --------------------------------- Modal ---------------------------------- */
 
 export function Modal({
@@ -194,36 +266,90 @@ export function Modal({
   children: ReactNode
   footer?: ReactNode
 }) {
+  const panelRef = useRef<HTMLDivElement>(null)
+  const titleId = useId()
+
   useEffect(() => {
+    const root = panelRef.current
+    const prevActive = document.activeElement as HTMLElement | null
+
+    const getFocusables = () => {
+      if (!root) return []
+      return Array.from(
+        root.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      )
+    }
+    const getInitial = () => {
+      const firstInput = root?.querySelector<HTMLElement>('input, select, textarea')
+      if (firstInput) return firstInput
+      const list = getFocusables()
+      return list[0] ?? null
+    }
+
+    const initial = getInitial()
+    initial?.focus()
+
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
+
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.stopPropagation()
         onClose()
+        return
+      }
+      if (e.key !== 'Tab') return
+      const list = getFocusables()
+      if (list.length === 0) return
+      const first = list[0]
+      const last = list[list.length - 1]
+      const active = document.activeElement
+      if (!root?.contains(active)) {
+        e.preventDefault()
+        ;(e.shiftKey ? last : first).focus()
+        return
+      }
+      if (e.shiftKey && active === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault()
+        first.focus()
       }
     }
     document.addEventListener('keydown', onKeyDown)
+
     return () => {
       document.body.style.overflow = prevOverflow
       document.removeEventListener('keydown', onKeyDown)
+      prevActive?.focus?.()
     }
   }, [onClose])
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/40 p-0 backdrop-blur-sm sm:items-center sm:p-4"
+      role="presentation"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/50 p-0 backdrop-blur-sm animate-[fade-in_200ms_ease-out] sm:items-center sm:p-4"
       onClick={onClose}
     >
       <div
-        className="flex max-h-[90dvh] w-full max-w-2xl flex-col rounded-t-(--radius-panel) bg-white p-5 shadow-2xl sm:rounded-(--radius-panel) dark:bg-slate-900"
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        className="flex max-h-[90dvh] w-full max-w-2xl flex-col rounded-t-(--radius-panel) bg-white p-5 shadow-2xl animate-[sheet-up_240ms_ease-out] sm:rounded-(--radius-panel) dark:bg-slate-900"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+          <h2
+            id={titleId}
+            className="font-display text-xl font-semibold tracking-tight text-slate-900 dark:text-white"
+          >
             {title}
           </h2>
-          <IconButton onClick={onClose} title="Cerrar" icon="close" autoFocus />
+          <IconButton onClick={onClose} title="Cerrar" icon="close" />
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1">
           {children}
@@ -273,10 +399,12 @@ export function EmptyState({
   icon,
   title,
   subtitle,
+  action,
 }: {
   icon: IconName
   title: string
   subtitle?: string
+  action?: ReactNode
 }) {
   return (
     <div className="flex flex-col items-center justify-center rounded-(--radius-panel) border border-dashed border-slate-300 px-6 py-14 text-center dark:border-slate-700">
@@ -289,6 +417,7 @@ export function EmptyState({
           {subtitle}
         </p>
       )}
+      {action && <div className="mt-4">{action}</div>}
     </div>
   )
 }
@@ -317,7 +446,7 @@ export function StatCard({
         )}
       </div>
       <p
-        className="mt-1.5 truncate text-2xl font-semibold tracking-tight tabular-nums text-slate-900 dark:text-white"
+        className="mt-1.5 truncate font-display text-3xl font-semibold tracking-tight tabular-nums text-slate-900 dark:text-white"
         style={{ color: accent ?? undefined }}
       >
         {value}
