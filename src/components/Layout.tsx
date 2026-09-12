@@ -95,7 +95,7 @@ export function Layout({ children }: { children: ReactNode }) {
 				<div className="space-y-3 border-t border-slate-100 pt-4 dark:border-slate-800">
 					<div className="rounded-xl bg-slate-50 px-4 py-3 dark:bg-slate-800/60">
 						<p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-500">
-							Patrimonio
+							Tu Patrimonio
 						</p>
 						<p className="mt-0.5 text-lg font-semibold tracking-tight tabular-nums text-slate-900 dark:text-white">
 							{formatEUR(total)}
