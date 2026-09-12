@@ -13,6 +13,21 @@
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#4f46e5" />
 
+    <script>
+      ;(function () {
+        try {
+          var saved = JSON.parse(localStorage.getItem('finanzas:state') || 'null')
+          var theme =
+            saved && saved.state && saved.state.settings && saved.state.settings.theme
+          var dark =
+            theme === 'dark' ||
+            (theme === 'system' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches)
+          if (dark) document.documentElement.classList.add('dark')
+        } catch (e) {}
+      })()
+    </script>
+
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_ES" />
     <meta property="og:site_name" content="Mis Finanzas" />
