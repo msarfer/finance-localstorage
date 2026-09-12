@@ -135,8 +135,6 @@ export function CashBreakdownEditor({
 	value: CashCounts;
 	onChange: (next: CashCounts) => void;
 }) {
-	const billsId = useId();
-	const coinsId = useId();
 	const fillId = useId();
 	const [fillValue, setFillValue] = useState('');
 	const [fillError, setFillError] = useState<string | null>(null);
@@ -150,6 +148,15 @@ export function CashBreakdownEditor({
 
 	const total = computeCashTotal(value);
 	const anyUnits = Object.keys(value).length > 0;
+
+	const groupTotal = (list: readonly number[]) =>
+		list.reduce((sum, d) => sum + (value[d] ?? 0) * d, 0);
+	const groupCount = (list: readonly number[]) =>
+		list.reduce((sum, d) => sum + (value[d] ?? 0), 0);
+	const billsTotal = groupTotal(BILLS);
+	const billsCount = groupCount(BILLS);
+	const coinsTotal = groupTotal(COINS);
+	const coinsCount = groupCount(COINS);
 
 	const clearAll = () => onChange({});
 
@@ -208,14 +215,26 @@ export function CashBreakdownEditor({
 				)}
 			</div>
 
-			<div role="group" aria-labelledby={billsId}>
-				<p
-					id={billsId}
-					className="mb-2 text-sm font-semibold text-slate-600 dark:text-slate-300"
-				>
-					Billetes
-				</p>
-				<ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+			<details className="group rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
+				<summary className="flex cursor-pointer select-none list-none items-center justify-between gap-2 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 [&::-webkit-details-marker]:hidden">
+					<span className="flex items-center gap-2">
+						<svg
+							className="h-4 w-4 text-slate-400 transition-transform group-open:rotate-90 dark:text-slate-500"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+							aria-hidden="true"
+						>
+							<path d="M6.28 5.22a.75.75 0 0 1 0 1.06L2.06 10.5l4.22 4.22a.75.75 0 1 1-1.06 1.06L.72 10.53a.75.75 0 0 1 0-1.06l4.5-4.5a.75.75 0 0 1 1.06 0Z" />
+						</svg>
+						Billetes
+					</span>
+					{billsCount > 0 && (
+						<span className="text-xs font-normal tabular-nums text-slate-500 dark:text-slate-400">
+							{billsCount} ud. · {formatEUR(billsTotal)}
+						</span>
+					)}
+				</summary>
+				<ul className="grid grid-cols-1 gap-2 px-3 pb-3 sm:grid-cols-2">
 					{BILLS.map((d) => (
 						<DenominationRow
 							key={d}
@@ -226,16 +245,28 @@ export function CashBreakdownEditor({
 						/>
 					))}
 				</ul>
-			</div>
+			</details>
 
-			<div role="group" aria-labelledby={coinsId}>
-				<p
-					id={coinsId}
-					className="mb-2 text-sm font-semibold text-slate-600 dark:text-slate-300"
-				>
-					Monedas
-				</p>
-				<ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+			<details className="group rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
+				<summary className="flex cursor-pointer select-none list-none items-center justify-between gap-2 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 [&::-webkit-details-marker]:hidden">
+					<span className="flex items-center gap-2">
+						<svg
+							className="h-4 w-4 text-slate-400 transition-transform group-open:rotate-90 dark:text-slate-500"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+							aria-hidden="true"
+						>
+							<path d="M6.28 5.22a.75.75 0 0 1 0 1.06L2.06 10.5l4.22 4.22a.75.75 0 1 1-1.06 1.06L.72 10.53a.75.75 0 0 1 0-1.06l4.5-4.5a.75.75 0 0 1 1.06 0Z" />
+						</svg>
+						Monedas
+					</span>
+					{coinsCount > 0 && (
+						<span className="text-xs font-normal tabular-nums text-slate-500 dark:text-slate-400">
+							{coinsCount} ud. · {formatEUR(coinsTotal)}
+						</span>
+					)}
+				</summary>
+				<ul className="grid grid-cols-1 gap-2 px-3 pb-3 sm:grid-cols-2">
 					{COINS.map((d) => (
 						<DenominationRow
 							key={d}
@@ -246,7 +277,7 @@ export function CashBreakdownEditor({
 						/>
 					))}
 				</ul>
-			</div>
+			</details>
 
 			<div className="flex items-center justify-between gap-3 rounded-lg bg-indigo-50 px-3 py-2.5 dark:bg-indigo-950/40">
 				<div className="flex items-center gap-3">
