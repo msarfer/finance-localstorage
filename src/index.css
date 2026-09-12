@@ -4,6 +4,24 @@
 
 @theme {
   --font-sans: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --color-brand: #4f46e5;
+  --color-brand-bright: #6366f1;
+  --color-brand-strong: #4338ca;
+  --color-brand-soft: #e0e7ff;
+  --color-brand-soft-dark: #1e1b4b;
+
+  --color-income: #10b981;
+  --color-income-bright: #34d399;
+  --color-income-strong: #047857;
+  --color-income-soft: #d1fae5;
+  --color-income-soft-dark: #022c22;
+
+  --color-expense: #ef4444;
+  --color-expense-bright: #f87171;
+  --color-expense-strong: #b91c1c;
+  --color-expense-soft: #fee2e2;
+  --color-expense-soft-dark: #450a0a;
 }
 
 html {

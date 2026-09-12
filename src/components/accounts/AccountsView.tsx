@@ -25,7 +25,7 @@ export function AccountsView() {
         <Link href={`/accounts/${a.id}`} className="group flex min-w-0 items-start gap-2.5">
           <span className="mt-0.5 h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: a.color }} />
           <span className="min-w-0">
-            <span className="block truncate font-semibold leading-tight transition group-hover:text-indigo-600">
+            <span className="block truncate font-semibold leading-tight transition group-hover:text-brand">
               {a.name}
             </span>
             <span className="block text-xs text-slate-500 dark:text-slate-400">
@@ -51,7 +51,7 @@ export function AccountsView() {
           <button
             type="button"
             onClick={() => setDeleting(a)}
-            className="rounded-md p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/40"
+            className="rounded-md p-1.5 text-slate-400 hover:bg-expense-soft hover:text-expense dark:hover:bg-expense-soft-dark/40"
             title="Eliminar"
           >
             <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">

@@ -18,8 +18,9 @@ export function Dashboard() {
   const month = currentMonthISO()
   const summary = summarize(state, month)
 
-  const incomeColor = '#10b981'
-  const expenseColor = '#ef4444'
+  const incomeColor = 'var(--color-income)'
+  const expenseColor = 'var(--color-expense)'
+  const neutralColor = 'var(--color-brand-bright)'
 
   return (
     <div className="space-y-6">
@@ -62,7 +63,7 @@ export function Dashboard() {
                   <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
                     <div
                       className="h-full rounded-full"
-                      style={{ width: `${pct}%`, backgroundColor: cat?.color ?? '#6366f1' }}
+                      style={{ width: `${pct}%`, backgroundColor: cat?.color ?? neutralColor }}
                     />
                   </div>
                 </div>
@@ -80,12 +81,15 @@ export function Dashboard() {
           <ul className="divide-y divide-slate-100 dark:divide-slate-800">
             {summary.recent.map((m) => {
               const cat = m.categoryId ? categoryById.get(m.categoryId) : undefined
-              const accent = m.type === 'expense' ? expenseColor : m.type === 'income' ? incomeColor : '#6366f1'
+              const accent = m.type === 'expense' ? expenseColor : m.type === 'income' ? incomeColor : neutralColor
               return (
                 <li key={m.id} className="flex items-center gap-3 py-2.5">
                   <span
                     className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm"
-                    style={{ backgroundColor: `${cat?.color ?? '#6366f1'}22`, color: cat?.color ?? '#6366f1' }}
+                    style={{
+                      backgroundColor: `color-mix(in srgb, ${cat?.color ?? neutralColor} 13%, transparent)`,
+                      color: cat?.color ?? neutralColor,
+                    }}
                   >
                     {cat?.emoji ?? (m.type === 'cashflow' ? '💱' : m.type === 'transfer' ? '🔁' : '💸')}
                   </span>

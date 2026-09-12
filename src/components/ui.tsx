@@ -55,7 +55,7 @@ export function Field({ label, children }: { label: string; children: ReactNode 
 }
 
 export const inputCls =
-  'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 dark:border-slate-700 dark:bg-slate-800 dark:text-white'
+  'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 outline-none transition focus:border-brand-bright focus:ring-2 focus:ring-brand-bright/30 dark:border-slate-700 dark:bg-slate-800 dark:text-white'
 
 export function Button({
   children,
@@ -78,11 +78,11 @@ export function Button({
     'inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50'
   const styles: Record<string, string> = {
     primary:
-      'bg-indigo-600 text-white hover:bg-indigo-500 shadow-sm',
+      'bg-brand text-white hover:bg-brand-bright shadow-sm',
     secondary:
       'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700',
     danger:
-      'bg-red-600 text-white hover:bg-red-500 shadow-sm',
+      'bg-expense text-white hover:bg-expense-bright shadow-sm',
     ghost:
       'text-slate-500 hover:bg-slate-100 hover:text-slate-700 dark:text-slate-400 dark:hover:bg-slate-800',
   }
@@ -371,7 +371,7 @@ export function DatePicker({
           type="button"
           onClick={() => setOpen((o) => !o)}
           aria-label="Abrir calendario"
-          className="absolute inset-y-0 right-0 flex cursor-pointer items-center px-2.5 text-slate-400 outline-none transition focus-visible:text-indigo-600 hover:text-slate-600 dark:hover:text-slate-200"
+          className="absolute inset-y-0 right-0 flex cursor-pointer items-center px-2.5 text-slate-400 outline-none transition focus-visible:text-brand hover:text-slate-600 dark:hover:text-slate-200"
         >
           <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path fillRule="evenodd" d="M6.75 2A1.75 1.75 0 0 0 5 3.75v.54c-.914.19-1.685.65-2.25 1.277A3.25 3.25 0 0 0 2 8.13v6.12A3.75 3.75 0 0 0 5.75 18h8.5A3.75 3.75 0 0 0 18 14.25V8.13a3.25 3.25 0 0 0-.75-2.563A4.47 4.47 0 0 0 15 4.29v-.54A1.75 1.75 0 0 0 13.25 2h-6.5ZM14.5 6V3.75c0-.138-.112-.25-.25-.25h-8.5a.25.25 0 0 0-.25.25V6h9Zm3 1.5a1.76 1.76 0 0 1-.245.013H2.745c-.084 0-.167-.004-.245-.013V14.25a2.25 2.25 0 0 0 2.25 2.25h8.5a2.25 2.25 0 0 0 2.25-2.25V7.5Z" clipRule="evenodd" />
@@ -420,9 +420,9 @@ export function DatePicker({
                   aria-label={formatShort(toISO(day))}
                   className={`flex h-8 items-center justify-center rounded-lg text-sm transition ${
                     toISO(day) === value
-                      ? 'bg-indigo-600 font-semibold text-white'
+                      ? 'bg-brand font-semibold text-white'
                       : toISO(day) === today
-                        ? 'font-semibold text-indigo-600 ring-1 ring-inset ring-indigo-400 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-slate-800'
+                        ? 'font-semibold text-brand ring-1 ring-inset ring-brand-bright hover:bg-brand-soft dark:text-brand-bright dark:hover:bg-slate-800'
                         : 'text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800'
                   }`}
                 >
@@ -442,7 +442,7 @@ export function DatePicker({
               if (d) setView({ year: d.getFullYear(), month: d.getMonth() })
               setOpen(false)
             }}
-            className="mt-2 w-full rounded-lg px-2 py-1.5 text-sm font-medium text-indigo-600 transition hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-slate-800"
+            className="mt-2 w-full rounded-lg px-2 py-1.5 text-sm font-medium text-brand transition hover:bg-brand-soft dark:text-brand-bright dark:hover:bg-slate-800"
           >
             Hoy
           </button>

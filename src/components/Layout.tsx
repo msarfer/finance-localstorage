@@ -68,7 +68,7 @@ export function Layout({ children }: { children: ReactNode }) {
 							href={item.path}
 							className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition ${
 								isActive(item.path, location)
-									? 'bg-indigo-600 text-white shadow-sm'
+									? 'bg-brand text-white shadow-sm'
 									: 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'
 							}`}
 						>

@@ -256,10 +256,10 @@ export function MovementsView() {
 			</div>
 
 			<div className="flex items-center gap-3 text-sm">
-				<span className="text-emerald-600 dark:text-emerald-400">
+				<span className="text-income dark:text-income-bright">
 					Ingresos: + {formatEUR(monthlyTotals.income)}
 				</span>
-				<span className="text-red-600 dark:text-red-400">
+				<span className="text-expense dark:text-expense-bright">
 					Gastos: - {formatEUR(monthlyTotals.expense)}
 				</span>
 			</div>

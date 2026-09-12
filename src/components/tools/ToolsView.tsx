@@ -140,7 +140,7 @@ export function ToolsView() {
         >
           <div className="space-y-3">
             {result.errors.length > 0 && (
-              <div className="max-h-40 overflow-auto rounded-lg bg-red-50 p-3 text-xs text-red-700 dark:bg-red-950/40 dark:text-red-300">
+              <div className="max-h-40 overflow-auto rounded-lg bg-expense-soft p-3 text-xs text-expense-strong dark:bg-expense-soft-dark/40 dark:text-expense-bright">
                 {result.errors.map((e, i) => (
                   <p key={i}>⚠️ {e}</p>
                 ))}

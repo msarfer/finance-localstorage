@@ -91,7 +91,7 @@ export function AccountFormModal({
 							onClick={() => setKind('online')}
 							className={`rounded-lg border px-3 py-2.5 text-sm font-medium transition ${
 								kind === 'online'
-									? 'border-indigo-600 bg-indigo-600 text-white'
+									? 'border-brand bg-brand text-white'
 									: 'border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800'
 							}`}
 						>
@@ -102,7 +102,7 @@ export function AccountFormModal({
 							onClick={() => setKind('cash')}
 							className={`rounded-lg border px-3 py-2.5 text-sm font-medium transition ${
 								kind === 'cash'
-									? 'border-indigo-600 bg-indigo-600 text-white'
+									? 'border-brand bg-brand text-white'
 									: 'border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800'
 							}`}
 						>
@@ -155,7 +155,7 @@ export function AccountFormModal({
 				</Field>
 
 				{error && (
-					<p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+					<p className="text-sm text-expense dark:text-expense-bright">{error}</p>
 				)}
 			</div>
 		</Modal>

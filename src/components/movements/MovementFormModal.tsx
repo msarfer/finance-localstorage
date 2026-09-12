@@ -253,10 +253,10 @@ export function MovementFormModal({
 						? 'cursor-not-allowed border-slate-200 text-slate-400 dark:border-slate-800 dark:text-slate-500'
 						: type === t
 							? t === 'income'
-								? 'border-emerald-600 bg-emerald-600 text-white'
+								? 'border-income bg-income text-white'
 								: t === 'expense'
-									? 'border-red-600 bg-red-600 text-white'
-									: 'border-indigo-600 bg-indigo-600 text-white'
+									? 'border-expense bg-expense text-white'
+									: 'border-brand bg-brand text-white'
 							: 'border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800'
 				}`}
 			>
@@ -271,7 +271,7 @@ export function MovementFormModal({
 			onClick={() => setDirection(d)}
 			className={`flex-1 rounded-lg border px-3 py-2 text-sm font-medium transition ${
 				direction === d
-					? 'border-indigo-600 bg-indigo-600 text-white'
+					? 'border-brand bg-brand text-white'
 					: 'border-slate-300 text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800'
 			}`}
 		>
@@ -482,7 +482,7 @@ export function MovementFormModal({
 				)}
 
 				{error && (
-					<p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600 dark:bg-red-950/40 dark:text-red-400">
+					<p className="rounded-lg bg-expense-soft px-3 py-2 text-sm text-expense dark:bg-expense-soft-dark/40 dark:text-expense-bright">
 						{error}
 					</p>
 				)}

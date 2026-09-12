@@ -119,7 +119,7 @@ export function AccountDetailView() {
     <div className="space-y-6">
       <Link
         href="/accounts"
-        className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 transition hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400"
+        className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 transition hover:text-brand dark:text-slate-400 dark:hover:text-brand-bright"
       >
         ← Volver a cuentas
       </Link>
@@ -209,10 +209,10 @@ export function AccountDetailView() {
         </div>
 
         <div className="flex items-center gap-3 py-2 text-sm">
-          <span className="text-emerald-600 dark:text-emerald-400">
+          <span className="text-income dark:text-income-bright">
             Ingresos: + {formatEUR(monthlyTotals.income)}
           </span>
-          <span className="text-red-600 dark:text-red-400">
+          <span className="text-expense dark:text-expense-bright">
             Gastos: - {formatEUR(monthlyTotals.expense)}
           </span>
         </div>

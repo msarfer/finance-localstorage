@@ -47,7 +47,7 @@ function DenominationRow({
 	const display = focused ? draft : String(count);
 
 	const btnCls =
-		'flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-slate-300 text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700';
+		'flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-slate-300 text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-bright/40 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700';
 
 	return (
 		<li className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2 dark:border-slate-700 dark:bg-slate-800">
@@ -106,7 +106,7 @@ function DenominationRow({
 							bump(-1);
 						}
 					}}
-					className="h-9 w-12 shrink-0 rounded-md border border-slate-300 bg-white text-center text-sm font-semibold tabular-nums text-slate-800 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/30 dark:border-slate-600 dark:bg-slate-900 dark:text-white"
+					className="h-9 w-12 shrink-0 rounded-md border border-slate-300 bg-white text-center text-sm font-semibold tabular-nums text-slate-800 outline-none transition focus:border-brand-bright focus:ring-2 focus:ring-brand-bright/30 dark:border-slate-600 dark:bg-slate-900 dark:text-white"
 				/>
 				<button
 					type="button"
@@ -209,7 +209,7 @@ export function CashBreakdownEditor({
 					</Button>
 				</div>
 				{fillError && (
-					<p className="mt-1 text-xs text-red-600 dark:text-red-400">
+					<p className="mt-1 text-xs text-expense dark:text-expense-bright">
 						{fillError}
 					</p>
 				)}
@@ -279,16 +279,16 @@ export function CashBreakdownEditor({
 				</ul>
 			</details>
 
-			<div className="flex items-center justify-between gap-3 rounded-lg bg-indigo-50 px-3 py-2.5 dark:bg-indigo-950/40">
+			<div className="flex items-center justify-between gap-3 rounded-lg bg-brand-soft px-3 py-2.5 dark:bg-brand-soft-dark/40">
 				<div className="flex items-center gap-3">
-					<span className="text-sm font-medium text-indigo-700 dark:text-indigo-300">
+					<span className="text-sm font-medium text-brand-strong dark:text-brand-bright">
 						Total
 					</span>
 					{anyUnits && (
 						<button
 							type="button"
 							onClick={clearAll}
-							className="text-xs font-medium text-indigo-600 underline-offset-2 hover:underline dark:text-indigo-400"
+							className="text-xs font-medium text-brand underline-offset-2 hover:underline dark:text-brand-bright"
 						>
 							Vaciar
 						</button>
@@ -296,7 +296,7 @@ export function CashBreakdownEditor({
 				</div>
 				<span
 					aria-live="polite"
-					className="text-base font-bold tabular-nums text-indigo-700 dark:text-indigo-300"
+					className="text-base font-bold tabular-nums text-brand-strong dark:text-brand-bright"
 				>
 					{formatEUR(total)}
 				</span>

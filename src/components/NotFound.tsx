@@ -11,7 +11,7 @@ export function NotFound() {
 			<div className="mt-6 flex gap-2">
 				<Link
 					href="/"
-					className="rounded-lg bg-indigo-600 px-3.5 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-500"
+					className="rounded-lg bg-brand px-3.5 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-brand-bright"
 				>
 					Ir al resumen
 				</Link>

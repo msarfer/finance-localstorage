@@ -97,7 +97,7 @@ function CategoryFormModal({
 					/>
 				</Field>
 				{error && (
-					<p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+					<p className="text-sm text-expense dark:text-expense-bright">{error}</p>
 				)}
 			</div>
 		</Modal>
@@ -176,7 +176,7 @@ export function CategoriesView() {
 								<button
 									type="button"
 									onClick={() => setDeleting(c)}
-									className="rounded-md p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/40"
+									className="rounded-md p-1.5 text-slate-400 hover:bg-expense-soft hover:text-expense dark:hover:bg-expense-soft-dark/40"
 									title="Eliminar"
 								>
 									<svg

@@ -26,14 +26,14 @@ export function MovementListItem({
 
   const chip = () => {
     if (m.type === 'expense')
-      return 'bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-300'
+      return 'bg-expense-soft text-expense-strong dark:bg-expense-soft-dark/60 dark:text-expense-bright'
     if (m.type === 'income')
-      return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300'
-    return 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300'
+      return 'bg-income-soft text-income-strong dark:bg-income-soft-dark/60 dark:text-income-bright'
+    return 'bg-brand-soft text-brand-strong dark:bg-brand-soft-dark/60 dark:text-brand-bright'
   }
 
   const accountLinkCls =
-    'font-medium text-slate-600 underline decoration-slate-300 underline-offset-2 transition hover:text-indigo-600 hover:decoration-indigo-400 dark:text-slate-300 dark:decoration-slate-700'
+    'font-medium text-slate-600 underline decoration-slate-300 underline-offset-2 transition hover:text-brand hover:decoration-brand-bright dark:text-slate-300 dark:decoration-slate-700'
 
   return (
     <li className="flex items-center gap-3 px-4 py-3">
@@ -83,9 +83,9 @@ export function MovementListItem({
         <span
           className={`text-sm font-semibold ${
             m.type === 'expense'
-              ? 'text-red-600 dark:text-red-400'
+              ? 'text-expense dark:text-expense-bright'
               : m.type === 'income'
-                ? 'text-emerald-600 dark:text-emerald-400'
+                ? 'text-income dark:text-income-bright'
                 : 'text-slate-600 dark:text-slate-300'
           }`}
         >
@@ -104,7 +104,7 @@ export function MovementListItem({
         <button
           type="button"
           onClick={() => onDelete(m)}
-          className="rounded-md p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/40"
+          className="rounded-md p-1.5 text-slate-400 hover:bg-expense-soft hover:text-expense dark:hover:bg-expense-soft-dark/40"
           title="Eliminar"
         >
           <svg className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
