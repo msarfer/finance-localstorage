@@ -3,30 +3,50 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Onest Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces Variable", "Onest Variable", Georgia, serif;
 
   /* Radii semánticos */
   --radius-panel: var(--radius-2xl); /* Card, modal, popovers */
   --radius-field: var(--radius-xl); /* botones, inputs, selects */
   --radius-inner: var(--radius-lg); /* micro-controles: steppers, nav calendario */
 
-  --color-brand: #4f46e5;
-  --color-brand-bright: #6366f1;
-  --color-brand-strong: #4338ca;
-  --color-brand-soft: #e0e7ff;
-  --color-brand-soft-dark: #1e1b4b;
+  /* Brand — verde banca */
+  --color-brand: #0f6b5a;
+  --color-brand-bright: #14907a;
+  --color-brand-strong: #0b5346;
+  --color-brand-soft: #ddf0ea;
+  --color-brand-soft-dark: #12332b;
 
-  --color-income: #10b981;
-  --color-income-bright: #34d399;
-  --color-income-strong: #047857;
-  --color-income-soft: #d1fae5;
-  --color-income-soft-dark: #022c22;
+  /* Ingresos — esmeralda */
+  --color-income: #12875c;
+  --color-income-bright: #2fa97b;
+  --color-income-strong: #0d6643;
+  --color-income-soft: #e1f2e9;
+  --color-income-soft-dark: #12281e;
 
-  --color-expense: #ef4444;
-  --color-expense-bright: #f87171;
-  --color-expense-strong: #b91c1c;
-  --color-expense-soft: #fee2e2;
-  --color-expense-soft-dark: #450a0a;
+  /* Gastos — terracota */
+  --color-expense: #c04f38;
+  --color-expense-bright: #d9775f;
+  --color-expense-strong: #a03c26;
+  --color-expense-soft: #fae9e3;
+  --color-expense-soft-dark: #37150d;
+
+  /* Acento ámbar */
+  --color-amber-accent: #c8862d;
+
+  /* Neutros cálidos (paleta "papel/tinta") */
+  --color-slate-50: #f7f5ef;
+  --color-slate-100: #efece3;
+  --color-slate-200: #e2dccf;
+  --color-slate-300: #d2c9b8;
+  --color-slate-400: #b0a792;
+  --color-slate-500: #8a8171;
+  --color-slate-600: #5e574b;
+  --color-slate-700: #443d33;
+  --color-slate-800: #2b2720;
+  --color-slate-900: #1d1a15;
+  --color-slate-950: #14120e;
 }
 
 html {
@@ -67,7 +87,7 @@ textarea {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgb(148 163 184 / 0.5) transparent;
+  scrollbar-color: rgb(176 167 146 / 0.5) transparent;
 }
 
 :focus-visible {
@@ -83,5 +103,34 @@ textarea {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@keyframes view-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
