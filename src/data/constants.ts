@@ -1,6 +1,6 @@
 export const BILLS = [50000, 20000, 10000, 5000, 2000, 1000, 500]
 
-export const COINS = [200, 100, 50, 20, 10, 5, 2, 1]
+export const COINS = [200, 100, 50, 20, 10, 5]
 
 export const DENOMINATIONS = [...BILLS, ...COINS]
 
@@ -21,8 +21,6 @@ export const COIN_LABELS: Record<number, string> = {
   20: '0,20 €',
   10: '0,10 €',
   5: '0,05 €',
-  2: '0,02 €',
-  1: '0,01 €',
 }
 
 export const ACCOUNT_COLORS = [

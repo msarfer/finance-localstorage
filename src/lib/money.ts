@@ -41,7 +41,7 @@ export function countsFromValue(cents: number): CashCounts {
     }
   }
   for (const denom of COINS) {
-    const count = Math.round(rest / denom)
+    const count = Math.floor(rest / denom)
     if (count > 0) {
       result[denom] = count
       rest -= count * denom
