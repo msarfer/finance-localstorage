@@ -15,6 +15,7 @@ import {
 	ColorPalette,
 	PageHeader,
 } from '@/components/ui';
+import { Icon } from '@/components/icons';
 
 function CategoryFormModal({
 	initial,
@@ -74,12 +75,19 @@ function CategoryFormModal({
 						/>
 					</Field>
 					<Field label="Emoji">
-						<input
-							className={`${inputCls} w-20 text-center`}
-							value={emoji}
-							onChange={(e) => setEmoji(e.target.value)}
-							placeholder="🏋️"
-						/>
+						<div className="relative w-20">
+							<input
+								className={`${inputCls} w-full text-center`}
+								value={emoji}
+								onChange={(e) => setEmoji(e.target.value)}
+								aria-label="Emoji de la categoría"
+							/>
+							{!emoji && (
+								<span className="pointer-events-none absolute inset-0 flex items-center justify-center text-slate-400 dark:text-slate-500">
+									<Icon name="smile" className="h-5 w-5" />
+								</span>
+							)}
+						</div>
 					</Field>
 				</div>
 				<Field label="Tipo">

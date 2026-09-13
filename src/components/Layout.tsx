@@ -14,7 +14,7 @@ const NAV: { path: string; label: string; icon: IconName }[] = [
 	{ path: '/accounts', label: 'Cuentas', icon: 'bank' },
 	{ path: '/movements', label: 'Movimientos', icon: 'swap' },
 	{ path: '/categories', label: 'Categorías', icon: 'tag' },
-	{ path: '/tools', label: 'Copia de seguridad', icon: 'backup' },
+	{ path: '/tools', label: 'Configuración', icon: 'gear' },
 ];
 
 const MOBILE_NAV: { path: string; label: string; icon: IconName }[] = [
@@ -166,11 +166,11 @@ export function Layout({ children }: { children: ReactNode }) {
 				<div className="flex items-center gap-1">
 					<Link
 						href="/tools"
-						aria-label="Copia de seguridad"
-						title="Copia de seguridad"
+						aria-label="Configuración"
+						title="Configuración"
 						className="rounded-(--radius-field) p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-200"
 					>
-						<Icon name="backup" className="h-5 w-5" />
+						<Icon name="gear" className="h-5 w-5" />
 					</Link>
 					<button
 						type="button"

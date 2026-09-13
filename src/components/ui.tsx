@@ -306,7 +306,9 @@ export function Modal({
     }
 
     const initial = getInitial()
-    initial?.focus()
+    const isMobile = window.matchMedia('(max-width: 639px)').matches
+    if (isMobile) root?.focus()
+    else initial?.focus()
 
     const prevOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -356,7 +358,8 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="flex h-[100dvh] w-full max-w-2xl flex-col rounded-t-(--radius-panel) bg-white px-5 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-[max(env(safe-area-inset-bottom),1rem)] shadow-2xl animate-[sheet-up_240ms_ease-out] sm:pt-5 sm:h-auto sm:max-h-[90dvh] sm:rounded-(--radius-panel) dark:bg-slate-900"
+        tabIndex={-1}
+        className="flex h-[100dvh] w-full max-w-2xl flex-col rounded-t-(--radius-panel) bg-white px-5 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-[max(env(safe-area-inset-bottom),1rem)] shadow-2xl animate-[sheet-up_240ms_ease-out] outline-none sm:pt-5 sm:h-auto sm:max-h-[90dvh] sm:rounded-(--radius-panel) dark:bg-slate-900"
         onClick={(e) => e.stopPropagation()}
       >
         <div
