@@ -52,9 +52,12 @@ export function Layout({ children }: { children: ReactNode }) {
 
 	const brand = (
 		<Link href="/" className="flex items-center gap-3">
-			<span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-(--radius-field) bg-brand text-white shadow-sm">
-				<Icon name="wallet" className="h-5 w-5" />
-			</span>
+			<img
+				src={`${import.meta.env.BASE_URL}favicon.svg`}
+				alt=""
+				aria-hidden="true"
+				className="h-9 w-9 shrink-0"
+			/>
 			<span>
 				<span className="block font-display text-base font-semibold leading-tight tracking-tight text-slate-900 dark:text-white">
 					Mis Finanzas
@@ -156,9 +159,12 @@ export function Layout({ children }: { children: ReactNode }) {
 			{/* Header móvil */}
 			<header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200/80 bg-slate-50/90 px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3 backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/90">
 				<Link href="/" className="flex items-center gap-2.5">
-					<span className="flex h-9 w-9 items-center justify-center rounded-(--radius-field) bg-brand text-white shadow-sm">
-						<Icon name="wallet" className="h-5 w-5" />
-					</span>
+					<img
+						src={`${import.meta.env.BASE_URL}favicon.svg`}
+						alt=""
+						aria-hidden="true"
+						className="h-9 w-9 shrink-0"
+					/>
 					<span className="font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-white">
 						Mis Finanzas
 					</span>
