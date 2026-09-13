@@ -105,7 +105,7 @@ export function ToolsView() {
 		<div className="space-y-6">
 			<PageHeader
 				title="Configuración"
-				subtitle="Apariencia, copia de seguridad y más"
+				subtitle="Ajusta la apariencia y administra tus datos"
 			/>
 
 			{done && (
@@ -119,66 +119,93 @@ export function ToolsView() {
 			)}
 
 			<Card className="p-6">
-				<SectionLabel>Tema de color</SectionLabel>
-				<h2 className="mt-2 text-lg font-semibold">Personaliza los acentos</h2>
-				<p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-					Elige una paleta predefinida.
-				</p>
-				<div className="mt-4 max-w-md">
-					<select
-						className={inputCls}
-						value={colorTheme}
-						onChange={(e) => setColorTheme(e.target.value as ColorThemeId)}
-					>
-						{COLOR_THEMES.map((t) => (
-							<option key={t.id} value={t.id}>
-								{t.label}
-							</option>
-						))}
-					</select>
+				<SectionLabel>Apariencia</SectionLabel>
+				<div className="mt-2 divide-y divide-slate-100 dark:divide-slate-800">
+					<div className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+						<div className="flex items-start gap-3">
+							<Icon
+								name="monitor"
+								className="mt-0.5 h-5 w-5 shrink-0 text-slate-400"
+							/>
+							<div>
+								<h2 className="text-sm font-medium">Tema de color</h2>
+								<p className="mt-0.5 text-sm text-slate-600 dark:text-slate-300">
+									Paleta de acentos de la aplicación.
+								</p>
+							</div>
+						</div>
+						<select
+							className={`${inputCls} sm:w-56`}
+							value={colorTheme}
+							onChange={(e) => setColorTheme(e.target.value as ColorThemeId)}
+						>
+							{COLOR_THEMES.map((t) => (
+								<option key={t.id} value={t.id}>
+									{t.label}
+								</option>
+							))}
+						</select>
+					</div>
 				</div>
 			</Card>
 
 			<Card className="p-6">
-				<SectionLabel>Exportar datos</SectionLabel>
-				<h2 className="mt-2 text-lg font-semibold">Descarga una copia</h2>
-				<p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-					Guarda todas tus cuentas, movimientos y categorías en un archivo JSON.
-					Guárdalo en un sitio seguro.
-				</p>
-				<div className="mt-4">
-					<Button icon="export" onClick={handleExport}>
-						Descargar copia de seguridad
-					</Button>
-				</div>
-			</Card>
+				<SectionLabel>Datos</SectionLabel>
+				<div className="mt-2 divide-y divide-slate-100 dark:divide-slate-800">
+					<div className="flex flex-col gap-3 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+						<div className="flex items-start gap-3">
+							<Icon
+								name="backup"
+								className="mt-0.5 h-5 w-5 shrink-0 text-slate-400"
+							/>
+							<div>
+								<h2 className="text-sm font-medium">Exportar datos</h2>
+								<p className="mt-0.5 text-sm text-slate-600 dark:text-slate-300">
+									Descarga una copia de seguridad en JSON. Guárdala en un
+									sitio seguro.
+								</p>
+							</div>
+						</div>
+						<Button icon="export" onClick={handleExport} className="w-full sm:w-56">
+							Descargar copia
+						</Button>
+					</div>
 
-			<Card className="p-6">
-				<SectionLabel>Importar datos</SectionLabel>
-				<h2 className="mt-2 text-lg font-semibold">Restaura una copia</h2>
-				<p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-					Selecciona un archivo JSON exportado. Se validará y se mostrará una
-					vista previa antes de reemplazar los datos actuales.
-				</p>
-				<div className="mt-4">
-					<input
-						ref={fileRef}
-						type="file"
-						accept="application/json,.json"
-						className="hidden"
-						onChange={(e) => {
-							const f = e.target.files?.[0];
-							if (f) onFile(f);
-						}}
-					/>
-					<Button
-						variant="secondary"
-						icon="import"
-						onClick={() => fileRef.current?.click()}
-						disabled={reading}
-					>
-						{reading ? 'Leyendo archivo…' : 'Elegir archivo JSON'}
-					</Button>
+					<div className="flex flex-col gap-3 py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+						<div className="flex items-start gap-3">
+							<Icon
+								name="import"
+								className="mt-0.5 h-5 w-5 shrink-0 text-slate-400"
+							/>
+							<div>
+								<h2 className="text-sm font-medium">Importar datos</h2>
+								<p className="mt-0.5 text-sm text-slate-600 dark:text-slate-300">
+									Restaura una copia desde un archivo JSON validado.
+								</p>
+							</div>
+						</div>
+						<div className="flex w-full items-center gap-3 sm:w-auto">
+							<input
+								ref={fileRef}
+								type="file"
+								accept="application/json,.json"
+								className="hidden"
+								onChange={(e) => {
+									const f = e.target.files?.[0];
+									if (f) onFile(f);
+								}}
+							/>
+							<Button
+								variant="secondary"
+								icon="import"
+								onClick={() => fileRef.current?.click()}
+								disabled={reading}
+								className="w-full sm:w-56"
+							>
+								{reading ? 'Leyendo archivo…' : 'Elegir archivo JSON'}
+							</Button>
+						</div>
+					</div>
 				</div>
 			</Card>
 
@@ -186,22 +213,32 @@ export function ToolsView() {
 				<SectionLabel className="text-amber-700 dark:text-amber-400">
 					Zona de peligro
 				</SectionLabel>
-				<h2 className="mt-2 text-lg font-semibold text-amber-900 dark:text-amber-200">
-					Empezar de cero
-				</h2>
-				<p className="mt-1 text-sm text-amber-800/80 dark:text-amber-300/80">
-					Elimina todas las cuentas, movimientos y categorías. Esta acción no se
-					puede deshacer.
-				</p>
-				<div className="mt-4">
-					<Button
-						variant="secondary"
-						icon="trash"
-						className="border-expense/30 text-expense hover:bg-expense-soft dark:border-expense/40 dark:text-expense-bright dark:hover:bg-expense-soft-dark/40"
-						onClick={() => setShowClear(true)}
-					>
-						Vaciar todos los datos
-					</Button>
+				<div className="mt-2 divide-y divide-amber-200/60 dark:divide-amber-900/60">
+					<div className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+						<div className="flex items-start gap-3">
+							<Icon
+								name="trash"
+								className="mt-0.5 h-5 w-5 shrink-0 text-amber-700 dark:text-amber-400"
+							/>
+							<div>
+								<h2 className="text-sm font-medium text-amber-900 dark:text-amber-200">
+									Empezar de cero
+								</h2>
+								<p className="mt-0.5 text-sm text-amber-800/80 dark:text-amber-300/80">
+									Elimina todas las cuentas, movimientos y categorías. Esta
+									acción no se puede deshacer.
+								</p>
+							</div>
+						</div>
+						<Button
+							variant="secondary"
+							icon="trash"
+							className="border-expense/30 text-expense hover:bg-expense-soft dark:border-expense/40 dark:text-expense-bright dark:hover:bg-expense-soft-dark/40"
+							onClick={() => setShowClear(true)}
+						>
+							Vaciar todos los datos
+						</Button>
+					</div>
 				</div>
 			</Card>
 
