@@ -2,6 +2,4 @@
 User-agent: *
 Allow: /
 
-# Cuando la aplicación esté publicada en un dominio, descomenta y completa la
-# URL definitiva, p. ej.:
-# Sitemap: https://tudominio.example/sitemap.xml
+Sitemap: https://msarfer.github.io/finance-localstorage/sitemap.xml
