@@ -339,10 +339,14 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="flex max-h-[90dvh] w-full max-w-2xl flex-col rounded-t-(--radius-panel) bg-white p-5 shadow-2xl animate-[sheet-up_240ms_ease-out] sm:rounded-(--radius-panel) dark:bg-slate-900"
+        className="flex max-h-[100dvh] w-full max-w-2xl flex-col rounded-t-(--radius-panel) bg-white px-5 pt-5 pb-[max(env(safe-area-inset-bottom),1rem)] shadow-2xl animate-[sheet-up_240ms_ease-out] sm:max-h-[90dvh] sm:rounded-(--radius-panel) dark:bg-slate-900"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-4 flex items-center justify-between">
+        <div
+          aria-hidden="true"
+          className="mx-auto mb-3 h-1 w-10 shrink-0 rounded-full bg-slate-200 sm:hidden dark:bg-slate-700"
+        />
+        <div className="mb-4 flex items-center justify-between border-b border-slate-100 pb-4 sm:border-b-0 sm:pb-0 dark:border-slate-800">
           <h2
             id={titleId}
             className="font-display text-xl font-semibold tracking-tight text-slate-900 dark:text-white"
@@ -354,7 +358,11 @@ export function Modal({
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1">
           {children}
         </div>
-        {footer && <div className="mt-6 flex justify-end gap-2">{footer}</div>}
+        {footer && (
+          <div className="mt-6 grid grid-cols-2 gap-2 [&>button]:w-full sm:flex sm:justify-end sm:gap-2 sm:[&>button]:w-auto">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   )

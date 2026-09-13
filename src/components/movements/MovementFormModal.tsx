@@ -314,7 +314,23 @@ export function MovementFormModal({
 			}
 		>
 			<div className="space-y-4 p-2">
-				<div className="grid grid-cols-4 gap-2">
+				<Field label="Tipo de movimiento">
+					<select
+						className={`${inputCls} sm:hidden`}
+						value={type}
+						onChange={(e) => switchType(e.target.value as MovementType)}
+					>
+						<option value="expense">Gasto</option>
+						<option value="income">Ingreso</option>
+						<option value="transfer" disabled={onlineAccounts.length < 2}>
+							Transferencia online
+						</option>
+						<option value="cashflow" disabled={onlineAccounts.length === 0}>
+							Banco ↔ Efectivo
+						</option>
+					</select>
+				</Field>
+				<div className="hidden grid-cols-4 gap-2 sm:grid">
 					{typeBtn('expense', 'Gasto', 'trend-down')}
 					{typeBtn('income', 'Ingreso', 'trend-up')}
 					{typeBtn('transfer', 'Online', 'swap', {
@@ -342,7 +358,7 @@ export function MovementFormModal({
 				</Field>
 
 				{type === 'transfer' && (
-					<div className="grid grid-cols-2 gap-3">
+					<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 						<Field label="Desde (origen)">
 							<select
 								className={inputCls}
@@ -378,7 +394,7 @@ export function MovementFormModal({
 							{dirBtn('toCash', 'Sacar dinero', 'arrow-left')}
 							{dirBtn('toBank', 'Ingresar dinero', 'arrow-left', 'rotate-180')}
 						</div>
-						<div className="grid grid-cols-2 gap-3">
+						<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 							<Field label="Cuenta bancaria (online)">
 								<select
 									className={inputCls}
@@ -414,7 +430,7 @@ export function MovementFormModal({
 				)}
 
 				{type !== 'transfer' && type !== 'cashflow' && (
-					<div className="grid grid-cols-2 gap-3">
+					<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 						<Field label="Cuenta">
 							<select
 								className={inputCls}
@@ -449,7 +465,7 @@ export function MovementFormModal({
 					</div>
 				)}
 
-				<div className="grid grid-cols-2 gap-3">
+				<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 					<Field
 						label={
 							cashAffected ? 'Importe (calculado del desglose)' : 'Importe (€)'
