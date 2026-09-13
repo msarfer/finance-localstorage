@@ -5,7 +5,7 @@ import { useStore } from '@/store/useStore';
 import { currentMonthISO, monthOf } from '@/lib/reports';
 import { monthLabel } from '@/lib/display';
 import { formatEUR } from '@/lib/money';
-import { Button, Card, Chip, ConfirmDialog, EmptyState, inputCls, PageHeader, SearchBox, SectionLabel, Segmented } from '@/components/ui';
+import { Button, Card, Chip, ConfirmDialog, EmptyState, Field, inputCls, PageHeader, SearchBox, SectionLabel, Segmented } from '@/components/ui';
 import { MovementFormModal } from './MovementFormModal';
 import { MovementListItem } from './MovementListItem';
 import { Icon } from '@/components/icons';
@@ -235,44 +235,55 @@ export function MovementsView() {
 
 			<Card className="p-4">
 				<div className="grid gap-3 sm:grid-cols-2">
-					<select
-						className={inputCls}
-						value={filterMonth}
-						onChange={(e) => setFilterMonth(e.target.value)}
-					>
-						{months.map((m) => (
-							<option key={m} value={m}>
-								{monthLabel(m)}
-							</option>
-						))}
-					</select>
-					<select
-						className={inputCls}
-						value={filterAccount}
-						onChange={(e) => setFilterAccount(e.target.value)}
-					>
-						<option value="">Todas las cuentas</option>
-						{accounts.map((a) => (
-							<option key={a.id} value={a.id}>
-								{a.name}
-							</option>
-						))}
-					</select>
+					<Field label="Mes">
+						<select
+							className={inputCls}
+							value={filterMonth}
+							onChange={(e) => setFilterMonth(e.target.value)}
+							aria-label="Mes"
+						>
+							{months.map((m) => (
+								<option key={m} value={m}>
+									{monthLabel(m)}
+								</option>
+							))}
+						</select>
+					</Field>
+					<Field label="Cuenta">
+						<select
+							className={inputCls}
+							value={filterAccount}
+							onChange={(e) => setFilterAccount(e.target.value)}
+							aria-label="Cuenta"
+						>
+							<option value="">Todas las cuentas</option>
+							{accounts.map((a) => (
+								<option key={a.id} value={a.id}>
+									{a.name}
+								</option>
+							))}
+						</select>
+					</Field>
 				</div>
 				<div className="mt-3 flex flex-wrap items-center gap-3">
-					<select
-						className={`${inputCls} sm:hidden`}
-						value={filterType}
-						onChange={(e) =>
-							setFilterType(e.target.value as 'all' | MovementType)
-						}
-					>
-						<option value="all">Todos</option>
-						<option value="income">Ingresos</option>
-						<option value="expense">Gastos</option>
-						<option value="transfer">Transferencias</option>
-						<option value="cashflow">Banco ↔ Efectivo</option>
-					</select>
+					<div className="w-full sm:hidden">
+						<Field label="Tipo">
+							<select
+								className={inputCls}
+								value={filterType}
+								onChange={(e) =>
+									setFilterType(e.target.value as 'all' | MovementType)
+								}
+								aria-label="Tipo"
+							>
+								<option value="all">Todos</option>
+								<option value="income">Ingresos</option>
+								<option value="expense">Gastos</option>
+								<option value="transfer">Transferencias</option>
+								<option value="cashflow">Banco ↔ Efectivo</option>
+							</select>
+						</Field>
+					</div>
 					<div className="hidden sm:block">
 						<Segmented<'all' | MovementType>
 							value={filterType}
