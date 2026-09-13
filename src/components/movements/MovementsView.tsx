@@ -164,7 +164,16 @@ export function MovementsView() {
 				subtitle={`${filtered.length} movimiento${filtered.length === 1 ? '' : 's'}`}
 				action={
 					<div className="relative">
-						<Button icon="plus" onClick={() => setMoveMenuOpen((o) => !o)}>
+						<Button
+							icon="plus"
+							onClick={() => setMoveMenuOpen((o) => !o)}
+							disabled={accounts.length === 0}
+							title={
+								accounts.length === 0
+									? 'Crea una cuenta para añadir movimientos'
+									: undefined
+							}
+						>
 							Nuevo movimiento
 						</Button>
 						{moveMenuOpen && (
