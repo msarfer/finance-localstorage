@@ -92,6 +92,11 @@ textarea {
   accent-color: var(--color-brand);
 }
 
+select {
+  height: 2.375rem;
+  padding: 0 2.25rem 0 0.75rem;
+}
+
 ::selection {
   background: var(--color-brand-soft);
   color: var(--color-brand-strong);
