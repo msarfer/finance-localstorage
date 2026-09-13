@@ -5,7 +5,8 @@ import '@fontsource-variable/onest'
 import './index.css'
 import App from '@/App.tsx'
 
-const canonicalUrl = new URL('/', window.location.origin).toString()
+const baseUrlPath = import.meta.env.BASE_URL || '/'
+const canonicalUrl = new URL(baseUrlPath, window.location.origin).toString()
 
 let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
 if (!canonical) {
