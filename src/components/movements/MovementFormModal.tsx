@@ -325,7 +325,7 @@ export function MovementFormModal({
 						<option value="transfer" disabled={onlineAccounts.length < 2}>
 							Transferencia online
 						</option>
-						<option value="cashflow" disabled={onlineAccounts.length === 0}>
+						<option value="cashflow" disabled={onlineAccounts.length === 0 || cashAccounts.length === 0}>
 							Banco ↔ Efectivo
 						</option>
 					</select>
@@ -337,14 +337,16 @@ export function MovementFormModal({
 						disabled: onlineAccounts.length < 2,
 					})}
 					{typeBtn('cashflow', 'Efectivo', 'wallet', {
-						disabled: onlineAccounts.length === 0,
+						disabled: onlineAccounts.length === 0 || cashAccounts.length === 0,
 					})}
 				</div>
-				{onlineAccounts.length < 2 && (
+				{(onlineAccounts.length < 2 || cashAccounts.length === 0) && (
 					<p className="text-xs text-slate-400 dark:text-slate-500">
 						{onlineAccounts.length === 0
 							? 'Necesitas al menos una cuenta online para Banco ↔ Efectivo y dos para transferencias'
-							: 'Necesitas al menos dos cuentas online para hacer transferencias'}
+							: cashAccounts.length === 0
+								? 'Necesitas al menos una cuenta de efectivo para Banco ↔ Efectivo'
+								: 'Necesitas al menos dos cuentas online para hacer transferencias'}
 					</p>
 				)}
 
