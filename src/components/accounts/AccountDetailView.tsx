@@ -213,17 +213,32 @@ export function AccountDetailView() {
             />
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-3">
-            <Segmented<'all' | MovementType>
+            <select
+              className={`${inputCls} sm:hidden`}
               value={filterType}
-              onChange={setFilterType}
-              options={[
-                { value: 'all', label: 'Todos' },
-                { value: 'income', label: 'Ingresos' },
-                { value: 'expense', label: 'Gastos' },
-                { value: 'transfer', label: 'Transferencias' },
-                { value: 'cashflow', label: 'Banco ↔ Efectivo' },
-              ]}
-            />
+              onChange={(e) =>
+                setFilterType(e.target.value as 'all' | MovementType)
+              }
+            >
+              <option value="all">Todos</option>
+              <option value="income">Ingresos</option>
+              <option value="expense">Gastos</option>
+              <option value="transfer">Transferencias</option>
+              <option value="cashflow">Banco ↔ Efectivo</option>
+            </select>
+            <div className="hidden sm:block">
+              <Segmented<'all' | MovementType>
+                value={filterType}
+                onChange={setFilterType}
+                options={[
+                  { value: 'all', label: 'Todos' },
+                  { value: 'income', label: 'Ingresos' },
+                  { value: 'expense', label: 'Gastos' },
+                  { value: 'transfer', label: 'Transferencias' },
+                  { value: 'cashflow', label: 'Banco ↔ Efectivo' },
+                ]}
+              />
+            </div>
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <Chip tone="income">Ingresos: + {formatEUR(monthlyTotals.income)}</Chip>
