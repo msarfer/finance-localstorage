@@ -195,7 +195,7 @@ export function Layout({ children }: { children: ReactNode }) {
 				</div>
 			</header>
 
-			<main className="pb-20 lg:pb-10 lg:pl-64">
+			<main className="pb-[calc(5rem+env(safe-area-inset-bottom))] lg:pb-10 lg:pl-64">
 				<div
 					key={location}
 					className="mx-auto max-w-5xl px-4 py-6 animate-[view-enter_280ms_ease-out] sm:px-6 lg:px-8"
@@ -205,7 +205,7 @@ export function Layout({ children }: { children: ReactNode }) {
 			</main>
 
 			{/* Bottom nav móvil */}
-			<nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-slate-200/80 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/95">
+			<nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-slate-200/80 bg-white/95 pb-[max(env(safe-area-inset-bottom),0.75rem)] backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/95">
 				{MOBILE_NAV.map((item) => {
 					const active = isActive(item.path, location);
 					return (
