@@ -154,7 +154,7 @@ export function Layout({ children }: { children: ReactNode }) {
 			</aside>
 
 			{/* Header móvil */}
-			<header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200/80 bg-slate-50/90 px-4 py-3 backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/90">
+			<header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200/80 bg-slate-50/90 px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3 backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/90">
 				<Link href="/" className="flex items-center gap-2.5">
 					<span className="flex h-9 w-9 items-center justify-center rounded-(--radius-field) bg-brand text-white shadow-sm">
 						<Icon name="wallet" className="h-5 w-5" />

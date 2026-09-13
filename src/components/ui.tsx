@@ -356,8 +356,7 @@ export function Modal({
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        style={kb ? { marginBottom: kb } : undefined}
-        className="flex h-[100dvh] w-full max-w-2xl flex-col rounded-t-(--radius-panel) bg-white px-5 pt-5 pb-[max(env(safe-area-inset-bottom),1rem)] shadow-2xl animate-[sheet-up_240ms_ease-out] sm:h-auto sm:max-h-[90dvh] sm:rounded-(--radius-panel) dark:bg-slate-900"
+        className="flex h-[100dvh] w-full max-w-2xl flex-col rounded-t-(--radius-panel) bg-white px-5 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-[max(env(safe-area-inset-bottom),1rem)] shadow-2xl animate-[sheet-up_240ms_ease-out] sm:pt-5 sm:h-auto sm:max-h-[90dvh] sm:rounded-(--radius-panel) dark:bg-slate-900"
         onClick={(e) => e.stopPropagation()}
       >
         <div
@@ -373,7 +372,10 @@ export function Modal({
           </h2>
           <IconButton onClick={onClose} title="Cerrar" icon="close" />
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1">
+        <div
+          className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1"
+          style={kb ? { paddingBottom: kb, scrollPaddingBottom: kb } : undefined}
+        >
           {children}
         </div>
         {footer && (
