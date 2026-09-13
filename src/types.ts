@@ -40,8 +40,11 @@ export interface Category {
   type: CategoryType
 }
 
+export type ColorThemeId = 'banca' | 'oceano' | 'uva' | 'atardecer'
+
 export interface AppSettings {
   theme: 'light' | 'dark' | 'system'
+  colorTheme: ColorThemeId
 }
 
 export interface AppState {

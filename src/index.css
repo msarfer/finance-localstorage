@@ -49,6 +49,75 @@
   --color-slate-950: #14120e;
 }
 
+/* Tema: Océano */
+[data-theme='oceano'] {
+  --color-brand: #0d6bc2;
+  --color-brand-bright: #3b8fdd;
+  --color-brand-strong: #0a55a0;
+  --color-brand-soft: #d9ecfd;
+  --color-brand-soft-dark: #0d2a4a;
+
+  --color-income: #0f8a5f;
+  --color-income-bright: #2fae7f;
+  --color-income-strong: #0c6b49;
+  --color-income-soft: #dbf3e7;
+  --color-income-soft-dark: #0f2c20;
+
+  --color-expense: #cc3b2e;
+  --color-expense-bright: #e25f51;
+  --color-expense-strong: #a52a20;
+  --color-expense-soft: #fbe6e1;
+  --color-expense-soft-dark: #3c110c;
+
+  --color-amber-accent: #c9952b;
+}
+
+/* Tema: Uva */
+[data-theme='uva'] {
+  --color-brand: #6d3fc0;
+  --color-brand-bright: #8a5ce0;
+  --color-brand-strong: #53309a;
+  --color-brand-soft: #ece3fb;
+  --color-brand-soft-dark: #241a44;
+
+  --color-income: #0f8a63;
+  --color-income-bright: #2bad79;
+  --color-income-strong: #0c6d4c;
+  --color-income-soft: #dbf2e7;
+  --color-income-soft-dark: #0f2b1f;
+
+  --color-expense: #d23b5e;
+  --color-expense-bright: #e26b84;
+  --color-expense-strong: #a82342;
+  --color-expense-soft: #fbe4eb;
+  --color-expense-soft-dark: #3c0e1e;
+
+  --color-amber-accent: #b98a2c;
+}
+
+/* Tema: Atardecer */
+[data-theme='atardecer'] {
+  --color-brand: #dd5a17;
+  --color-brand-bright: #f07a35;
+  --color-brand-strong: #b04310;
+  --color-brand-soft: #fde9db;
+  --color-brand-soft-dark: #3d1a0a;
+
+  --color-income: #1c8c46;
+  --color-income-bright: #43b06a;
+  --color-income-strong: #12693a;
+  --color-income-soft: #e1f2e2;
+  --color-income-soft-dark: #142d17;
+
+  --color-expense: #c9302c;
+  --color-expense-bright: #de5447;
+  --color-expense-strong: #9e1f1c;
+  --color-expense-soft: #fbe3df;
+  --color-expense-soft-dark: #380f0b;
+
+  --color-amber-accent: #e0a52e;
+}
+
 html {
   color-scheme: light;
   -webkit-text-size-adjust: 100%;

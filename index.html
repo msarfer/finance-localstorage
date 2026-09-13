@@ -32,6 +32,11 @@
             (theme === 'system' &&
               window.matchMedia('(prefers-color-scheme: dark)').matches)
           if (dark) document.documentElement.classList.add('dark')
+          var colorTheme =
+            saved && saved.state && saved.state.settings && saved.state.settings.colorTheme
+          if (colorTheme) {
+            document.documentElement.setAttribute('data-theme', colorTheme)
+          }
         } catch (e) {}
       })()
     </script>

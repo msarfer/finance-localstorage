@@ -10,8 +10,10 @@ import { MovementsView } from '@/components/movements/MovementsView'
 import { CategoriesView } from '@/components/categories/CategoriesView'
 import { ToolsView } from '@/components/tools/ToolsView'
 import { NotFound } from '@/components/NotFound'
+import { useColorTheme } from '@/hooks/useColorTheme'
 
 function App() {
+  useColorTheme()
   return (
     <Router hook={useHashLocation}>
       <Layout>

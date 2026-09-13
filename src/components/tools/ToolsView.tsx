@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 
 import type { ImportResult } from '@/utils/validate';
+import type { ColorThemeId } from '@/types';
 import { buildExport, parseImport } from '@/utils/validate';
 import { useStore } from '@/store/useStore';
 import { formatEUR } from '@/lib/money';
@@ -11,8 +12,11 @@ import {
 	Modal,
 	PageHeader,
 	SectionLabel,
+	inputCls,
 } from '@/components/ui';
 import { Icon } from '@/components/icons';
+import { useColorTheme } from '@/hooks/useColorTheme';
+import { COLOR_THEMES } from '@/theme';
 
 function todayFilename(): string {
 	return `mis-finanzas-${new Date().toISOString().slice(0, 10)}.json`;
@@ -25,6 +29,7 @@ export function ToolsView() {
 	const settings = useStore((s) => s.settings);
 	const replaceAll = useStore((s) => s.replaceAll);
 	const clearAll = useStore((s) => s.clearAll);
+	const { colorTheme, setColorTheme } = useColorTheme();
 
 	const fileRef = useRef<HTMLInputElement>(null);
 	const [result, setResult] = useState<ImportResult | null>(null);
@@ -99,8 +104,8 @@ export function ToolsView() {
 	return (
 		<div className="space-y-6">
 			<PageHeader
-				title="Copia de seguridad"
-				subtitle="Exporta o importa todos tus datos en formato JSON"
+				title="Configuración"
+				subtitle="Apariencia, copia de seguridad y más"
 			/>
 
 			{done && (
@@ -112,6 +117,27 @@ export function ToolsView() {
 					{done}
 				</div>
 			)}
+
+			<Card className="p-6">
+				<SectionLabel>Tema de color</SectionLabel>
+				<h2 className="mt-2 text-lg font-semibold">Personaliza los acentos</h2>
+				<p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+					Elige una paleta predefinida.
+				</p>
+				<div className="mt-4 max-w-md">
+					<select
+						className={inputCls}
+						value={colorTheme}
+						onChange={(e) => setColorTheme(e.target.value as ColorThemeId)}
+					>
+						{COLOR_THEMES.map((t) => (
+							<option key={t.id} value={t.id}>
+								{t.label}
+							</option>
+						))}
+					</select>
+				</div>
+			</Card>
 
 			<Card className="p-6">
 				<SectionLabel>Exportar datos</SectionLabel>

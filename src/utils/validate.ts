@@ -2,6 +2,7 @@ import type { Account, AppState, Category, Movement } from '@/types'
 import { DENOMINATIONS } from '@/data/constants'
 import { computeCashTotal } from '@/lib/money'
 import { EXPORT_HEADER, SCHEMA_VERSION } from '@/store/useStore'
+import { DEFAULT_COLOR_THEME, isColorTheme } from '@/theme'
 
 export interface ExportFile {
   app: string
@@ -29,9 +30,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function validateSettings(value: unknown): AppState['settings'] {
-  if (!isRecord(value)) return { theme: 'system' }
+  if (!isRecord(value)) return { theme: 'system', colorTheme: DEFAULT_COLOR_THEME }
   const theme = value.theme === 'dark' || value.theme === 'light' ? value.theme : 'system'
-  return { theme }
+  const colorTheme = isColorTheme(value.colorTheme) ? value.colorTheme : DEFAULT_COLOR_THEME
+  return { theme, colorTheme }
 }
 
 function validateAccount(value: unknown, errors: string[], idx: number): Account | null {

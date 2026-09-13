@@ -5,6 +5,7 @@ import type { Account, AppSettings, AppState, Category, Movement } from '@/types
 import { DEFAULT_CATEGORIES } from '@/data/defaultCategories'
 import { DENOMINATIONS } from '@/data/constants'
 import { computeCashTotal, emptyCashCounts, uid } from '@/lib/money'
+import { DEFAULT_COLOR_THEME, isColorTheme } from '@/theme'
 
 const STORAGE_KEY = 'finanzas:state'
 export const SCHEMA_VERSION = 4
@@ -80,7 +81,7 @@ export const useStore = create<FinanceStore>()(
       accounts: [],
       movements: [],
       categories: DEFAULT_CATEGORIES,
-      settings: { theme: 'system' },
+      settings: { theme: 'system', colorTheme: DEFAULT_COLOR_THEME },
 
       addAccount: (input) =>
         set((s) => {
@@ -172,7 +173,7 @@ export const useStore = create<FinanceStore>()(
         set((s) => ({ settings: { ...s.settings, ...patch } })),
 
       clearAll: () =>
-        set({ accounts: [], movements: [], categories: DEFAULT_CATEGORIES, settings: { theme: 'system' } }),
+        set({ accounts: [], movements: [], categories: DEFAULT_CATEGORIES, settings: { theme: 'system', colorTheme: DEFAULT_COLOR_THEME } }),
     }),
     {
       name: STORAGE_KEY,
@@ -198,7 +199,7 @@ export const useStore = create<FinanceStore>()(
           accounts: [] as Account[],
           movements: [] as Movement[],
           categories: DEFAULT_CATEGORIES,
-          settings: { theme: 'system' } as AppSettings,
+          settings: { theme: 'system', colorTheme: DEFAULT_COLOR_THEME } as AppSettings,
         }
         if (!s || !Array.isArray(s.accounts) || !Array.isArray(s.movements)) {
           return empty
@@ -238,7 +239,14 @@ export const useStore = create<FinanceStore>()(
             Array.isArray(s.categories) && s.categories.length > 0
               ? s.categories
               : DEFAULT_CATEGORIES,
-          settings: s.settings ?? { theme: 'system' },
+          settings: {
+            theme: s.settings?.theme === 'dark' || s.settings?.theme === 'light'
+              ? s.settings.theme
+              : 'system',
+            colorTheme: isColorTheme(s.settings?.colorTheme)
+              ? s.settings.colorTheme
+              : DEFAULT_COLOR_THEME,
+          },
         }
       },
     },
