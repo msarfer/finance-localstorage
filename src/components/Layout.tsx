@@ -181,10 +181,21 @@ export function Layout({ children }: { children: ReactNode }) {
 					>
 						<Icon name={mobileThemeIcon} className="h-5 w-5" />
 					</button>
+					{accounts.length > 0 && (
+						<button
+							type="button"
+							onClick={() => useUiStore.getState().openMovementForm()}
+							title="Nuevo movimiento"
+							aria-label="Nuevo movimiento"
+							className="flex h-9 w-9 items-center justify-center rounded-(--radius-field) bg-brand text-white shadow-sm transition hover:bg-brand-bright active:scale-95"
+						>
+							<Icon name="plus" className="h-5 w-5" />
+						</button>
+					)}
 				</div>
 			</header>
 
-			<main className="pb-24 lg:pb-10 lg:pl-64">
+			<main className="pb-20 lg:pb-10 lg:pl-64">
 				<div
 					key={location}
 					className="mx-auto max-w-5xl px-4 py-6 animate-[view-enter_280ms_ease-out] sm:px-6 lg:px-8"
@@ -214,19 +225,6 @@ export function Layout({ children }: { children: ReactNode }) {
 					);
 				})}
 			</nav>
-
-			{/* FAB: nuevo movimiento */}
-			{accounts.length > 0 && (
-				<button
-					type="button"
-					onClick={() => useUiStore.getState().openMovementForm()}
-					title="Nuevo movimiento"
-					aria-label="Nuevo movimiento"
-					className="fixed bottom-24 left-1/2 z-40 flex h-14 w-14 -translate-x-1/2 items-center justify-center rounded-full bg-brand text-white shadow-lg shadow-brand/30 transition hover:bg-brand-bright active:scale-95 animate-[fade-in_200ms_ease-out] lg:hidden dark:shadow-black/40"
-				>
-					<Icon name="plus" className="h-6 w-6" />
-				</button>
-			)}
 
 			{movementFormOpen && (
 				<MovementFormModal onClose={closeMovementForm} />

@@ -2,6 +2,7 @@ import { Router, Route, Switch } from 'wouter'
 import { useHashLocation } from 'wouter/use-hash-location'
 
 import { Layout } from '@/components/Layout'
+import { PwaUpdater } from '@/components/PwaUpdater'
 import { Dashboard } from '@/components/dashboard/Dashboard'
 import { AccountsView } from '@/components/accounts/AccountsView'
 import { AccountDetailView } from '@/components/accounts/AccountDetailView'
@@ -24,6 +25,7 @@ function App() {
           <Route path="*" component={NotFound} />
         </Switch>
       </Layout>
+      <PwaUpdater />
     </Router>
   )
 }
