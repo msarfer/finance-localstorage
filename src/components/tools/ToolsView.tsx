@@ -18,6 +18,7 @@ import { Icon } from '@/components/icons';
 import { useColorTheme } from '@/hooks/useColorTheme';
 import { useTheme } from '@/hooks/useTheme';
 import { COLOR_THEMES } from '@/theme';
+import { APP_VERSION } from '@/lib/version';
 
 function todayFilename(): string {
 	return `mis-finanzas-${new Date().toISOString().slice(0, 10)}.json`;
@@ -334,6 +335,9 @@ export function ToolsView() {
 					}}
 				/>
 			)}
+			<p className="text-center text-xs text-slate-400 dark:text-slate-500">
+				v{APP_VERSION}
+			</p>
 		</div>
 	);
 }

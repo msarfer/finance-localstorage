@@ -4,6 +4,7 @@ import { Link, useLocation } from 'wouter';
 import { useStore } from '@/store/useStore';
 import { useUiStore } from '@/store/ui';
 import { computeCashTotal, formatEUR } from '@/lib/money';
+import { APP_VERSION } from '@/lib/version';
 import { useTheme } from '@/hooks/useTheme';
 import { Icon } from '@/components/icons';
 import type { IconName } from '@/components/icons';
@@ -150,6 +151,9 @@ export function Layout({ children }: { children: ReactNode }) {
 						</span>
 						{themeSegmented}
 					</div>
+					<p className="px-1 text-center text-[11px] text-slate-400 dark:text-slate-500">
+						v{APP_VERSION}
+					</p>
 				</div>
 			</aside>
 
@@ -164,6 +168,9 @@ export function Layout({ children }: { children: ReactNode }) {
 					/>
 					<span className="font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-white">
 						Mis Finanzas
+					</span>
+					<span className="text-[10px] text-slate-400 dark:text-slate-500">
+						v{APP_VERSION}
 					</span>
 				</Link>
 				<div className="flex items-center gap-1">
