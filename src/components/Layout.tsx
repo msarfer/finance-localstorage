@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { Link, useLocation } from 'wouter';
 
 import { useStore } from '@/store/useStore';
@@ -37,9 +37,14 @@ function isActive(path: string, current: string): boolean {
 }
 
 export function Layout({ children }: { children: ReactNode }) {
+	const mainRef = useRef<HTMLElement>(null);
 	const accounts = useStore((s) => s.accounts);
 	const { theme, setTheme } = useTheme();
 	const [location] = useLocation();
+
+	useEffect(() => {
+		mainRef.current?.scrollTo(0, 0);
+	}, [location]);
 
 	const movementFormOpen = useUiStore((s) => s.movementFormOpen);
 	const closeMovementForm = useUiStore((s) => s.closeMovementForm);
@@ -121,7 +126,7 @@ export function Layout({ children }: { children: ReactNode }) {
 	);
 
 	return (
-		<div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+		<div className="app-shell flex flex-col overflow-hidden bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
 			{/* Sidebar desktop */}
 			<aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-slate-200/80 bg-white px-4 py-6 sm:px-5 lg:flex dark:border-slate-800 dark:bg-slate-900/60">
 				<div className="px-1">{brand}</div>
@@ -149,7 +154,7 @@ export function Layout({ children }: { children: ReactNode }) {
 			</aside>
 
 			{/* Header móvil */}
-			<header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200/80 bg-slate-50/90 px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3 backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/90">
+			<header className="z-40 flex shrink-0 items-center justify-between border-b border-slate-200/80 bg-slate-50/90 px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3 backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/90">
 				<Link href="/" className="flex items-center gap-2.5">
 					<img
 						src={`${import.meta.env.BASE_URL}favicon.svg`}
@@ -184,7 +189,10 @@ export function Layout({ children }: { children: ReactNode }) {
 				</div>
 			</header>
 
-			<main className="pb-[calc(5rem+env(safe-area-inset-bottom))] lg:pb-10 lg:pl-64">
+			<main
+				ref={mainRef}
+				className="flex-1 overflow-y-auto overscroll-y-contain lg:pl-64"
+			>
 				<div
 					key={location}
 					className="mx-auto max-w-5xl px-4 py-6 animate-[view-enter_280ms_ease-out] sm:px-6 lg:px-8"
@@ -194,7 +202,7 @@ export function Layout({ children }: { children: ReactNode }) {
 			</main>
 
 			{/* Bottom nav móvil */}
-			<nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-slate-200/80 bg-white/95 pb-[max(env(safe-area-inset-bottom),0.75rem)] backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/95">
+			<nav className="z-40 flex shrink-0 border-t border-slate-200/80 bg-white/95 pb-[max(env(safe-area-inset-bottom),0.75rem)] backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/95">
 				{MOBILE_NAV.map((item) => {
 					const active = isActive(item.path, location);
 					return (
