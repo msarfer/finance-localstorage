@@ -53,7 +53,7 @@ export function ToolsView() {
 		a.click();
 		document.body.removeChild(a);
 		URL.revokeObjectURL(url);
-		setDone('Exportación descargada correctamente');
+		setDone('Copia de seguridad descargada correctamente');
 		window.setTimeout(() => setDone(null), 3000);
 	};
 
@@ -108,7 +108,7 @@ export function ToolsView() {
 		<div className="space-y-6">
 			<PageHeader
 				title="Configuración"
-				subtitle="Ajusta la apariencia y administra tus datos"
+				subtitle="Ajusta la apariencia y gestiona tus datos"
 			/>
 
 			{done && (
@@ -131,9 +131,9 @@ export function ToolsView() {
 								className="mt-0.5 h-5 w-5 shrink-0 text-slate-400"
 							/>
 							<div>
-								<h2 className="text-sm font-medium">Modo de color</h2>
+								<h2 className="text-sm font-medium">Tema</h2>
 								<p className="mt-0.5 text-sm text-slate-600 dark:text-slate-300">
-									Tema claro, oscuro o según el sistema.
+									Elige entre el tema claro, el oscuro o el que usa tu sistema.
 								</p>
 							</div>
 						</div>
@@ -155,9 +155,9 @@ export function ToolsView() {
 								className="mt-0.5 h-5 w-5 shrink-0 text-slate-400"
 							/>
 							<div>
-								<h2 className="text-sm font-medium">Tema de color</h2>
+								<h2 className="text-sm font-medium"> Paleta de color</h2>
 								<p className="mt-0.5 text-sm text-slate-600 dark:text-slate-300">
-									Paleta de acentos de la aplicación.
+									Paleta de colores para toda la aplicación.
 								</p>
 							</div>
 						</div>
@@ -188,13 +188,17 @@ export function ToolsView() {
 							<div>
 								<h2 className="text-sm font-medium">Exportar datos</h2>
 								<p className="mt-0.5 text-sm text-slate-600 dark:text-slate-300">
-									Descarga una copia de seguridad en JSON. Guárdala en un
-									sitio seguro.
+									Descarga una copia de seguridad en formato JSON. Guárdala en
+									un lugar seguro.
 								</p>
 							</div>
 						</div>
-						<Button icon="export" onClick={handleExport} className="w-full sm:w-56">
-							Descargar copia
+						<Button
+							icon="export"
+							onClick={handleExport}
+							className="w-full sm:w-56"
+						>
+							Descargar copia de seguridad
 						</Button>
 					</div>
 
@@ -207,7 +211,7 @@ export function ToolsView() {
 							<div>
 								<h2 className="text-sm font-medium">Importar datos</h2>
 								<p className="mt-0.5 text-sm text-slate-600 dark:text-slate-300">
-									Restaura una copia desde un archivo JSON validado.
+									Restaura una copia de seguridad desde un archivo JSON.
 								</p>
 							</div>
 						</div>
@@ -252,8 +256,8 @@ export function ToolsView() {
 									Empezar de cero
 								</h2>
 								<p className="mt-0.5 text-sm text-amber-800/80 dark:text-amber-300/80">
-									Elimina todas las cuentas, movimientos y categorías. Esta
-									acción no se puede deshacer.
+									Borra todas las cuentas, movimientos y categorías. Esta acción
+									no se puede deshacer.
 								</p>
 							</div>
 						</div>
@@ -318,13 +322,13 @@ export function ToolsView() {
 			{showClear && (
 				<ConfirmDialog
 					title="Vaciar todos los datos"
-					message="Se eliminarán todas las cuentas y movimientos. Esta acción no se puede deshacer."
+					message="Se borrarán todas las cuentas, movimientos y categorías. Esta acción no se puede deshacer."
 					confirmLabel="Vaciar"
 					onCancel={() => setShowClear(false)}
 					onConfirm={() => {
 						clearAll();
 						setShowClear(false);
-						setDone('Datos eliminados');
+						setDone('Datos borrados');
 						window.setTimeout(() => setDone(null), 3000);
 					}}
 				/>
