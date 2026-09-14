@@ -11,9 +11,11 @@ import { CategoriesView } from '@/components/categories/CategoriesView'
 import { ToolsView } from '@/components/tools/ToolsView'
 import { NotFound } from '@/components/NotFound'
 import { useColorTheme } from '@/hooks/useColorTheme'
+import { usePortraitLock } from '@/hooks/usePortraitLock'
 
 function App() {
   useColorTheme()
+  usePortraitLock()
   return (
     <Router hook={useHashLocation}>
       <Layout>
