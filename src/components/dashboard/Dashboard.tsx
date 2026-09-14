@@ -12,7 +12,6 @@ import {
 	EmptyState,
 	PageHeader,
 	SectionLabel,
-	StatCard,
 } from '@/components/ui';
 import { MovementListItem } from '@/components/movements/MovementListItem';
 import { TrendChart } from '@/components/dashboard/TrendChart';
@@ -57,44 +56,23 @@ export function Dashboard() {
 						<p className="mt-2 font-display text-4xl font-semibold tracking-tight tabular-nums text-slate-900 sm:text-5xl dark:text-white">
 							{formatEUR(Math.round(animatedAssets))}
 						</p>
-						<p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+						<p className="mt-2 text-sm text-slate-500 dark:text-slate-400 flex flex-col">
 							<span className="inline-flex items-center gap-1.5">
 								<Icon name="bank" className="h-4 w-4" />
-								{formatEUR(summary.totalOnline)} online
+								{formatEUR(summary.totalOnline)}
 							</span>
-							{' · '}
 							<span className="inline-flex items-center gap-1.5">
 								<Icon name="wallet" className="h-4 w-4" />
-								{formatEUR(summary.totalCash)} en efectivo
+								{formatEUR(summary.totalCash)}
 							</span>
-						</p>
-					</div>
-					<div className="text-right">
-						<SectionLabel>Neto del mes</SectionLabel>
-						<p
-							className={`mt-2 font-display text-3xl font-semibold tracking-tight tabular-nums ${
-								monthBalancePositive
-									? 'text-income dark:text-income-bright'
-									: 'text-expense dark:text-expense-bright'
-							}`}
-						>
-							{monthBalancePositive ? '+' : '−'}
-							{formatEUR(Math.abs(summary.monthBalance))}
 						</p>
 					</div>
 				</div>
 			</Card>
 
-			<StatCard
-				label="Balance del mes"
-				value={formatEUR(summary.monthBalance)}
-				accent={monthBalancePositive ? incomeColor : expenseColor}
-				icon={monthBalancePositive ? 'trend-up' : 'trend-down'}
-			/>
-
 			<Card className="p-5">
 				<div className="flex items-center justify-between">
-					<SectionLabel>Movimiento del mes</SectionLabel>
+					<SectionLabel>Balance del mes</SectionLabel>
 					<Chip tone="neutral">{monthLabel(month)}</Chip>
 				</div>
 				<div className="mt-4 grid grid-cols-2 gap-6">
@@ -131,6 +109,21 @@ export function Dashboard() {
 				<p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
 					Proporción de ingresos y gastos del mes
 				</p>
+				<div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4 dark:border-slate-800">
+					<span className="text-sm font-medium text-slate-500 dark:text-slate-400">
+						Neto del mes
+					</span>
+					<span
+						className={`font-display text-3xl font-semibold tracking-tight tabular-nums ${
+							monthBalancePositive
+								? 'text-income dark:text-income-bright'
+								: 'text-expense dark:text-expense-bright'
+						}`}
+					>
+						{monthBalancePositive ? '+' : '−'}
+						{formatEUR(Math.abs(summary.monthBalance))}
+					</span>
+				</div>
 			</Card>
 
 			<Card className="p-5">
