@@ -33,6 +33,8 @@ export function Dashboard() {
 	const trend = monthlyTrend(state, 6);
 
 	const animatedAssets = useCountUp(summary.totalAssets, 700);
+	const animatedOnline = useCountUp(summary.totalOnline, 700);
+	const animatedCash = useCountUp(summary.totalCash, 700);
 
 	const incomeColor = 'var(--color-income)';
 	const expenseColor = 'var(--color-expense)';
@@ -59,11 +61,11 @@ export function Dashboard() {
 						<p className="mt-2 text-sm text-slate-500 dark:text-slate-400 flex flex-col">
 							<span className="inline-flex items-center gap-1.5">
 								<Icon name="bank" className="h-4 w-4" />
-								{formatEUR(summary.totalOnline)}
+								{formatEUR(Math.round(animatedOnline))}
 							</span>
 							<span className="inline-flex items-center gap-1.5">
 								<Icon name="wallet" className="h-4 w-4" />
-								{formatEUR(summary.totalCash)}
+								{formatEUR(Math.round(animatedCash))}
 							</span>
 						</p>
 					</div>
