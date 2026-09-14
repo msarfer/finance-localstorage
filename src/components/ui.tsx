@@ -531,9 +531,7 @@ export function ColorPalette({
           isCustom ? 'ring-2 ring-offset-2 ring-brand' : 'ring-slate-300'
         }`}
         style={{
-          background: isCustom
-            ? value
-            : 'linear-gradient(135deg, #9747ff 0%, #00e5ff 100%)',
+          background: isCustom ? value : '#a8b8c8',
         }}
       >
         <input
