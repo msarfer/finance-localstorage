@@ -12,7 +12,6 @@ import {
 	Modal,
 	PageHeader,
 	SectionLabel,
-	Segmented,
 	inputCls,
 } from '@/components/ui';
 import { Icon } from '@/components/icons';
@@ -137,15 +136,17 @@ export function ToolsView() {
 								</p>
 							</div>
 						</div>
-						<Segmented
+						<select
+							className={`${inputCls} sm:w-56`}
 							value={theme}
-							onChange={setTheme}
-							options={[
-								{ value: 'light', label: 'Claro' },
-								{ value: 'dark', label: 'Oscuro' },
-								{ value: 'system', label: 'Sistema' },
-							]}
-						/>
+							onChange={(e) =>
+								setTheme(e.target.value as 'light' | 'dark' | 'system')
+							}
+						>
+							<option value="light">Claro</option>
+							<option value="dark">Oscuro</option>
+							<option value="system">Sistema</option>
+						</select>
 					</div>
 
 					<div className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
