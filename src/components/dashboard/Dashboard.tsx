@@ -16,6 +16,7 @@ import {
 } from '@/components/ui';
 import { MovementListItem } from '@/components/movements/MovementListItem';
 import { TrendChart } from '@/components/dashboard/TrendChart';
+import { Icon } from '@/components/icons';
 
 export function Dashboard() {
 	const state = useStore(
@@ -43,17 +44,11 @@ export function Dashboard() {
 	const flow = income + expense;
 	const incomePct = flow > 0 ? (income / flow) * 100 : 50;
 
-	const onlineCount = state.accounts.filter((a) => a.kind === 'online').length;
-	const cashCount = state.accounts.filter((a) => a.kind === 'cash').length;
-
 	const monthBalancePositive = summary.monthBalance >= 0;
 
 	return (
 		<div className="space-y-6">
-			<PageHeader
-				title="Resumen"
-				subtitle={monthLabel(month)}
-			/>
+			<PageHeader title="Resumen" subtitle={monthLabel(month)} />
 
 			<Card className="relative overflow-hidden p-6 sm:p-8">
 				<div className="flex flex-wrap items-start justify-between gap-6">
@@ -63,9 +58,15 @@ export function Dashboard() {
 							{formatEUR(Math.round(animatedAssets))}
 						</p>
 						<p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-							{onlineCount} {onlineCount === 1 ? 'cuenta online' : 'cuentas online'}
+							<span className="inline-flex items-center gap-1.5">
+								<Icon name="bank" className="h-4 w-4" />
+								{formatEUR(summary.totalOnline)} online
+							</span>
 							{' · '}
-							{cashCount} {cashCount === 1 ? 'cuenta de efectivo' : 'cuentas de efectivo'}
+							<span className="inline-flex items-center gap-1.5">
+								<Icon name="wallet" className="h-4 w-4" />
+								{formatEUR(summary.totalCash)} en efectivo
+							</span>
 						</p>
 					</div>
 					<div className="text-right">
@@ -84,38 +85,12 @@ export function Dashboard() {
 				</div>
 			</Card>
 
-			<div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-				<StatCard
-					label="Cuentas online"
-					value={formatEUR(summary.totalOnline)}
-					sub={`${onlineCount} cuentas`}
-					icon="bank"
-				/>
-				<StatCard
-					label="Efectivo en mano"
-					value={formatEUR(summary.totalCash)}
-					sub={`${cashCount} cuentas`}
-					icon="wallet"
-				/>
-				<StatCard
-					label="Balance del mes"
-					value={formatEUR(summary.monthBalance)}
-					accent={
-						monthBalancePositive ? incomeColor : expenseColor
-					}
-					icon={
-						monthBalancePositive ? 'trend-up' : 'trend-down'
-					}
-				/>
-			</div>
-
-			<Card className="p-5">
-				<div className="flex items-center justify-between">
-					<SectionLabel>Tendencia 6 meses</SectionLabel>
-					<Chip tone="neutral">Ingreso vs gasto</Chip>
-				</div>
-				<TrendChart points={trend} />
-			</Card>
+			<StatCard
+				label="Balance del mes"
+				value={formatEUR(summary.monthBalance)}
+				accent={monthBalancePositive ? incomeColor : expenseColor}
+				icon={monthBalancePositive ? 'trend-up' : 'trend-down'}
+			/>
 
 			<Card className="p-5">
 				<div className="flex items-center justify-between">
@@ -147,7 +122,10 @@ export function Dashboard() {
 					/>
 					<div
 						className="h-full rounded-r-full transition-all"
-						style={{ width: `${100 - incomePct}%`, backgroundColor: expenseColor }}
+						style={{
+							width: `${100 - incomePct}%`,
+							backgroundColor: expenseColor,
+						}}
 					/>
 				</div>
 				<p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
@@ -234,14 +212,19 @@ export function Dashboard() {
 							<MovementListItem
 								key={m.id}
 								movement={m}
-								accountName={(id) =>
-									id ? accountName.get(id) : undefined
-								}
+								accountName={(id) => (id ? accountName.get(id) : undefined)}
 								categoryById={categoryById}
 							/>
 						))}
 					</ul>
 				)}
+			</Card>
+			<Card className="p-5">
+				<div className="flex items-center justify-between">
+					<SectionLabel>Tendencia 6 meses</SectionLabel>
+					<Chip tone="neutral">Ingreso vs gasto</Chip>
+				</div>
+				<TrendChart points={trend} />
 			</Card>
 		</div>
 	);

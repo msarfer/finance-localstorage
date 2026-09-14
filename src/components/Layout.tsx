@@ -120,14 +120,6 @@ export function Layout({ children }: { children: ReactNode }) {
 		</div>
 	);
 
-	const cycleMobileTheme = () => {
-		if (theme === 'system') setTheme('dark');
-		else if (theme === 'dark') setTheme('light');
-		else setTheme('system');
-	};
-	const mobileThemeIcon: IconName =
-		theme === 'dark' ? 'moon' : theme === 'light' ? 'sun' : 'monitor';
-
 	return (
 		<div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
 			{/* Sidebar desktop */}
@@ -178,15 +170,6 @@ export function Layout({ children }: { children: ReactNode }) {
 					>
 						<Icon name="gear" className="h-5 w-5" />
 					</Link>
-					<button
-						type="button"
-						onClick={cycleMobileTheme}
-						title={`Tema: ${theme === 'dark' ? 'oscuro' : theme === 'light' ? 'claro' : 'sistema'}`}
-						aria-label="Cambiar tema"
-						className="rounded-(--radius-field) p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 dark:text-slate-500 dark:hover:bg-slate-800 dark:hover:text-slate-200"
-					>
-						<Icon name={mobileThemeIcon} className="h-5 w-5" />
-					</button>
 					{accounts.length > 0 && (
 						<button
 							type="button"

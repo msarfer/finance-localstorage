@@ -12,10 +12,12 @@ import {
 	Modal,
 	PageHeader,
 	SectionLabel,
+	Segmented,
 	inputCls,
 } from '@/components/ui';
 import { Icon } from '@/components/icons';
 import { useColorTheme } from '@/hooks/useColorTheme';
+import { useTheme } from '@/hooks/useTheme';
 import { COLOR_THEMES } from '@/theme';
 
 function todayFilename(): string {
@@ -30,6 +32,7 @@ export function ToolsView() {
 	const replaceAll = useStore((s) => s.replaceAll);
 	const clearAll = useStore((s) => s.clearAll);
 	const { colorTheme, setColorTheme } = useColorTheme();
+	const { theme, setTheme } = useTheme();
 
 	const fileRef = useRef<HTMLInputElement>(null);
 	const [result, setResult] = useState<ImportResult | null>(null);
@@ -121,6 +124,30 @@ export function ToolsView() {
 			<Card className="p-6">
 				<SectionLabel>Apariencia</SectionLabel>
 				<div className="mt-2 divide-y divide-slate-100 dark:divide-slate-800">
+					<div className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+						<div className="flex items-start gap-3">
+							<Icon
+								name="sun"
+								className="mt-0.5 h-5 w-5 shrink-0 text-slate-400"
+							/>
+							<div>
+								<h2 className="text-sm font-medium">Modo de color</h2>
+								<p className="mt-0.5 text-sm text-slate-600 dark:text-slate-300">
+									Tema claro, oscuro o según el sistema.
+								</p>
+							</div>
+						</div>
+						<Segmented
+							value={theme}
+							onChange={setTheme}
+							options={[
+								{ value: 'light', label: 'Claro' },
+								{ value: 'dark', label: 'Oscuro' },
+								{ value: 'system', label: 'Sistema' },
+							]}
+						/>
+					</div>
+
 					<div className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
 						<div className="flex items-start gap-3">
 							<Icon
