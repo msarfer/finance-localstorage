@@ -142,11 +142,6 @@ body {
   overscroll-behavior: none;
 }
 
-.app-shell {
-  height: 100vh;
-  height: 100dvh;
-}
-
 @media (max-width: 639px) {
   input,
   select,
