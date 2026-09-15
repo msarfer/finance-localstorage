@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath, URL } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { defineConfig, type ESBuildOptions } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 const pkg = JSON.parse(
@@ -10,10 +10,17 @@ const pkg = JSON.parse(
 ) as { version: string }
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   base: '/finance-localstorage/',
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version),
+  },
+  esbuild:
+    mode === 'production'
+      ? ({ drop: ['console', 'debugger'] } as unknown as ESBuildOptions)
+      : undefined,
+  build: {
+    reportCompressedSize: false,
   },
   plugins: [
     tailwindcss(),
@@ -21,7 +28,6 @@ export default defineConfig({
     VitePWA({
       registerType: 'prompt',
       injectRegister: false,
-      includeAssets: ['favicon.svg'],
       pwaAssets: {
         config: true,
       },
@@ -37,6 +43,9 @@ export default defineConfig({
         orientation: 'portrait-primary',
         lang: 'es',
         categories: ['finance', 'productivity'],
+        start_url: '.',
+        scope: '.',
+        id: '/',
         icons: [
           { src: 'pwa-64x64.png', sizes: '64x64', type: 'image/png' },
           { src: 'pwa-192x192.png', sizes: '192x192', type: 'image/png' },
@@ -47,6 +56,11 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2,webmanifest}'],
         cleanupOutdatedCaches: true,
+        navigateFallback: '/finance-localstorage/index.html',
+        navigateFallbackDenylist: [
+          /^\/finance-localstorage\/assets\//,
+          /\.(?:png|ico|svg|woff2|webmanifest|xml)$/,
+        ],
       },
       devOptions: {
         enabled: false,
@@ -58,4 +72,4 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-})
+}))
