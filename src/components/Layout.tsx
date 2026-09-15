@@ -163,7 +163,7 @@ export function Layout({ children }: { children: ReactNode }) {
 			</aside>
 
 			{/* Header móvil */}
-			<header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200/80 bg-slate-50/90 px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3 backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/90">
+			<header className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200/80 bg-slate-50 px-4 pt-[calc(env(safe-area-inset-top)+0.75rem)] pb-3 lg:hidden dark:border-slate-800 dark:bg-slate-950">
 				<Link href="/" className="flex items-center gap-2.5">
 					<img
 						src={`${import.meta.env.BASE_URL}favicon.svg`}
@@ -216,7 +216,7 @@ export function Layout({ children }: { children: ReactNode }) {
 			</main>
 
 			{/* Bottom nav móvil */}
-			<nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-slate-200/80 bg-white/95 pb-[max(env(safe-area-inset-bottom),0.75rem)] backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-950/95">
+			<nav className="fixed inset-x-0 bottom-0 z-40 flex border-t border-slate-200/80 bg-white pb-[max(env(safe-area-inset-bottom),0.75rem)] lg:hidden dark:border-slate-800 dark:bg-slate-950">
 				{MOBILE_NAV.map((item) => {
 					const active = isActive(item.path, location);
 					return (
