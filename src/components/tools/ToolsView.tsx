@@ -18,7 +18,7 @@ import { Icon } from '@/components/icons';
 import { useColorTheme } from '@/hooks/useColorTheme';
 import { useTheme } from '@/hooks/useTheme';
 import { COLOR_THEMES } from '@/theme';
-import { APP_VERSION } from '@/lib/version';
+import { APP_VERSION } from '@/lib/env';
 
 function todayFilename(): string {
 	return `mis-finanzas-${new Date().toISOString().slice(0, 10)}.json`;

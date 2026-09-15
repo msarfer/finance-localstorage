@@ -4,7 +4,7 @@ import { Link, useLocation } from 'wouter';
 import { useStore } from '@/store/useStore';
 import { useUiStore } from '@/store/ui';
 import { computeCashTotal, formatEUR } from '@/lib/money';
-import { APP_VERSION } from '@/lib/version';
+import { APP_VERSION, DEV_MODE } from '@/lib/env';
 import { useTheme } from '@/hooks/useTheme';
 import { Icon } from '@/components/icons';
 import type { IconName } from '@/components/icons';
@@ -60,8 +60,15 @@ export function Layout({ children }: { children: ReactNode }) {
 				className="h-9 w-9 shrink-0"
 			/>
 			<span>
-				<span className="block font-display text-base font-semibold leading-tight tracking-tight text-slate-900 dark:text-white">
-					Mis Finanzas
+				<span className="flex items-center gap-2">
+					<span className="block font-display text-base font-semibold leading-tight tracking-tight text-slate-900 dark:text-white">
+						Mis Finanzas
+					</span>
+					{DEV_MODE && (
+						<span className="rounded-md bg-amber-400/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-600 dark:text-amber-400">
+							DEV
+						</span>
+					)}
 				</span>
 				<span className="block text-xs text-slate-500 dark:text-slate-400">
 					Tus cuentas en un vistazo
@@ -164,6 +171,11 @@ export function Layout({ children }: { children: ReactNode }) {
 					<span className="font-display text-lg font-semibold tracking-tight text-slate-900 dark:text-white">
 						Mis Finanzas
 					</span>
+					{DEV_MODE && (
+						<span className="rounded-md bg-amber-400/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-600 dark:text-amber-400">
+							DEV
+						</span>
+					)}
 					<span className="text-[10px] text-slate-400 dark:text-slate-500">
 						v{APP_VERSION}
 					</span>
