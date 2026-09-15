@@ -1,5 +1,5 @@
 import type { MovementType } from '@/types'
-import { formatEUR } from '@/lib/money'
+import { formatEUR, groupingLocale } from '@/lib/money'
 
 export const MOVEMENT_TYPE_LABEL: Record<MovementType, string> = {
   income: 'Ingreso',
@@ -24,7 +24,7 @@ export function monthLabel(iso: string): string {
   return new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(date)
 }
 
-const signedEURFormatter = new Intl.NumberFormat('es-ES', {
+const signedEURFormatter = new Intl.NumberFormat(groupingLocale, {
   style: 'currency',
   currency: 'EUR',
   signDisplay: 'always',

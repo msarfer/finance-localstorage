@@ -1,12 +1,14 @@
 import { BILLS, COINS } from '@/data/constants'
 import type { CashCounts } from '@/types'
 
-const eurFormatter = new Intl.NumberFormat('es-ES', {
+export const groupingLocale = 'de-DE'
+
+const eurFormatter = new Intl.NumberFormat(groupingLocale, {
   style: 'currency',
   currency: 'EUR',
 })
 
-const numberFormatter = new Intl.NumberFormat('es-ES', {
+const numberFormatter = new Intl.NumberFormat(groupingLocale, {
   minimumFractionDigits: 2,
   maximumFractionDigits: 2,
 })
