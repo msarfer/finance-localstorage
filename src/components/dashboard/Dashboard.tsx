@@ -91,7 +91,7 @@ export function Dashboard() {
 						)}
 						<p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
 							<span className="inline-flex items-center gap-1.5 font-medium">
-								<Icon name="wallet" className="h-4 w-4" />
+								<Icon name="banknote" className="h-4 w-4" />
 								{formatEUR(Math.round(summary.totalCash))}
 							</span>
 						</p>
@@ -103,7 +103,7 @@ export function Dashboard() {
 										className="flex items-center gap-1.5 tabular-nums"
 									>
 										<span style={{ color: a.color }}>
-											<Icon name="wallet" className="h-4 w-4" />
+											<Icon name="banknote" className="h-4 w-4" />
 										</span>
 										{formatEUR(Math.round(valueOf(a)))}
 									</li>
