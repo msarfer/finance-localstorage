@@ -39,11 +39,11 @@ export function TrendChart({ points }: { points: TrendPoint[] }) {
               >
                 <div
                   style={{ height: `${inc}%` }}
-                  className="w-full max-w-[14px] rounded-t-sm bg-income/80 transition-colors hover:bg-income dark:bg-income-bright/70 dark:hover:bg-income-bright"
+                  className="w-full max-w-3.5 rounded-t-sm bg-income/80 transition-colors hover:bg-income dark:bg-income-bright/70 dark:hover:bg-income-bright"
                 />
                 <div
                   style={{ height: `${exp}%` }}
-                  className="w-full max-w-[14px] rounded-t-sm bg-expense/80 transition-colors hover:bg-expense dark:bg-expense-bright/70 dark:hover:bg-expense-bright"
+                  className="w-full max-w-3.5 rounded-t-sm bg-expense/80 transition-colors hover:bg-expense dark:bg-expense-bright/70 dark:hover:bg-expense-bright"
                 />
               </div>
             )
