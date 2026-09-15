@@ -1,11 +1,9 @@
 import { useMemo, useState } from 'react'
-import { Link, useLocation, useRoute } from 'wouter'
+import { useLocation, useRoute } from 'wouter'
 
-import type { Movement, MovementType } from '@/types'
-import { accountTotal, useStore } from '@/store/useStore'
-import { formatEUR } from '@/lib/money'
-import { currentMonthISO, monthOf } from '@/lib/reports'
-import { monthLabel } from '@/lib/display'
+import { ExpensesByCategory } from '@/components/expenses/ExpensesByCategory'
+import { MovementFormModal } from '@/components/movements/MovementFormModal'
+import { MovementListItem } from '@/components/movements/MovementListItem'
 import {
   Button,
   Card,
@@ -17,11 +15,13 @@ import {
   SectionLabel,
   Segmented,
 } from '@/components/ui'
+import { monthLabel } from '@/lib/display'
+import { formatEUR } from '@/lib/money'
+import { currentMonthISO, expensesByCategory, monthOf } from '@/lib/reports'
+import { accountTotal, useStore } from '@/store/useStore'
+import type { Movement, MovementType } from '@/types'
 import { AccountFormModal } from './AccountFormModal'
 import { BinList } from './BinList'
-import { MovementFormModal } from '@/components/movements/MovementFormModal'
-import { MovementListItem } from '@/components/movements/MovementListItem'
-import { Icon } from '@/components/icons'
 
 export function AccountDetailView() {
   const [, params] = useRoute('/accounts/:id')
@@ -100,6 +100,11 @@ export function AccountDetailView() {
     return { income, expense }
   }, [filtered])
 
+  const expenseBreakdown = useMemo(
+    () => expensesByCategory(accountMovements, filterMonth, accountId),
+    [accountMovements, filterMonth, accountId],
+  )
+
   const [accountFormOpen, setAccountFormOpen] = useState(false)
   const [movementFormOpen, setMovementFormOpen] = useState(false)
   const [editingMovement, setEditingMovement] = useState<Movement | null>(null)
@@ -125,14 +130,6 @@ export function AccountDetailView() {
 
   return (
     <div className="space-y-6">
-      <Link
-        href="/accounts"
-        className="inline-flex items-center gap-1 text-sm font-medium text-slate-500 transition hover:text-brand dark:text-slate-400 dark:hover:text-brand-bright"
-      >
-        <Icon name="arrow-left" className="h-4 w-4" />
-        Volver a cuentas
-      </Link>
-
       <Card className="p-6">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="flex items-start gap-3">
@@ -178,6 +175,18 @@ export function AccountDetailView() {
           </div>
         )}
       </Card>
+
+      <section>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+          <h2 className="text-lg font-semibold">Gastos</h2>
+        </div>
+        <ExpensesByCategory
+          rows={expenseBreakdown}
+          categoryById={categoryById}
+          emptyTitle="Sin gastos este mes"
+          emptySubtitle="Registra un gasto para verlo desglosado aquí"
+        />
+      </section>
 
       <section>
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">

@@ -10,6 +10,12 @@ export function monthOf(date: string): string {
   return date.slice(0, 7)
 }
 
+export interface CategoryBreakdown {
+  categoryId: string
+  amount: number
+  count: number
+}
+
 export interface DashboardSummary {
   totalAssets: number
   totalOnline: number
@@ -17,7 +23,7 @@ export interface DashboardSummary {
   monthIncome: number
   monthExpense: number
   monthBalance: number
-  byCategory: { categoryId: string; amount: number; count: number }[]
+  byCategory: CategoryBreakdown[]
   recent: Movement[]
 }
 
@@ -55,6 +61,31 @@ export function monthlyTrend(
   return points
 }
 
+export function expensesByCategory(
+  movements: Movement[],
+  month: string,
+  accountId?: string,
+): CategoryBreakdown[] {
+  const totals = new Map<string, { amount: number; count: number }>()
+  for (const m of movements) {
+    if (monthOf(m.date) !== month) continue
+    const isExpense = m.type === 'expense' && (!accountId || m.accountId === accountId)
+    const isOutflow =
+      !!accountId &&
+      (m.type === 'transfer' || m.type === 'cashflow') &&
+      m.fromAccountId === accountId
+    if (!isExpense && !isOutflow) continue
+    const key = m.categoryId || ''
+    const cur = totals.get(key) ?? { amount: 0, count: 0 }
+    cur.amount += m.amount
+    cur.count += 1
+    totals.set(key, cur)
+  }
+  return Array.from(totals.entries())
+    .map(([categoryId, v]) => ({ categoryId, ...v }))
+    .sort((a, b) => b.amount - a.amount)
+}
+
 export function summarize(state: Pick<AppState, 'accounts' | 'movements' | 'categories'>, month: string = currentMonthISO()): DashboardSummary {
   let totalOnline = 0
   let totalCash = 0
@@ -68,7 +99,6 @@ export function summarize(state: Pick<AppState, 'accounts' | 'movements' | 'cate
 
   let monthIncome = 0
   let monthExpense = 0
-  const catTotals = new Map<string, { amount: number; count: number }>()
 
   for (const m of state.movements) {
     if (monthOf(m.date) !== month) continue
@@ -76,11 +106,6 @@ export function summarize(state: Pick<AppState, 'accounts' | 'movements' | 'cate
       monthIncome += m.amount
     } else if (m.type === 'expense') {
       monthExpense += m.amount
-      const key = m.categoryId || ''
-      const cur = catTotals.get(key) ?? { amount: 0, count: 0 }
-      cur.amount += m.amount
-      cur.count += 1
-      catTotals.set(key, cur)
     }
   }
 
@@ -95,9 +120,7 @@ export function summarize(state: Pick<AppState, 'accounts' | 'movements' | 'cate
     monthIncome,
     monthExpense,
     monthBalance: monthIncome - monthExpense,
-    byCategory: Array.from(catTotals.entries())
-      .map(([categoryId, v]) => ({ categoryId, ...v }))
-      .sort((a, b) => b.amount - a.amount),
+    byCategory: expensesByCategory(state.movements, month),
     recent,
   }
 }
