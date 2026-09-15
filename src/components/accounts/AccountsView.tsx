@@ -6,7 +6,6 @@ import { useStore } from '@/store/useStore'
 import { computeCashTotal } from '@/lib/money'
 import { formatEUR } from '@/lib/money'
 import { Button, Card, ConfirmDialog, EmptyState, IconButton, PageHeader, SectionLabel } from '@/components/ui'
-import { BinList } from './BinList'
 import { AccountFormModal } from './AccountFormModal'
 
 export function AccountsView() {
@@ -20,7 +19,7 @@ export function AccountsView() {
   const cash = accounts.filter((a) => a.kind === 'cash')
 
   const renderCard = (a: Account) => (
-    <Card key={a.id} className="p-5">
+    <Card key={a.id} className="flex h-full flex-col p-5">
       <div className="flex items-start justify-between gap-2">
         <Link href={`/accounts/${a.id}`} className="group flex min-w-0 items-start gap-2.5">
           <span className="mt-1 h-3 w-3 shrink-0 rounded-full" style={{ backgroundColor: a.color }} />
@@ -51,17 +50,11 @@ export function AccountsView() {
       </div>
       <Link
         href={`/accounts/${a.id}`}
-        className="mt-4 block font-display text-2xl font-semibold tracking-tight tabular-nums transition hover:opacity-75"
+        className="mt-auto block pt-6 font-display text-2xl font-semibold tracking-tight tabular-nums transition hover:opacity-75"
         style={{ color: a.color }}
       >
         {formatEUR(a.kind === 'cash' ? computeCashTotal(a.cash ?? {}) : a.balance)}
       </Link>
-      {a.kind === 'cash' && (
-        <div className="mt-4 border-t border-slate-100 pt-4 dark:border-slate-800">
-          <SectionLabel className="mb-2">Desglose</SectionLabel>
-          <BinList account={a} />
-        </div>
-      )}
     </Card>
   )
 
@@ -109,13 +102,17 @@ export function AccountsView() {
           {online.length > 0 && (
             <section>
               <SectionLabel className="mb-3">Cuentas online</SectionLabel>
-              <div className="grid gap-3 sm:grid-cols-2">{online.map(renderCard)}</div>
+              <div className="grid auto-rows-fr gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {online.map(renderCard)}
+            </div>
             </section>
           )}
           {cash.length > 0 && (
             <section>
               <SectionLabel className="mb-3">Efectivo físico</SectionLabel>
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{cash.map(renderCard)}</div>
+              <div className="grid auto-rows-fr gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {cash.map(renderCard)}
+            </div>
             </section>
           )}
         </div>
