@@ -46,7 +46,7 @@ export function PageHeader({
           </p>
         )}
       </div>
-      {action}
+      {action && <div className="ml-auto">{action}</div>}
     </div>
   )
 }

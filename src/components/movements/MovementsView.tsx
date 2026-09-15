@@ -5,7 +5,7 @@ import { useStore } from '@/store/useStore';
 import { currentMonthISO, monthOf } from '@/lib/reports';
 import { monthLabel } from '@/lib/display';
 import { formatEUR } from '@/lib/money';
-import { Button, Card, Chip, ConfirmDialog, EmptyState, Field, inputCls, PageHeader, SearchBox, SectionLabel, Segmented } from '@/components/ui';
+import { Button, Card, Chip, ConfirmDialog, EmptyState, Field, IconButton, inputCls, PageHeader, SearchBox, SectionLabel, Segmented } from '@/components/ui';
 import { MovementFormModal } from './MovementFormModal';
 import { MovementListItem } from './MovementListItem';
 import { Icon } from '@/components/icons';
@@ -157,6 +157,54 @@ export function MovementsView() {
 		setFormOpen(true);
 	};
 
+	const menuBody = (
+		<>
+			<div className="px-4 pt-4 pb-1">
+				<SectionLabel>Ordinarios</SectionLabel>
+			</div>
+			<MenuItem
+				icon="trend-down"
+				label="Gasto"
+				onClick={() => newMovement('expense')}
+				onClose={() => setMoveMenuOpen(false)}
+			/>
+			<MenuItem
+				icon="trend-up"
+				label="Ingreso"
+				onClick={() => newMovement('income')}
+				onClose={() => setMoveMenuOpen(false)}
+			/>
+			<MenuItem
+				icon="swap"
+				label="Transferencia online"
+				onClick={() => newMovement('transfer')}
+				onClose={() => setMoveMenuOpen(false)}
+				disabled={onlineTransferDisabled}
+				hint="Necesitas al menos dos cuentas online"
+			/>
+			<div className="my-1 border-t border-slate-100 dark:border-slate-800" />
+			<div className="px-4 pt-1 pb-1">
+				<SectionLabel>Banco ↔ Efectivo</SectionLabel>
+			</div>
+			<MenuItem
+				icon="wallet"
+				label="Sacar dinero"
+				onClick={() => newCashflow('toCash')}
+				onClose={() => setMoveMenuOpen(false)}
+				disabled={cashMenuDisabled}
+				hint="Necesitas una cuenta online y una de efectivo"
+			/>
+			<MenuItem
+				icon="wallet"
+				label="Ingresar dinero"
+				onClick={() => newCashflow('toBank')}
+				onClose={() => setMoveMenuOpen(false)}
+				disabled={cashMenuDisabled}
+				hint="Necesitas una cuenta online y una de efectivo"
+			/>
+		</>
+	);
+
 	return (
 		<div className="space-y-6">
 			<PageHeader
@@ -177,57 +225,37 @@ export function MovementsView() {
 							Nuevo movimiento
 						</Button>
 						{moveMenuOpen && (
-							<div
-								className="fixed inset-0 z-20"
-								onClick={() => setMoveMenuOpen(false)}
-							/>
-						)}
-						{moveMenuOpen && (
-							<div className="absolute right-0 z-30 mt-2 w-72 overflow-hidden rounded-(--radius-panel) border border-slate-200 bg-white text-left shadow-xl dark:border-slate-700 dark:bg-slate-900">
-								<div className="px-4 pt-4 pb-1">
-									<SectionLabel>Ordinarios</SectionLabel>
+							<>
+								<div
+									className="fixed inset-0 z-50 bg-slate-950/50 backdrop-blur-sm sm:hidden animate-[fade-in_200ms_ease-out]"
+									onClick={() => setMoveMenuOpen(false)}
+								>
+									<div
+										className="absolute inset-x-0 bottom-0 max-h-[75dvh] overflow-y-auto overscroll-contain rounded-t-(--radius-panel) bg-white pb-[max(env(safe-area-inset-bottom),1rem)] pt-3 shadow-2xl animate-[sheet-up_240ms_ease-out] dark:bg-slate-900"
+										onClick={(e) => e.stopPropagation()}
+									>
+										<div className="mx-auto mb-2 h-1 w-10 rounded-full bg-slate-200 dark:bg-slate-700" />
+										<div className="flex items-center justify-between px-2">
+											<SectionLabel className="px-2">
+												Nuevo movimiento
+											</SectionLabel>
+											<IconButton
+												onClick={() => setMoveMenuOpen(false)}
+												title="Cerrar"
+												icon="close"
+											/>
+										</div>
+										{menuBody}
+									</div>
 								</div>
-								<MenuItem
-									icon="trend-down"
-									label="Gasto"
-									onClick={() => newMovement('expense')}
-									onClose={() => setMoveMenuOpen(false)}
+								<div
+									className="fixed inset-0 z-20 hidden sm:block"
+									onClick={() => setMoveMenuOpen(false)}
 								/>
-								<MenuItem
-									icon="trend-up"
-									label="Ingreso"
-									onClick={() => newMovement('income')}
-									onClose={() => setMoveMenuOpen(false)}
-								/>
-								<MenuItem
-									icon="swap"
-									label="Transferencia online"
-									onClick={() => newMovement('transfer')}
-									onClose={() => setMoveMenuOpen(false)}
-									disabled={onlineTransferDisabled}
-									hint="Necesitas al menos dos cuentas online"
-								/>
-								<div className="my-1 border-t border-slate-100 dark:border-slate-800" />
-								<div className="px-4 pt-1 pb-1">
-									<SectionLabel>Banco ↔ Efectivo</SectionLabel>
+								<div className="absolute right-0 z-30 mt-2 hidden w-72 max-w-[calc(100vw-2rem)] overflow-hidden rounded-(--radius-panel) border border-slate-200 bg-white text-left shadow-xl sm:block dark:border-slate-700 dark:bg-slate-900">
+									{menuBody}
 								</div>
-								<MenuItem
-									icon="wallet"
-									label="Sacar dinero"
-									onClick={() => newCashflow('toCash')}
-									onClose={() => setMoveMenuOpen(false)}
-									disabled={cashMenuDisabled}
-									hint="Necesitas una cuenta online y una de efectivo"
-								/>
-								<MenuItem
-									icon="wallet"
-									label="Ingresar dinero"
-									onClick={() => newCashflow('toBank')}
-									onClose={() => setMoveMenuOpen(false)}
-									disabled={cashMenuDisabled}
-									hint="Necesitas una cuenta online y una de efectivo"
-								/>
-							</div>
+							</>
 						)}
 					</div>
 				}
