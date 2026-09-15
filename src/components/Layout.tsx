@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { Link, useLocation } from 'wouter';
 
@@ -41,6 +42,8 @@ export function Layout({ children }: { children: ReactNode }) {
 	const accounts = useStore((s) => s.accounts);
 	const { theme, setTheme } = useTheme();
 	const [location] = useLocation();
+
+	useEffect(() => { window.scrollTo(0, 0) }, [location]);
 
 	const movementFormOpen = useUiStore((s) => s.movementFormOpen);
 	const closeMovementForm = useUiStore((s) => s.closeMovementForm);
