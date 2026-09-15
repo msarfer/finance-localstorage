@@ -3,7 +3,7 @@ import { Link } from 'wouter';
 
 import { useStore } from '@/store/useStore';
 import { summarize, currentMonthISO, monthlyTrend } from '@/lib/reports';
-import { formatEUR } from '@/lib/money';
+import { computeCashTotal, formatEUR } from '@/lib/money';
 import { monthLabel } from '@/lib/display';
 import { useCountUp } from '@/hooks/useCountUp';
 import {
@@ -16,6 +16,7 @@ import {
 import { MovementListItem } from '@/components/movements/MovementListItem';
 import { TrendChart } from '@/components/dashboard/TrendChart';
 import { Icon } from '@/components/icons';
+import type { Account } from '@/types';
 
 export function Dashboard() {
 	const state = useStore(
@@ -32,9 +33,18 @@ export function Dashboard() {
 	const summary = summarize(state, month);
 	const trend = monthlyTrend(state, 6);
 
+	const valueOf = (a: Account) =>
+		a.kind === 'cash' ? computeCashTotal(a.cash ?? {}) : a.balance;
+	const byValueDesc = (a: Account, b: Account) =>
+		valueOf(b) - valueOf(a) || a.name.localeCompare(b.name);
+	const onlineAccounts = state.accounts
+		.filter((a) => a.kind === 'online')
+		.sort(byValueDesc);
+	const cashAccounts = state.accounts
+		.filter((a) => a.kind === 'cash')
+		.sort(byValueDesc);
+
 	const animatedAssets = useCountUp(summary.totalAssets, 700);
-	const animatedOnline = useCountUp(summary.totalOnline, 700);
-	const animatedCash = useCountUp(summary.totalCash, 700);
 
 	const incomeColor = 'var(--color-income)';
 	const expenseColor = 'var(--color-expense)';
@@ -58,16 +68,48 @@ export function Dashboard() {
 						<p className="mt-2 font-display text-4xl font-semibold tracking-tight tabular-nums text-slate-900 sm:text-5xl dark:text-white">
 							{formatEUR(Math.round(animatedAssets))}
 						</p>
-						<p className="mt-2 text-sm text-slate-500 dark:text-slate-400 flex flex-col">
-							<span className="inline-flex items-center gap-1.5">
+						<p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+							<span className="inline-flex items-center gap-1.5 font-medium">
 								<Icon name="bank" className="h-4 w-4" />
-								{formatEUR(Math.round(animatedOnline))}
-							</span>
-							<span className="inline-flex items-center gap-1.5">
-								<Icon name="wallet" className="h-4 w-4" />
-								{formatEUR(Math.round(animatedCash))}
+								{formatEUR(Math.round(summary.totalOnline))}
 							</span>
 						</p>
+						{onlineAccounts.length > 0 && (
+							<ul className="mt-1 space-y-1 border-l border-slate-200 pl-5 text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
+								{onlineAccounts.map((a) => (
+									<li
+										key={a.id}
+										className="flex items-center gap-1.5 tabular-nums"
+									>
+										<span style={{ color: a.color }}>
+											<Icon name="bank" className="h-4 w-4" />
+										</span>
+										{formatEUR(Math.round(valueOf(a)))}
+									</li>
+								))}
+							</ul>
+						)}
+						<p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+							<span className="inline-flex items-center gap-1.5 font-medium">
+								<Icon name="wallet" className="h-4 w-4" />
+								{formatEUR(Math.round(summary.totalCash))}
+							</span>
+						</p>
+						{cashAccounts.length > 0 && (
+							<ul className="mt-1 space-y-1 border-l border-slate-200 pl-5 text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
+								{cashAccounts.map((a) => (
+									<li
+										key={a.id}
+										className="flex items-center gap-1.5 tabular-nums"
+									>
+										<span style={{ color: a.color }}>
+											<Icon name="wallet" className="h-4 w-4" />
+										</span>
+										{formatEUR(Math.round(valueOf(a)))}
+									</li>
+								))}
+							</ul>
+						)}
 					</div>
 				</div>
 			</Card>
