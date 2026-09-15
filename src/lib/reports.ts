@@ -76,12 +76,11 @@ export function summarize(state: Pick<AppState, 'accounts' | 'movements' | 'cate
       monthIncome += m.amount
     } else if (m.type === 'expense') {
       monthExpense += m.amount
-      if (m.categoryId) {
-        const cur = catTotals.get(m.categoryId) ?? { amount: 0, count: 0 }
-        cur.amount += m.amount
-        cur.count += 1
-        catTotals.set(m.categoryId, cur)
-      }
+      const key = m.categoryId || ''
+      const cur = catTotals.get(key) ?? { amount: 0, count: 0 }
+      cur.amount += m.amount
+      cur.count += 1
+      catTotals.set(key, cur)
     }
   }
 

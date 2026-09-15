@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useShallow } from 'zustand/react/shallow';
 import { Link } from 'wouter';
 
@@ -12,9 +13,11 @@ import {
 	EmptyState,
 	PageHeader,
 	SectionLabel,
+	Segmented,
 } from '@/components/ui';
 import { MovementListItem } from '@/components/movements/MovementListItem';
 import { TrendChart } from '@/components/dashboard/TrendChart';
+import { CategoryDonut, type DonutSlice } from '@/components/dashboard/CategoryDonut';
 import { Icon } from '@/components/icons';
 import type { Account } from '@/types';
 
@@ -56,6 +59,18 @@ export function Dashboard() {
 	const incomePct = flow > 0 ? (income / flow) * 100 : 50;
 
 	const monthBalancePositive = summary.monthBalance >= 0;
+
+	const [expenseView, setExpenseView] = useState<'lista' | 'grafico'>('lista');
+
+	const donutSlices: DonutSlice[] = summary.byCategory.map(({ categoryId, amount }) => {
+		const cat = categoryById.get(categoryId);
+		return {
+			label: cat?.name ?? 'Sin categoría',
+			amount,
+			pct: summary.monthExpense > 0 ? (amount / summary.monthExpense) * 100 : 0,
+			color: cat?.color ?? neutralColor,
+		};
+	});
 
 	return (
 		<div className="space-y-6">
@@ -171,9 +186,16 @@ export function Dashboard() {
 			</Card>
 
 			<Card className="p-5">
-				<div className="flex items-center justify-between">
+				<div className="flex flex-wrap items-center justify-between gap-3">
 					<SectionLabel>Gastos por categoría</SectionLabel>
-					<Chip tone="expense">Este mes</Chip>
+					<Segmented<'lista' | 'grafico'>
+						value={expenseView}
+						onChange={setExpenseView}
+						options={[
+							{ value: 'lista', label: 'Lista' },
+							{ value: 'grafico', label: 'Gráfico' },
+						]}
+					/>
 				</div>
 				{summary.byCategory.length === 0 ? (
 					<div className="mt-4">
@@ -182,6 +204,10 @@ export function Dashboard() {
 							title="Sin gastos este mes"
 							subtitle="Registra un gasto para verlo desglosado aquí"
 						/>
+					</div>
+				) : expenseView === 'grafico' ? (
+					<div className="mt-6">
+						<CategoryDonut slices={donutSlices} total={summary.monthExpense} />
 					</div>
 				) : (
 					<div className="mt-4 space-y-4">
