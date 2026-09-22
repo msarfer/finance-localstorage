@@ -1,14 +1,14 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import type { Account, AppSettings, AppState, Category, Movement } from '@/types'
+import type { Account, AppSettings, AppState, CashCounts, Category, Movement } from '@/types'
 import { DEFAULT_CATEGORIES } from '@/data/defaultCategories'
 import { DENOMINATIONS } from '@/data/constants'
 import { computeCashTotal, emptyCashCounts, uid } from '@/lib/money'
 import { DEFAULT_COLOR_THEME, isColorTheme } from '@/theme'
 
 const STORAGE_KEY = 'finanzas:state'
-export const SCHEMA_VERSION = 4
+export const SCHEMA_VERSION = 5
 
 export const EXPORT_HEADER = {
   app: 'mis-finanzas',
@@ -42,6 +42,7 @@ function applyMovementDelta(
   const byId = new Map(accounts.map((a) => [a.id, { ...a, cash: a.cash ? { ...a.cash } : undefined }]))
   const sign = invert ? -1 : 1
   const counts = movement.cashBreakdown ?? {}
+  const change = movement.cashChange ?? {}
   const amount = movement.amount
 
   const apply = (accountId: string | undefined, gain: boolean) => {
@@ -50,13 +51,18 @@ function applyMovementDelta(
     const factor = gain ? sign : -sign
     if (acc.kind === 'cash') {
       const next: Account['cash'] = { ...(acc.cash ?? emptyCashCounts()) }
-      for (const [denom, count] of Object.entries(counts)) {
-        const d = Number(denom)
-        const delta = factor * (count ?? 0)
-        const after = (next[d] ?? 0) + delta
-        if (after <= 0) delete next[d]
-        else next[d] = after
+      const applyMap = (map: CashCounts, multiplier: number) => {
+        for (const [denom, count] of Object.entries(map)) {
+          const d = Number(denom)
+          const delta = multiplier * (count ?? 0)
+          const after = (next[d] ?? 0) + delta
+          if (after <= 0) delete next[d]
+          else next[d] = after
+        }
       }
+      // Gastos: salen `counts`, entra el `change`. Ingresos: entra `counts`, sale el `change`.
+      applyMap(counts, factor)
+      applyMap(change, -factor)
       acc.cash = next
       acc.balance = computeCashTotal(next)
     } else {
@@ -234,6 +240,7 @@ export const useStore = create<FinanceStore>()(
           movements: s.movements.map((m) => ({
             ...m,
             cashBreakdown: cleanCounts(m.cashBreakdown),
+            cashChange: cleanCounts(m.cashChange),
           })),
           categories:
             Array.isArray(s.categories) && s.categories.length > 0

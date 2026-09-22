@@ -104,6 +104,16 @@ function validateMovement(value: unknown, errors: string[], idx: number): Moveme
       }
     }
   }
+  const cashChange: Record<number, number> = {}
+  if (isRecord(value.cashChange)) {
+    for (const [denom, count] of Object.entries(value.cashChange)) {
+      const d = Number(denom)
+      const c = typeof count === 'number' ? count : 0
+      if (DENOMINATIONS.includes(d) && Number.isInteger(c) && c > 0 && c <= 100000) {
+        cashChange[d] = c
+      }
+    }
+  }
   return {
     id: typeof value.id === 'string' ? value.id : `mov-import-${idx}`,
     type,
@@ -114,6 +124,7 @@ function validateMovement(value: unknown, errors: string[], idx: number): Moveme
     fromAccountId: typeof value.fromAccountId === 'string' ? value.fromAccountId : undefined,
     toAccountId: typeof value.toAccountId === 'string' ? value.toAccountId : undefined,
     cashBreakdown: Object.keys(cashBreakdown).length > 0 ? cashBreakdown : undefined,
+    cashChange: Object.keys(cashChange).length > 0 ? cashChange : undefined,
     date: typeof value.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value.date) ? value.date : new Date().toISOString().slice(0, 10),
     createdAt: typeof value.createdAt === 'number' ? value.createdAt : Date.now(),
   }

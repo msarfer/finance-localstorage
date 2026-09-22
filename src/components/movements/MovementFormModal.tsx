@@ -73,6 +73,11 @@ export function MovementFormModal({
 	const [cashBreakdown, setCashBreakdown] = useState<CashCounts>(
 		initial?.cashBreakdown ?? emptyCashCounts(),
 	);
+	const [cashChange, setCashChange] = useState<CashCounts>(
+		initial?.cashChange ?? emptyCashCounts(),
+	);
+	const hasChangeInput = Object.keys(cashChange).length > 0;
+	const [changeOpen, setChangeOpen] = useState(hasChangeInput);
 	const [error, setError] = useState<string | null>(null);
 
 	const [direction, setDirection] = useState<CashflowDirection>(() => {
@@ -130,7 +135,11 @@ export function MovementFormModal({
 		(c) => c.type === type || c.type === 'both',
 	);
 
-	const resetCash = () => setCashBreakdown(emptyCashCounts());
+	const resetCash = () => {
+		setCashBreakdown(emptyCashCounts());
+		setCashChange(emptyCashCounts());
+		setChangeOpen(false);
+	};
 
 	const switchType = (t: MovementType) => {
 		setType(t);
@@ -147,7 +156,10 @@ export function MovementFormModal({
 	};
 
 	const cashTotal = computeCashTotal(cashBreakdown);
-	const cents = cashAffected ? cashTotal : parseCentsInput(amount);
+	const cashChangeTotal = computeCashTotal(cashChange);
+	const cents = cashAffected
+		? cashTotal - cashChangeTotal
+		: parseCentsInput(amount);
 
 	const submit = () => {
 		if (!cashAffected && (cents === null || cents <= 0)) {
@@ -156,6 +168,10 @@ export function MovementFormModal({
 		}
 		if (cashAffected && cashTotal === 0) {
 			setError('Define los billetes y monedas de esta operación');
+			return;
+		}
+		if (cashAffected && hasChangeInput && cashChangeTotal >= cashTotal) {
+			setError('El cambio no puede ser igual o mayor que lo entregado');
 			return;
 		}
 		const finalCents = cents ?? 0;
@@ -214,6 +230,17 @@ export function MovementFormModal({
 				return;
 			}
 			if (
+				type === 'income' &&
+				hasChangeInput &&
+				selectedAccount &&
+				!hasEnoughCash(selectedAccount.cash, cashChange)
+			) {
+				setError(
+					`No hay suficientes billetes/monedas en "${selectedAccount.name}" para devolver el cambio`,
+				);
+				return;
+			}
+			if (
 				needToWithdraw &&
 				selectedAccount &&
 				!hasEnoughCash(selectedAccount.cash, cashBreakdown)
@@ -231,6 +258,8 @@ export function MovementFormModal({
 				accountId,
 				categoryId: categoryId || undefined,
 				cashBreakdown: cashAffected ? cashBreakdown : undefined,
+				cashChange:
+					cashAffected && hasChangeInput ? cashChange : undefined,
 			};
 			if (initial) updateMovement(initial.id, payload);
 			else addMovement(payload);
@@ -291,12 +320,22 @@ export function MovementFormModal({
 
 	const breakdownLabel =
 		type === 'income'
-			? `Billetes y monedas que entran en "${selectedAccount?.name}"`
+			? `Billetes y monedas que recibes en "${selectedAccount?.name}"`
 			: type === 'expense'
-				? `Billetes y monedas que salen de "${selectedAccount?.name}"`
+				? `Billetes y monedas que entregas (salen de "${selectedAccount?.name}")`
 				: direction === 'toCash'
 					? `Billetes y monedas que sacas (de "${bankAccount?.name}" a "${walletAccount?.name}")`
 					: `Billetes y monedas que ingresas (de "${walletAccount?.name}" a "${bankAccount?.name}")`;
+
+	const changeEditable = type === 'income' || type === 'expense';
+
+	const changeToggleLabel =
+		type === 'income' ? 'He devuelto cambio' : 'He recibido cambio';
+
+	const changeFieldLabel =
+		type === 'income'
+			? `Cambio que devuelves (billetes y monedas que salen de "${selectedAccount?.name}")`
+			: `Cambio que recibes (billetes y monedas que entran en "${selectedAccount?.name}")`;
 
 	return (
 		<Modal
@@ -493,20 +532,78 @@ export function MovementFormModal({
 				</div>
 
 				{cashAffected && (
-					<Field label={breakdownLabel}>
-						<CashBreakdownEditor
-							value={cashBreakdown}
-							onChange={setCashBreakdown}
-						/>
-						<div className="mt-2 flex items-center justify-between rounded-(--radius-inner) bg-slate-50 px-3 py-2 text-xs dark:bg-slate-800">
-							<span className="text-slate-600 dark:text-slate-300">
-								El importe se calcula según los billetes y monedas
+					<div className="space-y-4">
+						<Field label={breakdownLabel}>
+							<CashBreakdownEditor
+								value={cashBreakdown}
+								onChange={setCashBreakdown}
+							/>
+						</Field>
+
+						{changeEditable && (
+							<div className="rounded-(--radius-field) border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
+								<button
+									type="button"
+									onClick={() => setChangeOpen((o) => !o)}
+									aria-expanded={changeOpen}
+									className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-700"
+								>
+									<span className="flex items-center gap-2">
+										<span
+											className={`flex h-4 w-4 items-center justify-center rounded-(--radius-inner) border transition ${
+												changeOpen
+													? 'border-brand bg-brand text-white'
+													: 'border-slate-300 bg-white text-transparent dark:border-slate-600 dark:bg-slate-900'
+											}`}
+										>
+											<Icon name="check" className="h-3 w-3" />
+										</span>
+										{changeToggleLabel}
+									</span>
+									<Icon
+										name="chevron-down"
+										className={`h-4 w-4 text-slate-400 transition-transform dark:text-slate-500 ${
+											changeOpen ? 'rotate-180' : ''
+										}`}
+									/>
+								</button>
+								{changeOpen && (
+									<div className="border-t border-slate-100 p-3 dark:border-slate-800">
+										<Field label={changeFieldLabel}>
+											<CashBreakdownEditor
+												value={cashChange}
+												onChange={setCashChange}
+											/>
+										</Field>
+									</div>
+								)}
+							</div>
+						)}
+
+						<div className="-mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 rounded-(--radius-inner) bg-slate-50 px-3 py-2 text-xs dark:bg-slate-800">
+							<span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-slate-600 dark:text-slate-300">
+								<span>
+									{type === 'income' ? 'Recibes' : 'Entregas'}:{' '}
+									<strong className="tabular-nums text-slate-700 dark:text-slate-200">
+										{formatEUR(cashTotal)}
+									</strong>
+								</span>
+								{hasChangeInput && (
+									<span>
+										Cambio:{' '}
+										<strong className="tabular-nums text-slate-700 dark:text-slate-200">
+											{formatEUR(cashChangeTotal)}
+										</strong>
+									</span>
+								)}
 							</span>
-							<span className="font-semibold text-slate-700 dark:text-slate-200">
-								{formatEUR(cashTotal)}
+							<span className="font-semibold tabular-nums text-brand-strong dark:text-brand-bright">
+								{hasChangeInput
+									? `Neto: ${formatEUR(cashTotal - cashChangeTotal)}`
+									: formatEUR(cashTotal)}
 							</span>
 						</div>
-					</Field>
+					</div>
 				)}
 
 				{error && (

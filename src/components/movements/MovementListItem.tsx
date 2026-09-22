@@ -2,6 +2,7 @@ import { Link } from 'wouter'
 
 import type { Category, Movement } from '@/types'
 import { formatDate, signedEUR } from '@/lib/display'
+import { computeCashTotal, formatEUR } from '@/lib/money'
 import { Icon } from '@/components/icons'
 import { IconButton } from '@/components/ui'
 import type { IconName } from '@/components/icons'
@@ -89,6 +90,9 @@ export function MovementListItem({
           ) : null}
           {cat && m.type !== 'transfer' ? ` · ${cat.name}` : ''}
           {m.cashBreakdown ? ' · 💵 efectivo' : ''}
+          {m.cashChange
+            ? ` · cambio ${formatEUR(computeCashTotal(m.cashChange))}`
+            : ''}
         </p>
       </div>
       <span
