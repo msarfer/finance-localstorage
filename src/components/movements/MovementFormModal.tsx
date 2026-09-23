@@ -519,12 +519,16 @@ export function MovementFormModal({
 				<div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
 					<Field
 						label={
-							cashAffected ? 'Importe (calculado del desglose)' : 'Importe (€)'
+							cashAffected
+								? hasChangeInput
+									? 'Importe (neto del desglose)'
+									: 'Importe (calculado del desglose)'
+								: 'Importe (€)'
 						}
 					>
 						{cashAffected ? (
 							<div className="flex h-9 items-center rounded-(--radius-field) border border-slate-200 bg-slate-50 px-3 text-sm font-semibold text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
-								{formatEUR(cashTotal)}
+								{formatEUR(cashTotal - cashChangeTotal)}
 							</div>
 						) : (
 							<input
