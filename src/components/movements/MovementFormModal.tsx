@@ -554,7 +554,14 @@ export function MovementFormModal({
 							<div className="rounded-(--radius-field) border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800">
 								<button
 									type="button"
-									onClick={() => setChangeOpen((o) => !o)}
+									onClick={() => {
+										if (changeOpen) {
+											setCashChange(emptyCashCounts());
+											setChangeOpen(false);
+										} else {
+											setChangeOpen(true);
+										}
+									}}
 									aria-expanded={changeOpen}
 									className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-slate-700"
 								>
