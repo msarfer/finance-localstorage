@@ -1,5 +1,5 @@
 import { BILLS, COINS } from '@/data/constants'
-import type { CashCounts } from '@/types'
+import type { CashCounts, Movement } from '@/types'
 
 export const groupingLocale = 'de-DE'
 
@@ -80,4 +80,28 @@ export function todayISO(): string {
 
 export function isEuroBill(denom: number): boolean {
   return BILLS.includes(denom)
+}
+
+export function revertCashMovement(
+  current: CashCounts | undefined,
+  original: Movement | undefined,
+  accountWasGain: boolean,
+): CashCounts {
+  const result: CashCounts = { ...(current ?? emptyCashCounts()) }
+  if (!original) return result
+  const breakdown = original.cashBreakdown ?? {}
+  const change = original.cashChange ?? {}
+  const apply = (map: CashCounts, multiplier: number) => {
+    for (const [denom, count] of Object.entries(map)) {
+      const d = Number(denom)
+      const after = (result[d] ?? 0) + multiplier * (count ?? 0)
+      if (after <= 0) delete result[d]
+      else result[d] = after
+    }
+  }
+  // Efecto neto del movimiento sobre la cartera: +desglose -cambio (gana)
+  // o -desglose +cambio (pierde). Al revertir se aplica el opuesto.
+  apply(breakdown, accountWasGain ? -1 : 1)
+  apply(change, accountWasGain ? 1 : -1)
+  return result
 }

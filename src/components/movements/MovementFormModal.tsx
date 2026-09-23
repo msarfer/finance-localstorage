@@ -7,6 +7,7 @@ import {
 	emptyCashCounts,
 	formatEUR,
 	parseCentsInput,
+	revertCashMovement,
 	todayISO,
 } from '@/lib/money';
 import { Button, Field, Modal, inputCls, DatePicker } from '@/components/ui';
@@ -205,7 +206,10 @@ export function MovementFormModal({
 			if (direction === 'toBank') {
 				if (
 					walletAccount &&
-					!hasEnoughCash(walletAccount.cash, cashBreakdown)
+					!hasEnoughCash(
+						revertCashMovement(walletAccount.cash, initial, false),
+						cashBreakdown,
+					)
 				) {
 					setError(
 						`No hay suficientes billetes/monedas en "${walletAccount.name}" para ingresar`,
@@ -233,7 +237,10 @@ export function MovementFormModal({
 				type === 'income' &&
 				hasChangeInput &&
 				selectedAccount &&
-				!hasEnoughCash(selectedAccount.cash, cashChange)
+				!hasEnoughCash(
+					revertCashMovement(selectedAccount.cash, initial, true),
+					cashChange,
+				)
 			) {
 				setError(
 					`No hay suficientes billetes/monedas en "${selectedAccount.name}" para devolver el cambio`,
@@ -243,7 +250,10 @@ export function MovementFormModal({
 			if (
 				needToWithdraw &&
 				selectedAccount &&
-				!hasEnoughCash(selectedAccount.cash, cashBreakdown)
+				!hasEnoughCash(
+					revertCashMovement(selectedAccount.cash, initial, false),
+					cashBreakdown,
+				)
 			) {
 				setError(
 					`No hay suficientes billetes/monedas en "${selectedAccount.name}" para este gasto`,
